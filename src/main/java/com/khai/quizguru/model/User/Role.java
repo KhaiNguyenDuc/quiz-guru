@@ -1,0 +1,30 @@
+package com.khai.quizguru.model.User;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.Data;
+import org.hibernate.annotations.NaturalId;
+
+import java.util.List;
+
+@Entity
+@Data
+@Table(name="roles")
+public class Role {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "name")
+    private RoleName name;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name="role_id"),
+            inverseJoinColumns = @JoinColumn(name="user_id"))
+    @JsonIgnore
+    private List<User> users;
+}
