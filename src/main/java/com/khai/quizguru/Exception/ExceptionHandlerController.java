@@ -85,5 +85,17 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(details, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionDetails> accessDenied(
+            AccessDeniedException e, WebRequest request
+    ){
+        ExceptionDetails details = new ExceptionDetails(
+                new Date(),
+                e.getMessage(),
+                request.getDescription(false)
+        );
+        return new ResponseEntity<>(details, HttpStatus.FORBIDDEN);
+    }
+
 
 }

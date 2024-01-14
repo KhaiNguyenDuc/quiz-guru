@@ -40,14 +40,14 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<JsonResponse> register(@RequestBody RegisterRequest registerRequest){
         RegisterResponse userSaved = userService.createUser(registerRequest);
-        return new ResponseEntity<>(new JsonResponse("sucess", userSaved), HttpStatus.CREATED);
+        return new ResponseEntity<>(new JsonResponse("success", userSaved), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenRefreshResponse> signIn(
+    public ResponseEntity<JsonResponse> signIn(
             @RequestBody LoginRequest loginRequest){
         String accessToken = "";
-        String refreshToken = "";
+        RefreshToken refreshToken;
         try{
             UsernamePasswordAuthenticationToken authReq
                     = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
@@ -56,13 +56,12 @@ public class AuthController {
             SecurityContextHolder.getContext().setAuthentication(auth);
             UserPrincipal userDetails = (UserPrincipal) auth.getPrincipal();
 
-            refreshToken = refreshTokenService.createRefreshToken(userDetails.getId()).getToken();
+            refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
         }catch (Exception e){
             throw e;
-
         }
-
-        return new ResponseEntity<>(new TokenRefreshResponse(accessToken, refreshToken),HttpStatus.OK);
+        TokenRefreshResponse tokenRefreshResponse = new TokenRefreshResponse(accessToken, refreshToken);
+        return new ResponseEntity<>(new JsonResponse("success", tokenRefreshResponse),HttpStatus.OK);
     }
 
     @PostMapping("/refresh-token")
@@ -74,6 +73,6 @@ public class AuthController {
         User user = refreshToken.getUser();
         String accessToken = tokenProvider.generateTokenFromUserId(user.getId(), user.getRoles());
 
-        return new ResponseEntity<>(new TokenRefreshResponse(accessToken, refreshToken.getToken()),HttpStatus.OK);
+        return new ResponseEntity<>(new TokenRefreshResponse(accessToken, refreshToken),HttpStatus.OK);
     }
 }

@@ -9,6 +9,11 @@ public class QuizResponse {
 
     private String id;
     private List<QuestionResponse> questions;
-    private User user;
+    private UserResponse user;
     private String givenText;
+    public String type;
+    public Integer number;
+    public String language;
+    public String level;
+
 }

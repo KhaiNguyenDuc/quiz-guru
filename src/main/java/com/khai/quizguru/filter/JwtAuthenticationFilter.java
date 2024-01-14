@@ -1,5 +1,10 @@
-package com.khai.quizguru.security;
+package com.khai.quizguru.filter;
 
+import com.khai.quizguru.Exception.UnauthorizedException;
+import com.khai.quizguru.security.JwtTokenProvider;
+import com.khai.quizguru.security.SecurityUserService;
+import com.khai.quizguru.security.UserPrincipal;
+import com.khai.quizguru.utils.Constant;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }catch(Exception e) {
-            log.error("Could not validate this jwt");
+            throw new UnauthorizedException(Constant.UNAUTHORIZED_MSG);
         }
 
         filterChain.doFilter(request, response);

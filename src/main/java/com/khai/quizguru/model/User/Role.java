@@ -17,6 +17,7 @@ public class Role {
     private String id;
 
     @Enumerated(EnumType.STRING)
+    @NaturalId
     @Column(name = "name")
     private RoleName name;
 

@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "choices")
@@ -26,5 +28,8 @@ public class Choice {
 
     @Column(name = "is_correct")
     private Boolean isCorrect;
+
+    @OneToMany(mappedBy = "selectedChoice")
+    private List<RecordItem> recordItems;
 
 }

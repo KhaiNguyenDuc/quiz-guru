@@ -116,6 +116,10 @@ public class QuizServiceImpl implements QuizService {
             Quiz quiz = new Quiz();
             quiz.setUser(userOtp.get());
             quiz.setGivenText(chat.getGivenText());
+            quiz.setLevel(chat.getPromptRequest().getLevel());
+            quiz.setLanguage(chat.getPromptRequest().getLanguage());
+            quiz.setNumber(chat.getPromptRequest().getNumber());
+            quiz.setType(chat.getPromptRequest().getQuestionType());
             Quiz quizSaved = quizRepository.save(quiz);
 
             // Create questions
@@ -133,23 +137,22 @@ public class QuizServiceImpl implements QuizService {
 
 
         } catch (Exception e) {
-            log.error(e.getMessage());
+            e.printStackTrace();
             throw new InternalErrorException(Constant.INTERNAL_ERROR_EXCEPTION_MSG);
         }
     }
 
     @Override
-    public HashMap<String, List<String>> findAllByUserId(String userId) {
+    public List<QuizResponse> findAllByUserId(String userId) {
         Optional<User> userOpt = userRepository.findById(userId);
         if (userOpt.isEmpty()) {
             throw new ResourceNotFoundException(Constant.RESOURCE_NOT_FOUND_MSG);
         }
 
         List<Quiz> quizzes = quizRepository.findAllByUser(userOpt.get());
-        HashMap<String, List<String>> quizMap = new HashMap<>();
-        quizMap.put("id", quizzes.stream().map(Quiz::getId).toList());
 
-        return quizMap;
+
+        return Arrays.asList(mapper.map(quizzes, QuizResponse[].class));
     }
 
 

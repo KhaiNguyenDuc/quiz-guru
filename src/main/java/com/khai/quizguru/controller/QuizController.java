@@ -36,20 +36,6 @@ public class QuizController {
     @Value("${openai.model}")
     private String model;
 
-
-    @GetMapping
-    public ResponseEntity<JsonResponse> findById(@RequestParam("id") String id){
-        QuizResponse quiz = quizService.findById(id);
-        return new ResponseEntity<>(new JsonResponse("success", quiz), HttpStatus.OK);
-    }
-
-    @GetMapping("/current")
-    public ResponseEntity<JsonResponse> findAllByUserId(@CurrentUser UserPrincipal userPrincipal){
-        HashMap<String, List<String>> quizzIds = quizService.findAllByUserId(userPrincipal.getId());
-        return new ResponseEntity<>(new JsonResponse("success", quizzIds), HttpStatus.OK);
-    }
-
-
     @PostMapping("/generate/txt")
     public ResponseEntity<JsonResponse> generateQuizByTxtFile(
             @CurrentUser UserPrincipal userPrincipal,

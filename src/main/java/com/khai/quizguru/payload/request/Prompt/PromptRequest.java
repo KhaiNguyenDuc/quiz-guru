@@ -3,24 +3,25 @@ package com.khai.quizguru.payload.request.Prompt;
 import com.khai.quizguru.dto.Message;
 import com.khai.quizguru.utils.Prompt;
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.List;
 
 @Data
 public abstract class PromptRequest {
 
-    protected Integer type;
-    protected Integer number;
-    protected String language;
-    protected Integer level;
+    public Integer type;
+    public Integer number;
+    public String language;
+    public Integer level;
 
     public abstract String getText();
-    protected String getQuestionType(){
+    public String getQuestionType(){
 
         return "Multiple choice";
     }
 
-    protected String getLevel(){
+    public String getLevel(){
         return switch (this.level) {
             case 2 -> "medium";
             case 3 -> "hard";

@@ -7,6 +7,7 @@ import com.khai.quizguru.model.User.Role;
 import com.khai.quizguru.model.User.RoleName;
 import com.khai.quizguru.model.User.User;
 import com.khai.quizguru.payload.response.RegisterResponse;
+import com.khai.quizguru.payload.response.UserResponse;
 import com.khai.quizguru.repository.RoleRepository;
 import com.khai.quizguru.repository.UserRepository;
 import com.khai.quizguru.service.UserService;
@@ -52,6 +53,15 @@ public class UserServiceImpl implements UserService {
 
         User userSaved = userRepository.save(user);
         return mapper.map(userSaved, RegisterResponse.class);
+    }
+
+    @Override
+    public UserResponse getUserById(String id) {
+        Optional<User> userOtp = userRepository.findById(id);
+        if(userOtp.isEmpty()){
+            throw  new ResourceNotFoundException(Constant.RESOURCE_NOT_FOUND_MSG);
+        }
+        return mapper.map(userOtp.get(), UserResponse.class);
     }
 
 }

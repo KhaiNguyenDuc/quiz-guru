@@ -14,5 +14,5 @@ public interface QuizService {
 
     String generateQuiz(ChatRequest chat, String userId);
 
-    HashMap<String, List<String>> findAllByUserId(String id);
+   List<QuizResponse> findAllByUserId(String id);
 }

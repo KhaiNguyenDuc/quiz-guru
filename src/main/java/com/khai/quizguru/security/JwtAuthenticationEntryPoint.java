@@ -3,9 +3,10 @@ package com.khai.quizguru.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.khai.quizguru.Exception.ExceptionDetails;
 import com.khai.quizguru.Exception.ResourceNotFoundException;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.NotFound;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -13,28 +14,26 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
+@Slf4j
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-
 
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse response, AuthenticationException e)
-            throws java.io.IOException {
+            throws IOException {
+        log.error("aaaaaaaaaaaaaaaaaa");
         // Set the response status and content type
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        int statusCode = HttpServletResponse.SC_UNAUTHORIZED;
+        response.setStatus(statusCode);
         response.setContentType("application/json");
 
         // Create a map for the error message
-
         ExceptionDetails exceptionDetails = new ExceptionDetails(
                 new Date(),
-                "Sorry, You're not authorized to access this resource.",
+                e.getMessage(),
                 ""
         );
-
 
         // Convert the error message to JSON
         ObjectMapper objectMapper = new ObjectMapper();
