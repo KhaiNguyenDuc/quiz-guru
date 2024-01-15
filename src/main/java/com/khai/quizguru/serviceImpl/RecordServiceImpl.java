@@ -78,10 +78,13 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public RecordResponse findById(String recordId) {
-        Optional<Record> record = recordRepository.findById(recordId);
-        if(record.isEmpty()){
+        Optional<Record> recordOpt = recordRepository.findById(recordId);
+        if(recordOpt.isEmpty()){
             throw new ResourceNotFoundException(Constant.RESOURCE_NOT_FOUND_MSG);
         }
-        return mapper.map(record.get(), RecordResponse.class);
+        Record record = recordOpt.get();
+        RecordResponse recordResponse = mapper.map(record, RecordResponse.class);
+        recordResponse.setGivenText(record.getQuiz().getGivenText());
+        return recordResponse;
     }
 }

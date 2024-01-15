@@ -28,7 +28,6 @@ public class Record extends UserDateAudit {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnore
     private User user;
 
     @Column(name = "score")

@@ -45,7 +45,7 @@ public class UserController {
 
 
     @GetMapping("/current/quiz")
-    public ResponseEntity<JsonResponse> findById(@CurrentUser UserPrincipal userPrincipal,
+    public ResponseEntity<JsonResponse> findQuizById(@CurrentUser UserPrincipal userPrincipal,
                                                  @RequestParam("id") String quizId){
         String user_id = userPrincipal.getId();
         QuizResponse quiz = quizService.findById(quizId);
@@ -53,6 +53,16 @@ public class UserController {
             throw new AccessDeniedException(Constant.ACCESS_DENIED_MSG);
         }
         return new ResponseEntity<>(new JsonResponse("success", quiz), HttpStatus.OK);
+    }
+    @GetMapping("/current/record")
+    public ResponseEntity<JsonResponse> findRecordById(@CurrentUser UserPrincipal userPrincipal,
+                                                 @RequestParam("id") String recordId){
+        String user_id = userPrincipal.getId();
+        RecordResponse recordResponse = recordService.findById(recordId);
+        if(!Objects.equals(recordResponse.getUser().getId(), user_id)){
+            throw new AccessDeniedException(Constant.ACCESS_DENIED_MSG);
+        }
+        return new ResponseEntity<>(new JsonResponse("success", recordResponse), HttpStatus.OK);
     }
 
     @GetMapping("/current/records")
