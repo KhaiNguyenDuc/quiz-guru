@@ -1,6 +1,6 @@
 package com.khai.quizguru.model;
 
-import com.khai.quizguru.model.User.User;
+import com.khai.quizguru.model.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
 

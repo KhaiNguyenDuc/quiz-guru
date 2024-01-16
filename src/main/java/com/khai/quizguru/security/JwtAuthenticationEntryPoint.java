@@ -1,12 +1,10 @@
 package com.khai.quizguru.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.khai.quizguru.Exception.ExceptionDetails;
-import com.khai.quizguru.Exception.ResourceNotFoundException;
+import com.khai.quizguru.exception.ExceptionDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.NotFound;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package com.khai.quizguru.Exception;
+package com.khai.quizguru.exception;
 
 public class UnauthorizedException extends RuntimeException {
 

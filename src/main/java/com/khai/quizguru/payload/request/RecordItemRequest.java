@@ -1,11 +1,12 @@
 package com.khai.quizguru.payload.request;
 
-import com.khai.quizguru.model.Choice;
-import com.khai.quizguru.model.Question;
+import jakarta.annotation.Nullable;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class RecordItemRequest {
     private String questionId;
-    private String selectedChoiceId;
+    private List<String> selectedChoiceIds;
 }

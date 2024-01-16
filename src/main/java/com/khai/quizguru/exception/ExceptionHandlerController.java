@@ -1,4 +1,4 @@
-package com.khai.quizguru.Exception;
+package com.khai.quizguru.exception;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

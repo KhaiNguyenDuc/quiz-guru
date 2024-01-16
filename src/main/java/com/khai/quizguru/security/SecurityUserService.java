@@ -1,13 +1,10 @@
 package com.khai.quizguru.security;
 
-import com.khai.quizguru.Exception.InvalidRequestException;
-import com.khai.quizguru.Exception.ResourceNotFoundException;
-import com.khai.quizguru.Exception.UnauthorizedException;
-import com.khai.quizguru.model.User.User;
+import com.khai.quizguru.exception.UnauthorizedException;
+import com.khai.quizguru.model.user.User;
 import com.khai.quizguru.repository.UserRepository;
 import com.khai.quizguru.utils.Constant;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.bcel.Const;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

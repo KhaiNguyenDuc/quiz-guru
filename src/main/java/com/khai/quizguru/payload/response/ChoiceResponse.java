@@ -1,8 +1,5 @@
 package com.khai.quizguru.payload.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.khai.quizguru.model.Question;
-import jakarta.persistence.*;
 import lombok.Data;
 
 @Data

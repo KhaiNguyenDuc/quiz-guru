@@ -1,6 +1,6 @@
 package com.khai.quizguru.filter;
 
-import com.khai.quizguru.Exception.UnauthorizedException;
+import com.khai.quizguru.exception.UnauthorizedException;
 import com.khai.quizguru.security.JwtTokenProvider;
 import com.khai.quizguru.security.SecurityUserService;
 import com.khai.quizguru.security.UserPrincipal;

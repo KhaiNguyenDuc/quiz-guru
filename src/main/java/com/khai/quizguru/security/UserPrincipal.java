@@ -1,7 +1,7 @@
 package com.khai.quizguru.security;
 
-import com.khai.quizguru.model.User.Role;
-import com.khai.quizguru.model.User.User;
+import com.khai.quizguru.model.user.Role;
+import com.khai.quizguru.model.user.User;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;

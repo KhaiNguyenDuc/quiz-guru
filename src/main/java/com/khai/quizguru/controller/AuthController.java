@@ -1,10 +1,9 @@
 package com.khai.quizguru.controller;
 
 import com.khai.quizguru.model.RefreshToken;
-import com.khai.quizguru.payload.jwt.JwtResponse;
 import com.khai.quizguru.payload.request.LoginRequest;
 import com.khai.quizguru.payload.request.RegisterRequest;
-import com.khai.quizguru.model.User.User;
+import com.khai.quizguru.model.user.User;
 import com.khai.quizguru.payload.jwt.TokenRefreshRequest;
 import com.khai.quizguru.payload.jwt.TokenRefreshResponse;
 import com.khai.quizguru.payload.response.JsonResponse;

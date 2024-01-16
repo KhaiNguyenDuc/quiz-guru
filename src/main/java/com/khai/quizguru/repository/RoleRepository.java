@@ -1,7 +1,7 @@
 package com.khai.quizguru.repository;
 
-import com.khai.quizguru.model.User.Role;
-import com.khai.quizguru.model.User.RoleName;
+import com.khai.quizguru.model.user.Role;
+import com.khai.quizguru.enums.RoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

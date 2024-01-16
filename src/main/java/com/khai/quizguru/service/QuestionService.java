@@ -2,8 +2,7 @@ package com.khai.quizguru.service;
 
 import com.khai.quizguru.dto.ChatRequest;
 import com.khai.quizguru.dto.ChatResponse;
-import com.khai.quizguru.model.Question;
-import com.khai.quizguru.model.Quiz;
+import com.khai.quizguru.model.question.Question;
 
 import java.util.List;
 

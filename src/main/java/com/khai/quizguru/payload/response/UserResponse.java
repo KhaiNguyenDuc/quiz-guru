@@ -1,6 +1,6 @@
 package com.khai.quizguru.payload.response;
 
-import com.khai.quizguru.model.User.Role;
+import com.khai.quizguru.model.user.Role;
 import lombok.Data;
 
 import java.util.List;

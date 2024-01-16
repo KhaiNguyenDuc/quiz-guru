@@ -5,8 +5,7 @@ import java.util.List;
 
 import javax.crypto.SecretKey;
 
-import com.khai.quizguru.model.RefreshToken;
-import com.khai.quizguru.model.User.Role;
+import com.khai.quizguru.model.user.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;

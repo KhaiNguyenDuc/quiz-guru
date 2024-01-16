@@ -1,9 +1,13 @@
 package com.khai.quizguru.model;
 
-import com.khai.quizguru.model.User.User;
+import com.khai.quizguru.enums.Level;
+import com.khai.quizguru.enums.QuizType;
+import com.khai.quizguru.model.question.Question;
+import com.khai.quizguru.model.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.NaturalId;
 
 import java.util.List;
 
@@ -28,8 +32,9 @@ public class Quiz extends UserDateAudit{
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type")
-    private String type;
+    private QuizType type;
 
     @Column(name = "number")
     private Integer number;
@@ -37,9 +42,13 @@ public class Quiz extends UserDateAudit{
     @Column(name = "language")
     private String language;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "level")
-    private String level;
+    private Level level;
 
     @OneToMany(mappedBy = "quiz", fetch = FetchType.LAZY)
     private List<Record> records;
+
+    @Column(name = "duration")
+    private Integer duration;
 }

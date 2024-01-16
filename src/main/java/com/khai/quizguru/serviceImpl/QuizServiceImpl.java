@@ -1,27 +1,25 @@
 package com.khai.quizguru.serviceImpl;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.khai.quizguru.Exception.InternalErrorException;
-import com.khai.quizguru.Exception.ResourceNotFoundException;
+import com.khai.quizguru.enums.QuestionType;
+import com.khai.quizguru.enums.QuizType;
+import com.khai.quizguru.exception.InternalErrorException;
+import com.khai.quizguru.exception.ResourceNotFoundException;
 import com.khai.quizguru.dto.ChatRequest;
 import com.khai.quizguru.dto.ChatResponse;
-import com.khai.quizguru.dto.Message;
 import com.khai.quizguru.dto.QuestionMixIn;
 import com.khai.quizguru.model.Choice;
-import com.khai.quizguru.model.Question;
+import com.khai.quizguru.model.question.Question;
 import com.khai.quizguru.model.Quiz;
-import com.khai.quizguru.model.User.User;
+import com.khai.quizguru.model.user.User;
 import com.khai.quizguru.payload.response.QuizResponse;
 import com.khai.quizguru.repository.ChoiceRepository;
 import com.khai.quizguru.repository.QuestionRepository;
 import com.khai.quizguru.repository.QuizRepository;
 import com.khai.quizguru.repository.UserRepository;
-import com.khai.quizguru.security.UserPrincipal;
 import com.khai.quizguru.service.QuizService;
 import com.khai.quizguru.utils.Constant;
-import com.khai.quizguru.utils.Prompt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -56,8 +54,9 @@ public class QuizServiceImpl implements QuizService {
         if(quizOtp.isEmpty()){
             throw new ResourceNotFoundException(Constant.RESOURCE_NOT_FOUND_MSG);
         }
-
-        return mapper.map(quizOtp.get(), QuizResponse.class);
+        QuizResponse quizResponse = mapper.map(quizOtp.get(), QuizResponse.class);
+        quizResponse.setType(quizOtp.get().getType().getValue());
+        return quizResponse;
 
     }
 
@@ -66,7 +65,7 @@ public class QuizServiceImpl implements QuizService {
     public String generateQuiz(ChatRequest chat, String userId) {
 
         ChatResponse chatResponse = restTemplate.postForObject(apiURL, chat, ChatResponse.class);
-
+        log.info(chat.getPromptRequest().generatePrompt());
         if(Objects.isNull(chatResponse)){
             throw new InternalErrorException(Constant.INTERNAL_ERROR_EXCEPTION_MSG);
         }
@@ -102,7 +101,9 @@ public class QuizServiceImpl implements QuizService {
 
                 question.setChoices(choices);
                 // Set the answer for each question
-                question.setAnswer(questionNode.get("answer").asInt());
+                for(int i = 0;i<questionNode.get("answers").size(); i++){
+                    question.setAnswer(questionNode.get("answers").get(i).asInt());
+                }
 
                 questions.add(question);
             }
@@ -119,11 +120,15 @@ public class QuizServiceImpl implements QuizService {
             quiz.setLevel(chat.getPromptRequest().getLevel());
             quiz.setLanguage(chat.getPromptRequest().getLanguage());
             quiz.setNumber(chat.getPromptRequest().getNumber());
-            quiz.setType(chat.getPromptRequest().getQuestionType());
+            quiz.setType(chat.getPromptRequest().getQuizType());
+            quiz.setDuration(chat.getPromptRequest().getDuration());
             Quiz quizSaved = quizRepository.save(quiz);
 
             // Create questions
-            questions.forEach(question -> question.setQuiz(quizSaved));
+            questions.forEach(question -> {
+                question.setQuiz(quizSaved);
+                question.setType(quiz.getType() == QuizType.MULTIPLE_CHOICE_QUESTION ? QuestionType.MULTIPLE_CHOICE : QuestionType.SINGLE_CHOICE);
+            });
             List<Question> savedQuestions = questionRepository.saveAll(questions);
 
             // Create choice

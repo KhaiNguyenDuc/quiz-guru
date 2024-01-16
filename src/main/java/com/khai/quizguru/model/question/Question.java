@@ -1,8 +1,13 @@
-package com.khai.quizguru.model;
+package com.khai.quizguru.model.question;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.khai.quizguru.enums.QuestionType;
+import com.khai.quizguru.model.Choice;
+import com.khai.quizguru.model.Quiz;
+import com.khai.quizguru.model.RecordItem;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.NaturalId;
 
 import java.util.List;
 
@@ -24,16 +29,16 @@ public class Question {
     @Column(name = "explanation")
     private String explanation;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private QuestionType type;
+
     @Transient
     @JsonIgnore
-    private int answer; // Not stored in the database but used for processing
+    private List<Integer> answers; // Not stored in the database but used for processing
 
-    public void setAnswer(int answer) {
-        this.answer = answer;
-        // Set isCorrect for each choice based on the answer index
-        for (int i = 0; i < choices.size(); i++) {
-            choices.get(i).setIsCorrect(i == answer);
-        }
+    public void setAnswer(Integer answer) {
+        this.choices.get(answer).setIsCorrect(true);
     }
 
     @ManyToOne

@@ -1,9 +1,7 @@
 package com.khai.quizguru.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.khai.quizguru.Exception.ResourceNotFoundException;
 import com.khai.quizguru.filter.JwtAuthenticationFilter;
-import jakarta.servlet.http.HttpServletResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

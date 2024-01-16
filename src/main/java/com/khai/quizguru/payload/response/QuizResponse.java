@@ -1,5 +1,4 @@
 package com.khai.quizguru.payload.response;
-import com.khai.quizguru.model.User.User;
 import com.khai.quizguru.model.UserDateAudit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,5 +17,5 @@ public class QuizResponse extends UserDateAudit {
     public Integer number;
     public String language;
     public String level;
-
+    public Integer duration;
 }

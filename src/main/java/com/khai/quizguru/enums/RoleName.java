@@ -1,4 +1,4 @@
-package com.khai.quizguru.model.User;
+package com.khai.quizguru.enums;
 
 public enum RoleName {
     USER,

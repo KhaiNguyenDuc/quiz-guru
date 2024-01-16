@@ -1,7 +1,7 @@
 package com.khai.quizguru.payload.jwt;
 
 import com.khai.quizguru.model.RefreshToken;
-import com.khai.quizguru.model.User.User;
+import com.khai.quizguru.model.user.User;
 import lombok.Data;
 
 @Data

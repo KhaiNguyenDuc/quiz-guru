@@ -1,28 +1,20 @@
 package com.khai.quizguru.controller;
 
-import com.khai.quizguru.Exception.InvalidRequestException;
 import com.khai.quizguru.dto.ChatRequest;
 import com.khai.quizguru.payload.request.Prompt.BaseTextRequest;
 import com.khai.quizguru.payload.request.Prompt.DocFileRequest;
 import com.khai.quizguru.payload.request.Prompt.PdfFileRequest;
 import com.khai.quizguru.payload.request.Prompt.TxtFileRequest;
 import com.khai.quizguru.payload.response.JsonResponse;
-import com.khai.quizguru.payload.response.QuizResponse;
 import com.khai.quizguru.security.CurrentUser;
 import com.khai.quizguru.security.UserPrincipal;
 import com.khai.quizguru.service.QuizService;
-import com.khai.quizguru.utils.Constant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 
 @RestController
 @Slf4j

@@ -1,7 +1,6 @@
 package com.khai.quizguru.payload.response;
 
-import com.khai.quizguru.model.RecordItem;
-import com.khai.quizguru.model.User.User;
+import com.khai.quizguru.model.user.User;
 import com.khai.quizguru.model.UserDateAudit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,4 +17,5 @@ public class RecordResponse extends UserDateAudit {
     private Integer score;
     private User user;
     private String givenText;
+    private String duration;
 }

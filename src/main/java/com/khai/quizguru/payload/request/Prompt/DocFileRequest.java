@@ -1,6 +1,6 @@
 package com.khai.quizguru.payload.request.Prompt;
 
-import com.khai.quizguru.Exception.InvalidRequestException;
+import com.khai.quizguru.exception.InvalidRequestException;
 import com.khai.quizguru.utils.Constant;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

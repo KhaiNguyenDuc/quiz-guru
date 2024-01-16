@@ -1,11 +1,9 @@
 package com.khai.quizguru.payload.request.Prompt;
 
-import com.khai.quizguru.dto.Message;
+import com.khai.quizguru.enums.Level;
+import com.khai.quizguru.enums.QuizType;
 import com.khai.quizguru.utils.Prompt;
 import lombok.Data;
-import lombok.Getter;
-
-import java.util.List;
 
 @Data
 public abstract class PromptRequest {
@@ -14,26 +12,33 @@ public abstract class PromptRequest {
     public Integer number;
     public String language;
     public Integer level;
+    public Integer duration;
 
     public abstract String getText();
-    public String getQuestionType(){
-
-        return "Multiple choice";
+    public QuizType getQuizType(){
+        return switch (this.type){
+            case 1 -> QuizType.SINGLE_CHOICE_QUESTION;
+            case 2 -> QuizType.MULTIPLE_CHOICE_QUESTION;
+            default -> QuizType.MIX_QUESTION;
+        };
     }
 
-    public String getLevel(){
+    public Level getLevel(){
         return switch (this.level) {
-            case 2 -> "medium";
-            case 3 -> "hard";
-            default -> "easy";
+            case 2 -> Level.MEDIUM;
+            case 3 -> Level.HARD;
+            default -> Level.EASY;
         };
     }
     public String generatePrompt(){
-
-        return String.format(Prompt.GENERATE_QUIZ_PROMPT,
+        String prompt = switch (this.type){
+            case 2 -> Prompt.MULTIPLE_CHOICE_QUIZ_PROMPT;
+            case 3 -> Prompt.MIX_CHOICE_QUIZ_PROMPT;
+            default -> Prompt.SINGLE_CHOICE_QUIZ_PROMPT;
+        };
+        return String.format(prompt,
                 this.getNumber(),
-                this.getQuestionType(),
-                this.getLevel(),
+                this.getLevel().getValue(),
                 this.getLanguage());
     }
 

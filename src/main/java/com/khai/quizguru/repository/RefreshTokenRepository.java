@@ -1,7 +1,7 @@
 package com.khai.quizguru.repository;
 
 import com.khai.quizguru.model.RefreshToken;
-import com.khai.quizguru.model.User.User;
+import com.khai.quizguru.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

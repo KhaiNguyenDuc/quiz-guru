@@ -1,8 +1,7 @@
 package com.khai.quizguru.payload.request.Prompt;
 
-import com.khai.quizguru.Exception.InvalidRequestException;
+import com.khai.quizguru.exception.InvalidRequestException;
 import com.khai.quizguru.utils.Constant;
-import com.khai.quizguru.utils.Prompt;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.pdfbox.Loader;
@@ -10,7 +9,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 
 @EqualsAndHashCode(callSuper = true)
@@ -37,13 +35,4 @@ public class PdfFileRequest extends PromptRequest {
 
     }
 
-    @Override
-    public String generatePrompt(){
-
-        return String.format(Prompt.GENERATE_QUIZ_PROMPT,
-                this.getNumber(),
-                this.getQuestionType(),
-                this.getLevel(),
-                this.getLanguage());
-    }
 }

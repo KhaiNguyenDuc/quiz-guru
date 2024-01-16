@@ -1,11 +1,10 @@
 package com.khai.quizguru.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.khai.quizguru.model.question.Question;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
@@ -27,9 +26,15 @@ public class Choice {
     private Question question;
 
     @Column(name = "is_correct")
-    private Boolean isCorrect;
+    private Boolean isCorrect = false;
 
-    @OneToMany(mappedBy = "selectedChoice")
+    @ManyToMany
+    @JoinTable(
+            name = "record_item_choice",
+            joinColumns = @JoinColumn(name = "choice_id"),
+            inverseJoinColumns = @JoinColumn(name = "record_item_id")
+    )
+    @JsonIgnore
     private List<RecordItem> recordItems;
 
 }

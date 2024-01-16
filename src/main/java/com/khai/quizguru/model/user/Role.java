@@ -1,6 +1,7 @@
-package com.khai.quizguru.model.User;
+package com.khai.quizguru.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.khai.quizguru.enums.RoleName;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.NaturalId;

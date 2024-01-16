@@ -1,6 +1,6 @@
 package com.khai.quizguru.controller;
 
-import com.khai.quizguru.Exception.AccessDeniedException;
+import com.khai.quizguru.exception.AccessDeniedException;
 import com.khai.quizguru.payload.response.JsonResponse;
 import com.khai.quizguru.payload.response.QuizResponse;
 import com.khai.quizguru.payload.response.RecordResponse;

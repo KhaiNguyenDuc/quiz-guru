@@ -1,11 +1,11 @@
 package com.khai.quizguru.serviceImpl;
 
-import com.khai.quizguru.Exception.ResourceExistException;
-import com.khai.quizguru.Exception.ResourceNotFoundException;
+import com.khai.quizguru.exception.ResourceExistException;
+import com.khai.quizguru.exception.ResourceNotFoundException;
 import com.khai.quizguru.payload.request.RegisterRequest;
-import com.khai.quizguru.model.User.Role;
-import com.khai.quizguru.model.User.RoleName;
-import com.khai.quizguru.model.User.User;
+import com.khai.quizguru.model.user.Role;
+import com.khai.quizguru.enums.RoleName;
+import com.khai.quizguru.model.user.User;
 import com.khai.quizguru.payload.response.RegisterResponse;
 import com.khai.quizguru.payload.response.UserResponse;
 import com.khai.quizguru.repository.RoleRepository;
@@ -18,8 +18,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 

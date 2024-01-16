@@ -1,9 +1,9 @@
 package com.khai.quizguru.serviceImpl;
 
-import com.khai.quizguru.Exception.ResourceNotFoundException;
-import com.khai.quizguru.Exception.TokenRefreshException;
+import com.khai.quizguru.exception.ResourceNotFoundException;
+import com.khai.quizguru.exception.TokenRefreshException;
 import com.khai.quizguru.model.RefreshToken;
-import com.khai.quizguru.model.User.User;
+import com.khai.quizguru.model.user.User;
 import com.khai.quizguru.repository.RefreshTokenRepository;
 import com.khai.quizguru.repository.UserRepository;
 import com.khai.quizguru.service.RefreshTokenService;

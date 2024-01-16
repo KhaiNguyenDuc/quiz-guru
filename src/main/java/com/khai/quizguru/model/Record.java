@@ -1,11 +1,9 @@
 package com.khai.quizguru.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.khai.quizguru.model.User.User;
+import com.khai.quizguru.model.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.util.List;
 
@@ -32,4 +30,7 @@ public class Record extends UserDateAudit {
 
     @Column(name = "score")
     private Integer score;
+
+    @Column(name = "duration")
+    private Integer duration;
 }

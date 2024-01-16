@@ -18,7 +18,7 @@ public class ChatRequest {
     private PromptRequest promptRequest;
 
     @JsonIgnore
-    private String basePrompt = Prompt.GENERATE_QUIZ_PROMPT;
+    private String basePrompt = Prompt.SINGLE_CHOICE_QUIZ_PROMPT;
 
     @JsonIgnore
     private String givenText = "";
