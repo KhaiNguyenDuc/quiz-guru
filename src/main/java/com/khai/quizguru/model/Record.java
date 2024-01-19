@@ -33,4 +33,7 @@ public class Record extends UserDateAudit {
 
     @Column(name = "duration")
     private Integer duration;
+
+    @Column(name = "time_left")
+    private Integer timeLeft;
 }

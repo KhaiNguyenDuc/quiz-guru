@@ -7,6 +7,8 @@ import com.khai.quizguru.model.Record;
 import com.khai.quizguru.model.question.Question;
 import com.khai.quizguru.model.user.User;
 import com.khai.quizguru.payload.request.RecordRequest;
+import com.khai.quizguru.payload.response.JsonPageResponse;
+import com.khai.quizguru.payload.response.QuizResponse;
 import com.khai.quizguru.payload.response.RecordResponse;
 import com.khai.quizguru.repository.*;
 import com.khai.quizguru.service.RecordService;
@@ -14,6 +16,8 @@ import com.khai.quizguru.utils.Constant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,14 +40,24 @@ public class RecordServiceImpl implements RecordService {
     private final ModelMapper mapper;
     private final QuestionRepository questionRepository;
     @Override
-    public List<RecordResponse> findAllRecordsByUserId(String userId) {
+    public JsonPageResponse<RecordResponse> findAllRecordsByUserId(String userId, Pageable pageable) {
 
         Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty()){
             throw new ResourceNotFoundException(Constant.RESOURCE_NOT_FOUND_MSG);
         }
-        List<Record> records = recordRepository.findAllByUser(user.get());
-        return Arrays.asList(mapper.map(records, RecordResponse[].class));
+        Page<Record> records = recordRepository.findAllByUser(user.get(), pageable);
+
+        List<RecordResponse> recordResponses = Arrays.asList(mapper.map(records.getContent(), RecordResponse[].class));
+        JsonPageResponse<RecordResponse> pageResponse = new JsonPageResponse<>();
+        pageResponse.setData(recordResponses);
+        pageResponse.setSize(pageable.getPageSize());
+        pageResponse.setPage(pageable.getPageNumber());
+        pageResponse.setTotalElements(records.getNumberOfElements());
+        pageResponse.setTotalPages(records.getTotalPages());
+        pageResponse.setLast(records.isLast());
+        return pageResponse;
+
     }
     public Record mapRecordRequestToRecord(RecordRequest recordRequest, QuizType quizType) {
         Record record = new Record();
@@ -75,7 +89,7 @@ public class RecordServiceImpl implements RecordService {
         }).collect(Collectors.toList());
         record.setScore(score.get());
         record.setRecordItems(recordItems);
-
+        record.setTimeLeft(recordRequest.getTimeLeft());
         return record;
     }
 
@@ -107,8 +121,6 @@ public class RecordServiceImpl implements RecordService {
                 choiceOpt.ifPresent(choices::add);
             }
         }
-
-
 
         List<RecordItem> recordItems = record.getRecordItems();
         recordItems.forEach(recordItem -> recordItem.setRecord(record));

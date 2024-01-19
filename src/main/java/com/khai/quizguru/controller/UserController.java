@@ -1,10 +1,7 @@
 package com.khai.quizguru.controller;
 
 import com.khai.quizguru.exception.AccessDeniedException;
-import com.khai.quizguru.payload.response.JsonResponse;
-import com.khai.quizguru.payload.response.QuizResponse;
-import com.khai.quizguru.payload.response.RecordResponse;
-import com.khai.quizguru.payload.response.UserResponse;
+import com.khai.quizguru.payload.response.*;
 import com.khai.quizguru.security.CurrentUser;
 import com.khai.quizguru.security.UserPrincipal;
 import com.khai.quizguru.service.QuizService;
@@ -12,6 +9,7 @@ import com.khai.quizguru.service.RecordService;
 import com.khai.quizguru.service.UserService;
 import com.khai.quizguru.utils.Constant;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,15 +36,19 @@ public class UserController {
     }
 
     @GetMapping("/current/quizzes")
-    public ResponseEntity<JsonResponse> findAllByCurrentUser(@CurrentUser UserPrincipal userPrincipal){
-        List<QuizResponse> quizzIds = quizService.findAllByUserId(userPrincipal.getId());
-        return new ResponseEntity<>(new JsonResponse("success", quizzIds), HttpStatus.OK);
+    public ResponseEntity<JsonPageResponse<QuizResponse>> findAllQuizzesByCurrentUser(
+            @CurrentUser UserPrincipal userPrincipal,
+            @RequestParam(name = "page", defaultValue ="0", required = false) Integer page,
+            @RequestParam(name = "size", defaultValue = "10", required = false) Integer size){
+        JsonPageResponse<QuizResponse> quizzIds = quizService.findAllByUserId(userPrincipal.getId(), PageRequest.of(page, size));
+        return new ResponseEntity<>(quizzIds, HttpStatus.OK);
     }
 
 
     @GetMapping("/current/quiz")
-    public ResponseEntity<JsonResponse> findQuizById(@CurrentUser UserPrincipal userPrincipal,
-                                                 @RequestParam("id") String quizId){
+    public ResponseEntity<JsonResponse> findQuizById(
+            @CurrentUser UserPrincipal userPrincipal,
+            @RequestParam("id") String quizId){
         String user_id = userPrincipal.getId();
         QuizResponse quiz = quizService.findById(quizId);
         if(!Objects.equals(quiz.getUser().getId(), user_id)){
@@ -55,8 +57,10 @@ public class UserController {
         return new ResponseEntity<>(new JsonResponse("success", quiz), HttpStatus.OK);
     }
     @GetMapping("/current/record")
-    public ResponseEntity<JsonResponse> findRecordById(@CurrentUser UserPrincipal userPrincipal,
-                                                 @RequestParam("id") String recordId){
+    public ResponseEntity<JsonResponse> findRecordById(
+            @CurrentUser UserPrincipal userPrincipal,
+            @RequestParam("id") String recordId)
+    {
         String user_id = userPrincipal.getId();
         RecordResponse recordResponse = recordService.findById(recordId);
         if(!Objects.equals(recordResponse.getUser().getId(), user_id)){
@@ -66,9 +70,12 @@ public class UserController {
     }
 
     @GetMapping("/current/records")
-    public ResponseEntity<JsonResponse> findAllRecordsByCurrentUser(@CurrentUser UserPrincipal userPrincipal){
+    public ResponseEntity<JsonPageResponse<RecordResponse>> findAllRecordsByCurrentUser(
+            @CurrentUser UserPrincipal userPrincipal,
+            @RequestParam(name = "page", defaultValue ="0", required = false) Integer page,
+            @RequestParam(name = "size", defaultValue = "10", required = false) Integer size){
         String user_id = userPrincipal.getId();
-        List<RecordResponse> records = recordService.findAllRecordsByUserId(user_id);
-        return new ResponseEntity<>(new JsonResponse("success", records), HttpStatus.OK);
+        JsonPageResponse<RecordResponse> records = recordService.findAllRecordsByUserId(user_id, PageRequest.of(page, size));
+        return new ResponseEntity<>(records, HttpStatus.OK);
     }
 }

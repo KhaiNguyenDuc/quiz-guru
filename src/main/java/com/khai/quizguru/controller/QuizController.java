@@ -1,6 +1,7 @@
 package com.khai.quizguru.controller;
 
 import com.khai.quizguru.dto.ChatRequest;
+import com.khai.quizguru.exception.InternalErrorException;
 import com.khai.quizguru.payload.request.Prompt.BaseTextRequest;
 import com.khai.quizguru.payload.request.Prompt.DocFileRequest;
 import com.khai.quizguru.payload.request.Prompt.PdfFileRequest;
@@ -9,6 +10,7 @@ import com.khai.quizguru.payload.response.JsonResponse;
 import com.khai.quizguru.security.CurrentUser;
 import com.khai.quizguru.security.UserPrincipal;
 import com.khai.quizguru.service.QuizService;
+import com.khai.quizguru.utils.Constant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -71,5 +73,18 @@ public class QuizController {
             return new ResponseEntity<>(new JsonResponse("success", quizId), HttpStatus.OK);
 
 
+    }
+
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<JsonResponse> deleteQuizById(
+            @CurrentUser UserPrincipal userPrincipal,
+            @PathVariable("id") String quizId){
+        try{
+            quizService.deleteById(quizId, userPrincipal.getId());
+        }catch (Exception e){
+            throw new InternalErrorException(Constant.INTERNAL_ERROR_EXCEPTION_MSG);
+        }
+
+        return new ResponseEntity<>(new JsonResponse("success", "Delete success"), HttpStatus.OK);
     }
 }

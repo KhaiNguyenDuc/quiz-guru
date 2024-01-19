@@ -5,14 +5,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.khai.quizguru.enums.QuestionType;
 import com.khai.quizguru.enums.QuizType;
 import com.khai.quizguru.exception.InternalErrorException;
+import com.khai.quizguru.exception.InvalidRequestException;
 import com.khai.quizguru.exception.ResourceNotFoundException;
 import com.khai.quizguru.dto.ChatRequest;
 import com.khai.quizguru.dto.ChatResponse;
 import com.khai.quizguru.dto.QuestionMixIn;
+import com.khai.quizguru.exception.UnauthorizedException;
 import com.khai.quizguru.model.Choice;
 import com.khai.quizguru.model.question.Question;
 import com.khai.quizguru.model.Quiz;
 import com.khai.quizguru.model.user.User;
+import com.khai.quizguru.payload.response.JsonPageResponse;
 import com.khai.quizguru.payload.response.QuizResponse;
 import com.khai.quizguru.repository.ChoiceRepository;
 import com.khai.quizguru.repository.QuestionRepository;
@@ -24,6 +27,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -127,7 +133,6 @@ public class QuizServiceImpl implements QuizService {
             // Create questions
             questions.forEach(question -> {
                 question.setQuiz(quizSaved);
-                question.setType(quiz.getType() == QuizType.MULTIPLE_CHOICE_QUESTION ? QuestionType.MULTIPLE_CHOICE : QuestionType.SINGLE_CHOICE);
             });
             List<Question> savedQuestions = questionRepository.saveAll(questions);
 
@@ -143,21 +148,49 @@ public class QuizServiceImpl implements QuizService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new InternalErrorException(Constant.INTERNAL_ERROR_EXCEPTION_MSG);
+            throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
         }
     }
 
     @Override
-    public List<QuizResponse> findAllByUserId(String userId) {
+    public JsonPageResponse<QuizResponse> findAllByUserId(String userId, Pageable pageable) {
         Optional<User> userOpt = userRepository.findById(userId);
         if (userOpt.isEmpty()) {
             throw new ResourceNotFoundException(Constant.RESOURCE_NOT_FOUND_MSG);
         }
 
-        List<Quiz> quizzes = quizRepository.findAllByUser(userOpt.get());
+        Page<Quiz> quizzes = quizRepository.findAllByUser(userOpt.get(), pageable);
+        List<QuizResponse> quizResponses =  Arrays.asList(mapper.map(quizzes.getContent(), QuizResponse[].class));
+
+        JsonPageResponse<QuizResponse> pageResponse = new JsonPageResponse<>();
+        pageResponse.setData(quizResponses);
+        pageResponse.setSize(pageable.getPageSize());
+        pageResponse.setPage(pageable.getPageNumber());
+        pageResponse.setTotalElements(quizzes.getNumberOfElements());
+        pageResponse.setTotalPages(quizzes.getTotalPages());
+        pageResponse.setLast(quizzes.isLast());
+        return pageResponse;
+    }
+
+    @Override
+    public void deleteById(String quizId, String userId) {
+
+        Optional<User> userOpt = userRepository.findById(userId);
+        if(userOpt.isEmpty()){
+            throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
+        }
 
 
-        return Arrays.asList(mapper.map(quizzes, QuizResponse[].class));
+        Optional<Quiz> quizOpt = quizRepository.findById(quizId);
+        if(quizOpt.isEmpty()){
+            throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
+        }
+        Quiz quiz = quizOpt.get();
+        if(!userOpt.get().equals(quiz.getUser())){
+            throw new UnauthorizedException(Constant.UNAUTHORIZED_MSG);
+        }
+        quiz.setIsDeleted(true);
+        quizRepository.save(quiz);
     }
 
 

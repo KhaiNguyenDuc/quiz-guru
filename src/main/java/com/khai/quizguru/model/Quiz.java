@@ -51,4 +51,7 @@ public class Quiz extends UserDateAudit{
 
     @Column(name = "duration")
     private Integer duration;
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted = false;
 }

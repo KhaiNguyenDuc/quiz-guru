@@ -1,7 +1,6 @@
 package com.khai.quizguru.payload.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 @Data
 @AllArgsConstructor

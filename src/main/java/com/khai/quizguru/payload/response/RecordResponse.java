@@ -17,5 +17,7 @@ public class RecordResponse extends UserDateAudit {
     private Integer score;
     private User user;
     private String givenText;
-    private String duration;
+    private Integer duration;
+    private String type;
+    private Integer timeLeft;
 }
