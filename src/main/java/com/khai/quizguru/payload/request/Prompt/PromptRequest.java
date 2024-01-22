@@ -31,13 +31,20 @@ public abstract class PromptRequest {
         };
     }
     public String generatePrompt(){
-        String prompt = switch (this.type){
-            case 2 -> Prompt.MULTIPLE_CHOICE_QUIZ_PROMPT;
-            case 3 -> Prompt.MIX_CHOICE_QUIZ_PROMPT;
-            default -> Prompt.SINGLE_CHOICE_QUIZ_PROMPT;
-        };
+        String prompt = "";
+        if(this instanceof hasVocabulary){
+            prompt = Prompt.VOCABULARY_QUIZ_PROMPT;
+        }else{
+            prompt = switch (this.type){
+                case 2 -> Prompt.MULTIPLE_CHOICE_QUIZ_PROMPT;
+                case 3 -> Prompt.MIX_CHOICE_QUIZ_PROMPT;
+                default -> Prompt.SINGLE_CHOICE_QUIZ_PROMPT;
+            };
+        }
+
         return String.format(prompt,
                 this.getNumber(),
+                this.getQuizType().getValue(),
                 this.getLevel().getValue(),
                 this.getLanguage());
     }

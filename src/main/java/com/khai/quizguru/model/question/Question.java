@@ -23,7 +23,7 @@ public class Question {
     @Column(name = "query")
     private String query;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Choice> choices;
 
     @Column(name = "explanation")
@@ -37,8 +37,8 @@ public class Question {
     @JsonIgnore
     private List<Integer> answers; // Not stored in the database but used for processing
 
-    public void setAnswer(Integer answer) {
-        this.choices.get(answer).setIsCorrect(true);
+    public void setAnswer(Integer answer, List<Choice> choices) {
+        choices.get(answer).setIsCorrect(true);
     }
 
     @ManyToOne

@@ -7,8 +7,6 @@ import com.khai.quizguru.model.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.NaturalId;
-
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)

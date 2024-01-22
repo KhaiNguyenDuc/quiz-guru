@@ -2,8 +2,6 @@ package com.khai.quizguru.serviceImpl;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.khai.quizguru.enums.QuestionType;
-import com.khai.quizguru.enums.QuizType;
 import com.khai.quizguru.exception.InternalErrorException;
 import com.khai.quizguru.exception.InvalidRequestException;
 import com.khai.quizguru.exception.ResourceNotFoundException;
@@ -12,26 +10,26 @@ import com.khai.quizguru.dto.ChatResponse;
 import com.khai.quizguru.dto.QuestionMixIn;
 import com.khai.quizguru.exception.UnauthorizedException;
 import com.khai.quizguru.model.Choice;
+import com.khai.quizguru.model.Library;
+import com.khai.quizguru.model.Word;
 import com.khai.quizguru.model.question.Question;
 import com.khai.quizguru.model.Quiz;
 import com.khai.quizguru.model.user.User;
+import com.khai.quizguru.payload.request.Prompt.VocabularyRequest;
+import com.khai.quizguru.payload.request.Prompt.hasVocabulary;
 import com.khai.quizguru.payload.response.JsonPageResponse;
 import com.khai.quizguru.payload.response.QuizResponse;
-import com.khai.quizguru.repository.ChoiceRepository;
-import com.khai.quizguru.repository.QuestionRepository;
-import com.khai.quizguru.repository.QuizRepository;
-import com.khai.quizguru.repository.UserRepository;
+import com.khai.quizguru.repository.*;
 import com.khai.quizguru.service.QuizService;
 import com.khai.quizguru.utils.Constant;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -54,6 +52,9 @@ public class QuizServiceImpl implements QuizService {
     private final RestTemplate restTemplate;
     private final ModelMapper mapper;
     private final ObjectMapper objMapper;
+    private final LibraryRepository libraryRepository;
+    private final WordRepository wordRepository;
+
     @Override
     public QuizResponse findById(String id) {
         Optional<Quiz> quizOtp = quizRepository.findById(id);
@@ -67,7 +68,6 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public String generateQuiz(ChatRequest chat, String userId) {
 
         ChatResponse chatResponse = restTemplate.postForObject(apiURL, chat, ChatResponse.class);
@@ -80,42 +80,6 @@ public class QuizServiceImpl implements QuizService {
 
 
         try {
-            // Parse the string to JSON
-            JsonNode jsonNode = objMapper.readTree(stringResponse);
-
-            // Extract the "questions" array from the JSON response
-            JsonNode questionsNode = jsonNode.get("questions");
-
-            List<Question> questions = new ArrayList<>();
-            // Iterate through each question in the array
-            for (JsonNode questionNode : questionsNode) {
-                // Deserialize the Question, excluding the choices
-                objMapper.addMixIn(Question.class, QuestionMixIn.class);
-                Question question = objMapper.treeToValue(questionNode, Question.class);
-
-                // Manually process the choices
-                List<Choice> choices = new ArrayList<>();
-
-                for (JsonNode choiceNode : questionNode.get("choices")) {
-                    // Assuming Choice has a constructor that takes a string
-                    Choice choice = new Choice();
-                    choice.setName(choiceNode.asText());
-                    choice.setQuestion(question);
-                    choices.add(choice);
-                }
-
-
-                question.setChoices(choices);
-                // Set the answer for each question
-                for(int i = 0;i<questionNode.get("answers").size(); i++){
-                    question.setAnswer(questionNode.get("answers").get(i).asInt());
-                }
-
-                questions.add(question);
-            }
-
-            // Create quiz
-
             Optional<User> userOtp = userRepository.findById(userId);
             if(userOtp.isEmpty()){
                 throw new ResourceNotFoundException(Constant.RESOURCE_NOT_FOUND_MSG);
@@ -130,18 +94,60 @@ public class QuizServiceImpl implements QuizService {
             quiz.setDuration(chat.getPromptRequest().getDuration());
             Quiz quizSaved = quizRepository.save(quiz);
 
-            // Create questions
-            questions.forEach(question -> {
-                question.setQuiz(quizSaved);
-            });
-            List<Question> savedQuestions = questionRepository.saveAll(questions);
+            // Parse the string to JSON
+            JsonNode jsonNode = objMapper.readTree(stringResponse);
 
-            // Create choice
-            List<Choice> allChoices = new ArrayList<>();
-            savedQuestions.forEach(savedQuestion -> allChoices.addAll(savedQuestion.getChoices()));
-            choiceRepository.saveAll(allChoices);
+            // Extract the "questions" array from the JSON response
+            JsonNode questionsNode = jsonNode.get("questions");
 
 
+            // Iterate through each question in the array
+            for (JsonNode questionNode : questionsNode) {
+                // Deserialize the Question, excluding the choices
+                objMapper.addMixIn(Question.class, QuestionMixIn.class);
+                Question question = objMapper.treeToValue(questionNode, Question.class);
+                question.setQuiz(quiz);
+                questionRepository.save(question);
+                List<Choice> choices = new ArrayList<>();
+                for (JsonNode choiceNode : questionNode.get("choices")) {
+                    // Assuming Choice has a constructor that takes a string
+                    Choice choice = new Choice();
+                    choice.setQuestion(question);
+                    choice.setName(choiceNode.asText());
+                    choices.add(choice);
+                    choiceRepository.save(choice);
+
+                }
+
+
+                // Set the answer for each question
+                for(int i = 0;i<questionNode.get("answers").size(); i++){
+                    question.setAnswer(questionNode.get("answers").get(i).asInt(), choices);
+                }
+                questionRepository.save(question);
+
+
+
+            }
+
+
+            if(chat.getPromptRequest() instanceof hasVocabulary){
+                VocabularyRequest vocabularyRequest = (VocabularyRequest) chat.getPromptRequest();
+                Optional<Library> libraryOpt = libraryRepository.findByUser(userOtp.get());
+                if(libraryOpt.isEmpty()){
+                    throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
+                }
+                Library library = libraryOpt.get();
+                library.setUser(userOtp.get());
+                List<Word> words = new ArrayList<>();
+                for (String name: vocabularyRequest.getNames()) {
+                    Word word = new Word();
+                    word.setName(name);
+                    word.setLibrary(library);
+                    words.add(word);
+                }
+                wordRepository.saveAll(words);
+            }
             return quizSaved.getId();
 
 

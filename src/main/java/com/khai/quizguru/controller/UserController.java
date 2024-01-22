@@ -4,6 +4,7 @@ import com.khai.quizguru.exception.AccessDeniedException;
 import com.khai.quizguru.payload.response.*;
 import com.khai.quizguru.security.CurrentUser;
 import com.khai.quizguru.security.UserPrincipal;
+import com.khai.quizguru.service.LibraryService;
 import com.khai.quizguru.service.QuizService;
 import com.khai.quizguru.service.RecordService;
 import com.khai.quizguru.service.UserService;
@@ -27,6 +28,7 @@ public class UserController {
 
     private final UserService userService;
     private final QuizService quizService;
+    private final LibraryService libraryService;
     private final RecordService recordService;
 
     @GetMapping("/current")
@@ -78,4 +80,16 @@ public class UserController {
         JsonPageResponse<RecordResponse> records = recordService.findAllRecordsByUserId(user_id, PageRequest.of(page, size));
         return new ResponseEntity<>(records, HttpStatus.OK);
     }
+
+    @GetMapping("/current/library")
+    public ResponseEntity<JsonPageResponse<WordResponse>> findLibraryByCurrentUser(
+            @CurrentUser UserPrincipal userPrincipal,
+            @RequestParam(name = "page", defaultValue ="0", required = false) Integer page,
+            @RequestParam(name = "size", defaultValue = "10", required = false) Integer size
+    ){
+        String user_id = userPrincipal.getId();
+        JsonPageResponse<WordResponse> library = libraryService.findLibraryByUserId(user_id, PageRequest.of(page, size));
+        return new ResponseEntity<>(library, HttpStatus.OK);
+    }
+
 }

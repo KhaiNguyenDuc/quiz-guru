@@ -1,10 +1,8 @@
 package com.khai.quizguru.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.khai.quizguru.model.Quiz;
+import com.khai.quizguru.model.*;
 import com.khai.quizguru.model.Record;
-import com.khai.quizguru.model.RefreshToken;
-import com.khai.quizguru.model.UserDateAudit;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -46,4 +44,9 @@ public class User extends UserDateAudit {
     @OneToMany
     @JsonIgnore
     private List<Record> records;
+
+    @OneToOne
+    @JoinColumn(name = "library_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Library library;
 }

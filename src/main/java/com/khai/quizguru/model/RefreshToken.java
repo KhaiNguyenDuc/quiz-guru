@@ -1,9 +1,9 @@
 package com.khai.quizguru.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.khai.quizguru.model.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.time.Instant;
 
 @Entity(name = "refresh_token")

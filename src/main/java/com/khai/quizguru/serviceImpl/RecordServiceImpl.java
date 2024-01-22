@@ -1,6 +1,8 @@
 package com.khai.quizguru.serviceImpl;
 
+import com.khai.quizguru.enums.QuestionType;
 import com.khai.quizguru.enums.QuizType;
+import com.khai.quizguru.exception.InvalidRequestException;
 import com.khai.quizguru.exception.ResourceNotFoundException;
 import com.khai.quizguru.model.*;
 import com.khai.quizguru.model.Record;
@@ -66,17 +68,21 @@ public class RecordServiceImpl implements RecordService {
 
             RecordItem recordItem = new RecordItem();
             Optional<Question> questionOpt = questionRepository.findById(recordItemRequest.getQuestionId());
-            questionOpt.ifPresent(recordItem::setQuestion);
+            if(questionOpt.isEmpty()){
+                throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
+            }
+            Question question = questionOpt.get();
+            recordItem.setQuestion(question);
             List<Choice> choices = choiceRepository.findAllById(recordItemRequest.getSelectedChoiceIds());
             recordItem.setSelectedChoices(choices);
 
-            if (quizType == QuizType.MULTIPLE_CHOICE_QUESTION && !choices.isEmpty()) {
+            if (question.getType() == QuestionType.MULTIPLE_CHOICE && !choices.isEmpty()) {
                 boolean allCorrect = choices.stream()
                         .allMatch(Choice::getIsCorrect);
                 if (allCorrect) {
                     score.addAndGet(1); // Increment score only if all selected choices are correct
                 }
-            } else if (quizType == QuizType.SINGLE_CHOICE_QUESTION && !choices.isEmpty()) {
+            } else if (question.getType() == QuestionType.SINGLE_CHOICE && !choices.isEmpty()) {
                 for (Choice item : choices) {
                     if (item.getIsCorrect()) {
                         score.addAndGet(1); // Increment score for each correct choice

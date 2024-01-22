@@ -2,8 +2,6 @@ package com.khai.quizguru.model;
 
 import java.io.Serializable;
 import java.util.Date;
-
-//import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;

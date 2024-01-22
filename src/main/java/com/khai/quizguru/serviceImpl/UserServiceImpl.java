@@ -2,12 +2,14 @@ package com.khai.quizguru.serviceImpl;
 
 import com.khai.quizguru.exception.ResourceExistException;
 import com.khai.quizguru.exception.ResourceNotFoundException;
+import com.khai.quizguru.model.Library;
 import com.khai.quizguru.payload.request.RegisterRequest;
 import com.khai.quizguru.model.user.Role;
 import com.khai.quizguru.enums.RoleName;
 import com.khai.quizguru.model.user.User;
 import com.khai.quizguru.payload.response.RegisterResponse;
 import com.khai.quizguru.payload.response.UserResponse;
+import com.khai.quizguru.repository.LibraryRepository;
 import com.khai.quizguru.repository.RoleRepository;
 import com.khai.quizguru.repository.UserRepository;
 import com.khai.quizguru.service.UserService;
@@ -29,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final ModelMapper mapper;
+    private final LibraryRepository libraryRepository;
     private final PasswordEncoder encoder;
 
     @Override
@@ -44,11 +47,12 @@ public class UserServiceImpl implements UserService {
         }
 
         Role role = roleOtp.get();
-
+        Library library = new Library();
+        Library librarySaved = libraryRepository.save(library);
         User user = mapper.map(registerRequest, User.class);
         user.setRoles(List.of(role));
         user.setPassword(encoder.encode(user.getPassword()));
-
+        user.setLibrary(librarySaved);
         User userSaved = userRepository.save(user);
         return mapper.map(userSaved, RegisterResponse.class);
     }

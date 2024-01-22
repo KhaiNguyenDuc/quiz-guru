@@ -6,10 +6,12 @@ import com.khai.quizguru.payload.request.Prompt.BaseTextRequest;
 import com.khai.quizguru.payload.request.Prompt.DocFileRequest;
 import com.khai.quizguru.payload.request.Prompt.PdfFileRequest;
 import com.khai.quizguru.payload.request.Prompt.TxtFileRequest;
+import com.khai.quizguru.payload.request.Prompt.VocabularyRequest;
 import com.khai.quizguru.payload.response.JsonResponse;
 import com.khai.quizguru.security.CurrentUser;
 import com.khai.quizguru.security.UserPrincipal;
 import com.khai.quizguru.service.QuizService;
+import com.khai.quizguru.service.LibraryService;
 import com.khai.quizguru.utils.Constant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,7 @@ public class QuizController {
 
 
     private final QuizService quizService;
+    private final LibraryService vocabularyService;
 
     @Value("${openai.model}")
     private String model;
@@ -71,8 +74,16 @@ public class QuizController {
             ChatRequest chat = new ChatRequest(model, baseTextRequest);
             String quizId = quizService.generateQuiz(chat, userPrincipal.getId());
             return new ResponseEntity<>(new JsonResponse("success", quizId), HttpStatus.OK);
+    }
 
+    @PostMapping("/generate/vocabulary")
+    public ResponseEntity<JsonResponse> generateQuizByVocabulary(
+            @CurrentUser UserPrincipal userPrincipal,
+            @RequestBody VocabularyRequest vocabularyRequest) {
 
+        ChatRequest chat = new ChatRequest(model, vocabularyRequest);
+        String quizId = quizService.generateQuiz(chat, userPrincipal.getId());
+        return new ResponseEntity<>(new JsonResponse("success", quizId), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}/delete")

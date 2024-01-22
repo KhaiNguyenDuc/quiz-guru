@@ -23,6 +23,7 @@ public class Choice {
 
     @ManyToOne
     @JoinColumn(name="question_id",referencedColumnName = "id")
+    @JsonIgnore
     private Question question;
 
     @Column(name = "is_correct")
