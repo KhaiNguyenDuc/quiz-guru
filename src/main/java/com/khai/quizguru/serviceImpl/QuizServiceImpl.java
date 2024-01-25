@@ -9,11 +9,8 @@ import com.khai.quizguru.dto.ChatRequest;
 import com.khai.quizguru.dto.ChatResponse;
 import com.khai.quizguru.dto.QuestionMixIn;
 import com.khai.quizguru.exception.UnauthorizedException;
-import com.khai.quizguru.model.Choice;
-import com.khai.quizguru.model.Library;
-import com.khai.quizguru.model.Word;
+import com.khai.quizguru.model.*;
 import com.khai.quizguru.model.question.Question;
-import com.khai.quizguru.model.Quiz;
 import com.khai.quizguru.model.user.User;
 import com.khai.quizguru.payload.request.Prompt.VocabularyRequest;
 import com.khai.quizguru.payload.request.Prompt.hasVocabulary;
@@ -54,6 +51,7 @@ public class QuizServiceImpl implements QuizService {
     private final ObjectMapper objMapper;
     private final LibraryRepository libraryRepository;
     private final WordRepository wordRepository;
+    private final WordSetRepository wordSetRepository;
 
     @Override
     public QuizResponse findById(String id) {
@@ -72,6 +70,7 @@ public class QuizServiceImpl implements QuizService {
 
         ChatResponse chatResponse = restTemplate.postForObject(apiURL, chat, ChatResponse.class);
         log.info(chat.getPromptRequest().generatePrompt());
+
         if(Objects.isNull(chatResponse)){
             throw new InternalErrorException(Constant.INTERNAL_ERROR_EXCEPTION_MSG);
         }
@@ -118,40 +117,13 @@ public class QuizServiceImpl implements QuizService {
                     choiceRepository.save(choice);
 
                 }
-
-
                 // Set the answer for each question
                 for(int i = 0;i<questionNode.get("answers").size(); i++){
                     question.setAnswer(questionNode.get("answers").get(i).asInt(), choices);
                 }
                 questionRepository.save(question);
-
-
-
-            }
-
-
-            if(chat.getPromptRequest() instanceof hasVocabulary){
-                VocabularyRequest vocabularyRequest = (VocabularyRequest) chat.getPromptRequest();
-                Optional<Library> libraryOpt = libraryRepository.findByUser(userOtp.get());
-                if(libraryOpt.isEmpty()){
-                    throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
-                }
-                Library library = libraryOpt.get();
-                library.setUser(userOtp.get());
-                List<Word> words = new ArrayList<>();
-                for (String name: vocabularyRequest.getNames()) {
-                    Word word = new Word();
-                    word.setName(name);
-                    word.setLibrary(library);
-                    words.add(word);
-                }
-                wordRepository.saveAll(words);
             }
             return quizSaved.getId();
-
-
-
         } catch (Exception e) {
             e.printStackTrace();
             throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);

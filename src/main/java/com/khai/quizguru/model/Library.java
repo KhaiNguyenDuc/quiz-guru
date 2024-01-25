@@ -17,11 +17,10 @@ public class Library {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @OneToMany(mappedBy = "library", fetch = FetchType.EAGER)
-    private List<Word> words;
-
     @OneToOne(mappedBy = "library")
     @JsonIgnore
     private User user;
 
+    @OneToMany(mappedBy = "library")
+    private List<WordSet> wordSets;
 }

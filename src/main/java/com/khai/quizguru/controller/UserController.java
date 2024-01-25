@@ -4,10 +4,7 @@ import com.khai.quizguru.exception.AccessDeniedException;
 import com.khai.quizguru.payload.response.*;
 import com.khai.quizguru.security.CurrentUser;
 import com.khai.quizguru.security.UserPrincipal;
-import com.khai.quizguru.service.LibraryService;
-import com.khai.quizguru.service.QuizService;
-import com.khai.quizguru.service.RecordService;
-import com.khai.quizguru.service.UserService;
+import com.khai.quizguru.service.*;
 import com.khai.quizguru.utils.Constant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +27,7 @@ public class UserController {
     private final QuizService quizService;
     private final LibraryService libraryService;
     private final RecordService recordService;
+    private final WordSetService wordSetService;
 
     @GetMapping("/current")
     public ResponseEntity<JsonResponse> getCurrentUser(@CurrentUser UserPrincipal userPrincipal){
@@ -81,15 +79,15 @@ public class UserController {
         return new ResponseEntity<>(records, HttpStatus.OK);
     }
 
-    @GetMapping("/current/library")
-    public ResponseEntity<JsonPageResponse<WordResponse>> findLibraryByCurrentUser(
+    @GetMapping("/current/word-set")
+    public ResponseEntity<JsonPageResponse<WordSetResponse>> findAllWordSetByCurrentUser(
             @CurrentUser UserPrincipal userPrincipal,
             @RequestParam(name = "page", defaultValue ="0", required = false) Integer page,
             @RequestParam(name = "size", defaultValue = "10", required = false) Integer size
     ){
         String user_id = userPrincipal.getId();
-        JsonPageResponse<WordResponse> library = libraryService.findLibraryByUserId(user_id, PageRequest.of(page, size));
-        return new ResponseEntity<>(library, HttpStatus.OK);
+        JsonPageResponse<WordSetResponse> wordSetResponse = wordSetService.findAllWordSetByUserId(user_id, PageRequest.of(page, size));
+        return new ResponseEntity<>(wordSetResponse, HttpStatus.OK);
     }
 
 }

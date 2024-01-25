@@ -1,5 +1,6 @@
 package com.khai.quizguru.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.khai.quizguru.enums.Level;
 import com.khai.quizguru.enums.QuizType;
 import com.khai.quizguru.model.question.Question;
@@ -52,4 +53,8 @@ public class Quiz extends UserDateAudit{
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
+
+    @OneToOne(mappedBy = "quiz")
+    @JsonIgnore
+    private WordSet wordSet;
 }

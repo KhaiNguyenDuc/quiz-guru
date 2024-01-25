@@ -20,7 +20,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse response, AuthenticationException e)
             throws IOException {
-        log.error("aaaaaaaaaaaaaaaaaa");
         // Set the response status and content type
         int statusCode = HttpServletResponse.SC_UNAUTHORIZED;
         response.setStatus(statusCode);

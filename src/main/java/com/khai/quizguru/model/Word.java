@@ -1,8 +1,11 @@
 package com.khai.quizguru.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.khai.quizguru.model.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -19,7 +22,9 @@ public class Word {
     private String definition;
 
     @ManyToOne
-    @JoinColumn(name = "library_id", referencedColumnName = "id")
-    private Library library;
+    @JoinColumn(name = "word_set_id", referencedColumnName = "id")
+    @JsonIgnore
+    private WordSet wordSet;
+
 
 }

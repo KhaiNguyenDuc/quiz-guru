@@ -16,14 +16,22 @@ public class QuizGuruApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(QuizGuruApplication.class, args);
 	}
+
 	@Value("${openai.api.key}")
 	public String apiKey;
 
+	@Value("${lingua.api.key}")
+	private String dictionaryAPIKey;
+
+	@Value("${lingua.api.host}")
+	private String dictionaryHost;
 	@Bean
 	public RestTemplate template(){
 		RestTemplate restTemplate=new RestTemplate();
 		restTemplate.getInterceptors().add((request, body, execution) -> {
 			request.getHeaders().add("Authorization", "Bearer " + apiKey);
+			request.getHeaders().add("X-RapidAPI-Key", dictionaryAPIKey);
+			request.getHeaders().add("X-RapidAPI-Host", dictionaryHost);
 			return execution.execute(request, body);
 		});
 		return restTemplate;

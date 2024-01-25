@@ -6,5 +6,5 @@ import com.khai.quizguru.payload.response.WordResponse;
 import org.springframework.data.domain.Pageable;
 
 public interface LibraryService {
-    JsonPageResponse<WordResponse> findLibraryByUserId(String userId, Pageable pageable);
+
 }

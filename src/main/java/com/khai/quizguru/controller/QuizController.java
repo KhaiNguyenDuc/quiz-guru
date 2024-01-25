@@ -12,6 +12,7 @@ import com.khai.quizguru.security.CurrentUser;
 import com.khai.quizguru.security.UserPrincipal;
 import com.khai.quizguru.service.QuizService;
 import com.khai.quizguru.service.LibraryService;
+import com.khai.quizguru.service.WordSetService;
 import com.khai.quizguru.utils.Constant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ public class QuizController {
 
     private final QuizService quizService;
     private final LibraryService vocabularyService;
+    private final WordSetService wordSetService;
 
     @Value("${openai.model}")
     private String model;
@@ -83,6 +85,7 @@ public class QuizController {
 
         ChatRequest chat = new ChatRequest(model, vocabularyRequest);
         String quizId = quizService.generateQuiz(chat, userPrincipal.getId());
+
         return new ResponseEntity<>(new JsonResponse("success", quizId), HttpStatus.OK);
     }
 
