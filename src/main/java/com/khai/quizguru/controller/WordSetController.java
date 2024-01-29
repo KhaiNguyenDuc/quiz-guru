@@ -1,11 +1,9 @@
 package com.khai.quizguru.controller;
 
 import com.khai.quizguru.exception.UnauthorizedException;
+import com.khai.quizguru.payload.request.BindRequest;
 import com.khai.quizguru.payload.request.WordSetRequest;
-import com.khai.quizguru.payload.response.JsonPageResponse;
-import com.khai.quizguru.payload.response.JsonResponse;
-import com.khai.quizguru.payload.response.RecordResponse;
-import com.khai.quizguru.payload.response.WordResponse;
+import com.khai.quizguru.payload.response.*;
 import com.khai.quizguru.security.CurrentUser;
 import com.khai.quizguru.security.UserPrincipal;
 import com.khai.quizguru.service.WordSetService;
@@ -34,14 +32,23 @@ public class WordSetController {
         return new ResponseEntity<>(new JsonResponse("success", id), HttpStatus.CREATED);
     }
 
+    @PostMapping("/bind")
+    public ResponseEntity<JsonResponse> bindQuiz(
+            @CurrentUser UserPrincipal userPrincipal,
+            @RequestBody BindRequest bindRequest
+            ){
+        wordSetService.bindQuiz(bindRequest.getWordSetId(), bindRequest.getQuizId(), userPrincipal.getId());
+        return new ResponseEntity<>(new JsonResponse("success", "success"), HttpStatus.CREATED);
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<JsonPageResponse<WordResponse>> findWordsByWordSetId(
+    public ResponseEntity<JsonPageResponse<WordSetResponse>> findWordsByWordSetId(
             @CurrentUser UserPrincipal userPrincipal,
             @PathVariable("id") String wordSetId,
             @RequestParam(name = "page", defaultValue ="0", required = false) Integer page,
             @RequestParam(name = "size", defaultValue = "10", required = false) Integer size
     ){
-        JsonPageResponse<WordResponse> words = wordSetService.findWordsById(wordSetId, userPrincipal.getId(), PageRequest.of(page, size));
+        JsonPageResponse<WordSetResponse> words = wordSetService.findWordsById(wordSetId, userPrincipal.getId(), PageRequest.of(page, size));
         return new ResponseEntity<>(words, HttpStatus.OK);
     }
 

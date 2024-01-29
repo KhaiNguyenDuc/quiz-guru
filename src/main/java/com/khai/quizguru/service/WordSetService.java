@@ -14,7 +14,9 @@ public interface WordSetService {
 
     JsonPageResponse<WordSetResponse> findAllWordSetByUserId(String userId, Pageable pageable);
 
-    JsonPageResponse<WordResponse> findWordsById(String wordSetId, String userId, Pageable pageable);
+    JsonPageResponse<WordSetResponse> findWordsById(String wordSetId, String userId, Pageable pageable);
 
     void deleteById(String wordSetId, String id);
+
+    void bindQuiz(String wordSetId, String quizId, String userId);
 }

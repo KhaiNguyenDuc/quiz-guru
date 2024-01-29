@@ -7,4 +7,5 @@ public interface hasVocabulary {
     List<String> names = new ArrayList<>();
 
     List<String> getNames();
+
 }

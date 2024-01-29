@@ -4,6 +4,8 @@ import com.khai.quizguru.model.UserDateAudit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class WordSetResponse extends UserDateAudit {
@@ -12,4 +14,5 @@ public class WordSetResponse extends UserDateAudit {
     private Integer wordNumber;
     private Integer reviewNumber;
     private String quizId;
+    private List<WordResponse> wordResponses;
 }

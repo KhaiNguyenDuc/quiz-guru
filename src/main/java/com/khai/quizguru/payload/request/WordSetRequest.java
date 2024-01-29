@@ -10,5 +10,6 @@ public class WordSetRequest {
 
     private String name;
     private String quizId;
+
     private List<WordRequest> words;
 }

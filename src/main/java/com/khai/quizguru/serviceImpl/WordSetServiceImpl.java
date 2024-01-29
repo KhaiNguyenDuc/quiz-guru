@@ -54,15 +54,20 @@ public class WordSetServiceImpl implements WordSetService {
         Library library = libraryOpt.get();
         library.setUser(userOtp.get());
 
-        Optional<Quiz> quizOpt = quizRepository.findById(wordSetRequest.getQuizId());
-        if(quizOpt.isEmpty()){
-            throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
-        }
-        Quiz quiz = quizOpt.get();
-
         WordSet wordSet = new WordSet();
+
+        if(wordSetRequest.getQuizId() != null){
+            Optional<Quiz> quizOpt = quizRepository.findById(wordSetRequest.getQuizId());
+
+            if(quizOpt.isPresent()){
+                Quiz quiz = quizOpt.get();
+                wordSet.setQuiz(quiz);
+            }
+        }
+
+
         wordSet.setLibrary(library);
-        wordSet.setQuiz(quiz);
+
         wordSet.setName(wordSetRequest.getName());
         wordSet.setWordNumber(wordSetRequest.getWords().size());
         WordSet wordSetSaved = wordSetRepository.save(wordSet);
@@ -113,7 +118,7 @@ public class WordSetServiceImpl implements WordSetService {
     }
 
     @Override
-    public JsonPageResponse<WordResponse> findWordsById(String wordSetId, String userId, Pageable pageable) {
+    public JsonPageResponse<WordSetResponse> findWordsById(String wordSetId, String userId, Pageable pageable) {
         Optional<WordSet> wordSetOpt = wordSetRepository.findById(wordSetId);
 
         if(wordSetOpt.isEmpty()){
@@ -123,10 +128,13 @@ public class WordSetServiceImpl implements WordSetService {
         if(!wordSet.getLibrary().getUser().getId().equals(userId)){
             throw  new UnauthorizedException(Constant.UNAUTHORIZED_MSG);
         }
+        WordSetResponse wordSetResponse = mapper.map(wordSet, WordSetResponse.class);
         Page<Word> words = wordRepository.findAllByWordSet(wordSet, pageable);
         List<WordResponse> wordResponses = Arrays.asList(mapper.map(words.getContent(), WordResponse[].class));
-        JsonPageResponse<WordResponse> pageResponse = new JsonPageResponse<>();
-        pageResponse.setData(wordResponses);
+
+        wordSetResponse.setWordResponses(wordResponses);
+        JsonPageResponse<WordSetResponse> pageResponse = new JsonPageResponse<>();
+        pageResponse.setData(List.of(wordSetResponse));
         pageResponse.setSize(pageable.getPageSize());
         pageResponse.setPage(pageable.getPageNumber());
         pageResponse.setTotalElements(words.getNumberOfElements());
@@ -152,5 +160,28 @@ public class WordSetServiceImpl implements WordSetService {
         wordSet.setIsDeleted(Boolean.TRUE);
         wordSetRepository.save(wordSet);
 
+    }
+
+    @Override
+    public void bindQuiz(String wordSetId, String quizId, String userId) {
+        Optional<WordSet> wordSetOpt = wordSetRepository.findById(wordSetId);
+
+        if(wordSetOpt.isEmpty()){
+            throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
+        }
+        WordSet wordSet = wordSetOpt.get();
+
+        Optional<Quiz> quizOpt = quizRepository.findById(quizId);
+
+        if(quizOpt.isEmpty()){
+            throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
+        }
+
+        Quiz quiz = quizOpt.get();
+        if(!quiz.getUser().getId().equals(userId)){
+            throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
+        }
+        wordSet.setQuiz(quiz);
+        wordSetRepository.save(wordSet);
     }
 }

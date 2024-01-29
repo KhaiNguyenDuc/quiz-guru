@@ -19,3 +19,5 @@ public class VocabularyRequest extends PromptRequest implements hasVocabulary {
         return this.names;
     }
 }
+
+
