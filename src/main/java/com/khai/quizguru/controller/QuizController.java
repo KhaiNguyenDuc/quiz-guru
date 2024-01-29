@@ -2,11 +2,14 @@ package com.khai.quizguru.controller;
 
 import com.khai.quizguru.dto.ChatRequest;
 import com.khai.quizguru.exception.InternalErrorException;
-import com.khai.quizguru.payload.request.Prompt.BaseTextRequest;
-import com.khai.quizguru.payload.request.Prompt.DocFileRequest;
-import com.khai.quizguru.payload.request.Prompt.PdfFileRequest;
-import com.khai.quizguru.payload.request.Prompt.TxtFileRequest;
-import com.khai.quizguru.payload.request.Prompt.VocabularyRequest;
+import com.khai.quizguru.payload.request.QuizGenerationResult;
+import com.khai.quizguru.payload.request.text.BaseTextRequest;
+import com.khai.quizguru.payload.request.text.DocFileRequest;
+import com.khai.quizguru.payload.request.text.PdfFileRequest;
+import com.khai.quizguru.payload.request.text.TxtFileRequest;
+import com.khai.quizguru.payload.request.vocabulary.GenerateVocabularyRequest;
+import com.khai.quizguru.payload.request.vocabulary.TextToVocabRequest;
+import com.khai.quizguru.payload.request.vocabulary.VocabularyPromptRequest;
 import com.khai.quizguru.payload.response.JsonResponse;
 import com.khai.quizguru.security.CurrentUser;
 import com.khai.quizguru.security.UserPrincipal;
@@ -41,7 +44,8 @@ public class QuizController {
             @ModelAttribute TxtFileRequest txtFileRequest) {
 
         ChatRequest chat = new ChatRequest(model, txtFileRequest);
-        String quizId = quizService.generateQuiz(chat, userPrincipal.getId());
+        QuizGenerationResult result = quizService.generateQuiz(chat, userPrincipal.getId());
+        String quizId = result.getQuizId();
         return new ResponseEntity<>(new JsonResponse("success", quizId), HttpStatus.OK);
 
     }
@@ -52,7 +56,8 @@ public class QuizController {
             @ModelAttribute PdfFileRequest pdfFileRequest) {
 
         ChatRequest chat = new ChatRequest(model, pdfFileRequest);
-        String quizId = quizService.generateQuiz(chat, userPrincipal.getId());
+        QuizGenerationResult result = quizService.generateQuiz(chat, userPrincipal.getId());
+        String quizId = result.getQuizId();
         return new ResponseEntity<>(new JsonResponse("success", quizId), HttpStatus.OK);
 
     }
@@ -63,7 +68,8 @@ public class QuizController {
             @ModelAttribute DocFileRequest docFileRequest) {
 
         ChatRequest chat = new ChatRequest(model, docFileRequest);
-        String quizId = quizService.generateQuiz(chat, userPrincipal.getId());
+        QuizGenerationResult result = quizService.generateQuiz(chat, userPrincipal.getId());
+        String quizId = result.getQuizId();
         return new ResponseEntity<>(new JsonResponse("success", quizId), HttpStatus.OK);
 
     }
@@ -74,19 +80,39 @@ public class QuizController {
             @RequestBody BaseTextRequest baseTextRequest) {
 
             ChatRequest chat = new ChatRequest(model, baseTextRequest);
-            String quizId = quizService.generateQuiz(chat, userPrincipal.getId());
+            QuizGenerationResult result = quizService.generateQuiz(chat, userPrincipal.getId());
+            String quizId = result.getQuizId();
             return new ResponseEntity<>(new JsonResponse("success", quizId), HttpStatus.OK);
     }
 
     @PostMapping("/generate/vocabulary")
     public ResponseEntity<JsonResponse> generateQuizByVocabulary(
             @CurrentUser UserPrincipal userPrincipal,
-            @RequestBody VocabularyRequest vocabularyRequest) {
+            @RequestBody GenerateVocabularyRequest generateVocabularyRequest) {
 
-        ChatRequest chat = new ChatRequest(model, vocabularyRequest);
-        String quizId = quizService.generateQuiz(chat, userPrincipal.getId());
+        ChatRequest chat = new ChatRequest(model, generateVocabularyRequest);
+        QuizGenerationResult result = quizService.generateQuizAndSaveWordSet(chat, userPrincipal.getId());
+        String quizId = result.getQuizId();
 
         return new ResponseEntity<>(new JsonResponse("success", quizId), HttpStatus.OK);
+    }
+
+    @PostMapping("/generate/text-to-vocab")
+    public ResponseEntity<JsonResponse> generateQuizByTextToVocab(
+            @CurrentUser UserPrincipal userPrincipal,
+            @RequestBody TextToVocabRequest textToVocabRequest) {
+
+        ChatRequest chat = new ChatRequest(model, textToVocabRequest);
+        QuizGenerationResult result = quizService.generateQuizAndSaveWordSet(chat, userPrincipal.getId());
+        String id = "";
+        // If user wanted to do quiz after generation
+        if(textToVocabRequest.getIsDoQuiz()){
+            id = result.getQuizId();
+        // if not redirect user to words page
+        }else{
+            id = result.getWordSetId();
+        }
+        return new ResponseEntity<>(new JsonResponse("success", id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}/delete")

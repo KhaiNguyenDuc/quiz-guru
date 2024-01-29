@@ -1,7 +1,7 @@
 package com.khai.quizguru.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.khai.quizguru.payload.request.Prompt.PromptRequest;
+import com.khai.quizguru.payload.request.PromptRequest;
 import com.khai.quizguru.utils.Prompt;
 import lombok.Data;
 

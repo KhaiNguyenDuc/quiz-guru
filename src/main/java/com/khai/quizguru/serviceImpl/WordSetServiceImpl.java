@@ -8,12 +8,9 @@ import com.khai.quizguru.model.Quiz;
 import com.khai.quizguru.model.Word;
 import com.khai.quizguru.model.WordSet;
 import com.khai.quizguru.model.user.User;
-import com.khai.quizguru.payload.request.Prompt.VocabularyRequest;
-import com.khai.quizguru.payload.request.Prompt.hasVocabulary;
 import com.khai.quizguru.payload.request.WordRequest;
 import com.khai.quizguru.payload.request.WordSetRequest;
 import com.khai.quizguru.payload.response.JsonPageResponse;
-import com.khai.quizguru.payload.response.RecordResponse;
 import com.khai.quizguru.payload.response.WordResponse;
 import com.khai.quizguru.payload.response.WordSetResponse;
 import com.khai.quizguru.repository.*;
@@ -22,7 +19,6 @@ import com.khai.quizguru.utils.Constant;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +51,7 @@ public class WordSetServiceImpl implements WordSetService {
         library.setUser(userOtp.get());
 
         WordSet wordSet = new WordSet();
-
+        wordSet.setName(wordSetRequest.getName());
         if(wordSetRequest.getQuizId() != null){
             Optional<Quiz> quizOpt = quizRepository.findById(wordSetRequest.getQuizId());
 
@@ -162,6 +158,8 @@ public class WordSetServiceImpl implements WordSetService {
 
     }
 
+
+
     @Override
     public void bindQuiz(String wordSetId, String quizId, String userId) {
         Optional<WordSet> wordSetOpt = wordSetRepository.findById(wordSetId);
@@ -183,5 +181,42 @@ public class WordSetServiceImpl implements WordSetService {
         }
         wordSet.setQuiz(quiz);
         wordSetRepository.save(wordSet);
+    }
+
+    @Override
+    public void addWordToWordSet(String wordSetId, WordSetRequest wordSetRequest) {
+        Optional<WordSet> wordSetOpt = wordSetRepository.findById(wordSetId);
+
+        if(wordSetOpt.isEmpty()){
+            throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
+        }
+        WordSet wordSet = wordSetOpt.get();
+
+        List<Word> words = new ArrayList<>();
+        for(WordRequest wordRequest : wordSetRequest.getWords()){
+            Word word = new Word();
+            word.setName(wordRequest.getName());
+            word.setDefinition(wordRequest.getDefinition());
+            word.setWordSet(wordSet);
+            words.add(word);
+        }
+        wordRepository.saveAll(words);
+
+        wordSet.setWordNumber(wordSet.getWordNumber() + words.size());
+        wordSetRepository.save(wordSet);
+    }
+
+    @Override
+    public WordSetResponse updateWordSet(WordSetRequest wordSetRequest, String wordSetId, String userId) {
+        Optional<WordSet> wordSetOpt = wordSetRepository.findById(wordSetId);
+
+        if(wordSetOpt.isEmpty()){
+            throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
+        }
+        WordSet wordSet = wordSetOpt.get();
+
+        wordSet.setName(wordSetRequest.getName());
+        WordSet wordSetSaved = wordSetRepository.save(wordSet);
+        return mapper.map(wordSetSaved, WordSetResponse.class);
     }
 }

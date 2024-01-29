@@ -19,4 +19,7 @@ public interface WordSetService {
     void deleteById(String wordSetId, String id);
 
     void bindQuiz(String wordSetId, String quizId, String userId);
+
+    void addWordToWordSet(String wordSetId, WordSetRequest wordSetRequest);
+    WordSetResponse updateWordSet(WordSetRequest wordSetRequest, String wordSetId, String userId);
 }

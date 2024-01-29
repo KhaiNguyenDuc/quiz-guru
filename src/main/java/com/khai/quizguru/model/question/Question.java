@@ -26,7 +26,7 @@ public class Question {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Choice> choices;
 
-    @Column(name = "explanation")
+    @Column(name = "explanation",  columnDefinition = "LONGTEXT")
     private String explanation;
 
     @Enumerated(EnumType.STRING)

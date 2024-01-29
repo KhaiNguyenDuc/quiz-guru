@@ -12,14 +12,16 @@ import com.khai.quizguru.exception.UnauthorizedException;
 import com.khai.quizguru.model.*;
 import com.khai.quizguru.model.question.Question;
 import com.khai.quizguru.model.user.User;
-import com.khai.quizguru.payload.request.Prompt.VocabularyRequest;
-import com.khai.quizguru.payload.request.Prompt.hasVocabulary;
+import com.khai.quizguru.payload.request.QuizGenerationResult;
+import com.khai.quizguru.payload.request.WordRequest;
+import com.khai.quizguru.payload.request.WordSetRequest;
+import com.khai.quizguru.payload.request.vocabulary.VocabularyPromptRequest;
 import com.khai.quizguru.payload.response.JsonPageResponse;
 import com.khai.quizguru.payload.response.QuizResponse;
 import com.khai.quizguru.repository.*;
 import com.khai.quizguru.service.QuizService;
+import com.khai.quizguru.service.WordSetService;
 import com.khai.quizguru.utils.Constant;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -49,9 +51,7 @@ public class QuizServiceImpl implements QuizService {
     private final RestTemplate restTemplate;
     private final ModelMapper mapper;
     private final ObjectMapper objMapper;
-    private final LibraryRepository libraryRepository;
-    private final WordRepository wordRepository;
-    private final WordSetRepository wordSetRepository;
+    private final WordSetService wordSetService;
 
     @Override
     public QuizResponse findById(String id) {
@@ -66,9 +66,53 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public String generateQuiz(ChatRequest chat, String userId) {
+    public QuizGenerationResult generateQuizAndSaveWordSet(ChatRequest chat, String userId){
+
+        QuizGenerationResult result = this.generateQuiz(chat, userId);
+
+        WordSetRequest wordSetRequest = new WordSetRequest();
+        wordSetRequest.setQuizId(result.getQuizId());
+        wordSetRequest.setName("");
+        ChatResponse chatResponse = result.getChatResponse();
+        String stringResponse = chatResponse.getChoices().get(0).getMessage().getContent();
+        try {
+            // Parse the string to JSON
+            JsonNode jsonNode = objMapper.readTree(stringResponse);
+
+            // Extract the "questions" array from the JSON response
+            JsonNode wordsNode = jsonNode.get("words");
+            List<WordRequest> wordRequests = new ArrayList<>();
+            for(JsonNode node: wordsNode){
+
+                WordRequest wordRequest = new WordRequest();
+                wordRequest.setName(node.asText());
+                wordRequests.add(wordRequest);
+            }
+            wordSetRequest.setWords(wordRequests);
+
+            String wordSetId = "";
+            if(chat.getPromptRequest() instanceof VocabularyPromptRequest vocabularyPromptRequest){
+                wordSetRequest.setName(vocabularyPromptRequest.getWordSetName());
+                if(!Objects.equals(vocabularyPromptRequest.getWordSetId(), "")){
+                    wordSetId = vocabularyPromptRequest.getWordSetId();
+                    wordSetService.addWordToWordSet(wordSetId, wordSetRequest);
+                }else{
+                    wordSetId = wordSetService.createWordSet(wordSetRequest, userId);
+                }
+            }
+            result.setWordSetId(wordSetId);
+
+        }catch (Exception e){
+            throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
+        }
+        return result;
+    }
+    @Override
+    public QuizGenerationResult generateQuiz(ChatRequest chat, String userId) {
 
         ChatResponse chatResponse = restTemplate.postForObject(apiURL, chat, ChatResponse.class);
+
+
         log.info(chat.getPromptRequest().generatePrompt());
 
         if(Objects.isNull(chatResponse)){
@@ -123,7 +167,11 @@ public class QuizServiceImpl implements QuizService {
                 }
                 questionRepository.save(question);
             }
-            return quizSaved.getId();
+
+            QuizGenerationResult quizGenerationResult = new QuizGenerationResult();
+            quizGenerationResult.setQuizId(quizSaved.getId());
+            quizGenerationResult.setChatResponse(chatResponse);
+            return quizGenerationResult;
         } catch (Exception e) {
             e.printStackTrace();
             throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);

@@ -1,7 +1,9 @@
-package com.khai.quizguru.payload.request.Prompt;
+package com.khai.quizguru.payload.request;
 
 import com.khai.quizguru.enums.Level;
 import com.khai.quizguru.enums.QuizType;
+import com.khai.quizguru.payload.request.vocabulary.GenerateVocabularyRequest;
+import com.khai.quizguru.payload.request.vocabulary.TextToVocabRequest;
 import com.khai.quizguru.utils.Prompt;
 import lombok.Data;
 
@@ -32,9 +34,11 @@ public abstract class PromptRequest {
     }
     public String generatePrompt(){
         String prompt = "";
-        if(this instanceof hasVocabulary){
+        if(this instanceof GenerateVocabularyRequest){
             prompt = Prompt.VOCABULARY_QUIZ_PROMPT;
-        }else{
+        }else if(this instanceof TextToVocabRequest){
+           prompt = Prompt.TEXT_TO_VOCAB_PROMPT;
+        } else {
             prompt = switch (this.type){
                 case 2 -> Prompt.MULTIPLE_CHOICE_QUIZ_PROMPT;
                 case 3 -> Prompt.MIX_CHOICE_QUIZ_PROMPT;

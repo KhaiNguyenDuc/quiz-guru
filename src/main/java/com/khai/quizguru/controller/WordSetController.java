@@ -32,6 +32,17 @@ public class WordSetController {
         return new ResponseEntity<>(new JsonResponse("success", id), HttpStatus.CREATED);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<JsonResponse> updateWordSet(
+            @CurrentUser UserPrincipal userPrincipal,
+            @RequestBody WordSetRequest wordSetRequest,
+            @PathVariable("id") String wordSetId
+    ){
+        WordSetResponse wordSetResponse = wordSetService.updateWordSet(wordSetRequest, wordSetId, userPrincipal.getId());
+        return new ResponseEntity<>(new JsonResponse("success", wordSetResponse), HttpStatus.OK);
+    }
+
+
     @PostMapping("/bind")
     public ResponseEntity<JsonResponse> bindQuiz(
             @CurrentUser UserPrincipal userPrincipal,

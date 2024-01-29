@@ -20,10 +20,10 @@ public class QuizGuruApplication {
 	@Value("${openai.api.key}")
 	public String apiKey;
 
-	@Value("${lingua.api.key}")
+	@Value("${dictionary.api.key}")
 	private String dictionaryAPIKey;
 
-	@Value("${lingua.api.host}")
+	@Value("${dictionary.api.host}")
 	private String dictionaryHost;
 	@Bean
 	public RestTemplate template(){

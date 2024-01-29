@@ -1,6 +1,6 @@
-package com.khai.quizguru.payload.request.Prompt;
+package com.khai.quizguru.payload.request.text;
 
-import com.khai.quizguru.utils.Prompt;
+import com.khai.quizguru.payload.request.PromptRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
