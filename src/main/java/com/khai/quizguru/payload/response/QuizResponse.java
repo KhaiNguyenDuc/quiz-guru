@@ -18,4 +18,5 @@ public class QuizResponse extends UserDateAudit {
     public String language;
     public String level;
     public Integer duration;
+    private WordSetResponse wordSet;
 }

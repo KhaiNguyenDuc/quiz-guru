@@ -1,6 +1,7 @@
 package com.khai.quizguru.controller;
 
 import com.khai.quizguru.exception.AccessDeniedException;
+import com.khai.quizguru.payload.request.ProfileRequest;
 import com.khai.quizguru.payload.response.*;
 import com.khai.quizguru.security.CurrentUser;
 import com.khai.quizguru.security.UserPrincipal;
@@ -10,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +30,14 @@ public class UserController {
     @GetMapping("/current")
     public ResponseEntity<JsonResponse> getCurrentUser(@CurrentUser UserPrincipal userPrincipal){
         UserResponse user = userService.getUserById(userPrincipal.getId());
+        return new ResponseEntity<>(new JsonResponse("success", user), HttpStatus.OK);
+    }
+
+    @PutMapping("/current/update")
+    public ResponseEntity<JsonResponse> updateUserProfile(
+            @CurrentUser UserPrincipal userPrincipal,
+            @ModelAttribute ProfileRequest profileRequest){
+        UserResponse user = userService.updateById(profileRequest, userPrincipal.getId());
         return new ResponseEntity<>(new JsonResponse("success", user), HttpStatus.OK);
     }
 

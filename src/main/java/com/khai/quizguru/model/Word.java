@@ -18,7 +18,7 @@ public class Word {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "definition")
+    @Column(name = "definition", columnDefinition = "LONGTEXT")
     private String definition;
 
     @ManyToOne

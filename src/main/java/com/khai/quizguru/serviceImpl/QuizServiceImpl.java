@@ -21,6 +21,8 @@ import com.khai.quizguru.payload.request.vocabulary.GenerateVocabularyRequest;
 import com.khai.quizguru.payload.request.vocabulary.VocabularyPromptRequest;
 import com.khai.quizguru.payload.response.JsonPageResponse;
 import com.khai.quizguru.payload.response.QuizResponse;
+import com.khai.quizguru.payload.response.WordResponse;
+import com.khai.quizguru.payload.response.WordSetResponse;
 import com.khai.quizguru.repository.*;
 import com.khai.quizguru.service.QuizService;
 import com.khai.quizguru.service.WordSetService;
@@ -56,14 +58,24 @@ public class QuizServiceImpl implements QuizService {
     private final ObjectMapper objMapper;
     private final WordSetService wordSetService;
 
+
     @Override
     public QuizResponse findById(String id) {
         Optional<Quiz> quizOtp = quizRepository.findById(id);
         if(quizOtp.isEmpty()){
             throw new ResourceNotFoundException(Constant.RESOURCE_NOT_FOUND_MSG);
         }
-        QuizResponse quizResponse = mapper.map(quizOtp.get(), QuizResponse.class);
-        quizResponse.setType(quizOtp.get().getType().getValue());
+        Quiz quiz = quizOtp.get();
+        QuizResponse quizResponse = mapper.map(quiz, QuizResponse.class);
+        if(Objects.nonNull(quiz.getWordSet())){
+            WordSetResponse wordSetResponse = mapper.map(quiz.getWordSet(), WordSetResponse.class);
+
+            List<WordResponse> wordResponses = Arrays.asList(mapper.map(quiz.getWordSet().getWords(), WordResponse[].class));
+            wordSetResponse.setWords(wordResponses);
+            quizResponse.setWordSet(wordSetResponse);
+
+        }
+        quizResponse.setType(quiz.getType().getValue());
         return quizResponse;
 
     }

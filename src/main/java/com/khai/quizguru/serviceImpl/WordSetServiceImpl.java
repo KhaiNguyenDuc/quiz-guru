@@ -128,7 +128,7 @@ public class WordSetServiceImpl implements WordSetService {
         Page<Word> words = wordRepository.findAllByWordSet(wordSet, pageable);
         List<WordResponse> wordResponses = Arrays.asList(mapper.map(words.getContent(), WordResponse[].class));
 
-        wordSetResponse.setWordResponses(wordResponses);
+        wordSetResponse.setWords(wordResponses);
         JsonPageResponse<WordSetResponse> pageResponse = new JsonPageResponse<>();
         pageResponse.setData(List.of(wordSetResponse));
         pageResponse.setSize(pageable.getPageSize());

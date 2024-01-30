@@ -14,5 +14,5 @@ public class WordSetResponse extends UserDateAudit {
     private Integer wordNumber;
     private Integer reviewNumber;
     private String quizId;
-    private List<WordResponse> wordResponses;
+    private List<WordResponse> words;
 }

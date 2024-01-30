@@ -49,4 +49,15 @@ public class User extends UserDateAudit {
     @JoinColumn(name = "library_id", referencedColumnName = "id")
     @JsonIgnore
     private Library library;
+
+
+    @OneToOne
+    @JoinColumn(name="image_id",referencedColumnName = "id")
+    private Image image;
+
+
+    @OneToOne
+    @JoinColumn(name="background_image_id",referencedColumnName = "id")
+    private Image backgoundImage;
+
 }
