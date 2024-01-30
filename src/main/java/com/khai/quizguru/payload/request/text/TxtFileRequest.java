@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Objects;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class TxtFileRequest extends PromptRequest {
@@ -15,7 +17,7 @@ public class TxtFileRequest extends PromptRequest {
 
     @Override
     public String getText() {
-        if (this.file.isEmpty()) {
+        if (Objects.isNull(this.file)) {
             throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
         }
         String originalFilename = file.getOriginalFilename();

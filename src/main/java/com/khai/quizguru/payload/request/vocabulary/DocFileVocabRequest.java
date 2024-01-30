@@ -1,21 +1,18 @@
-package com.khai.quizguru.payload.request.text;
+package com.khai.quizguru.payload.request.vocabulary;
 
 import com.khai.quizguru.exception.InvalidRequestException;
-import com.khai.quizguru.payload.request.PromptRequest;
 import com.khai.quizguru.utils.Constant;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.Objects;
-
-
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class DocFileRequest extends PromptRequest {
-
+public class DocFileVocabRequest extends VocabularyPromptRequest {
     private MultipartFile file;
 
     @Override
@@ -43,6 +40,4 @@ public class DocFileRequest extends PromptRequest {
             throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
         }
     }
-
-
 }

@@ -2,7 +2,7 @@ package com.khai.quizguru.serviceImpl;
 
 import com.khai.quizguru.dto.ChatRequest;
 import com.khai.quizguru.dto.ChatResponse;
-import com.khai.quizguru.model.question.Question;
+import com.khai.quizguru.model.Question;
 import com.khai.quizguru.repository.QuestionRepository;
 import com.khai.quizguru.service.QuestionService;
 import lombok.RequiredArgsConstructor;

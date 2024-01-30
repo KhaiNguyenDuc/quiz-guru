@@ -16,7 +16,9 @@ public abstract class PromptRequest {
     public Integer level;
     public Integer duration;
 
+
     public abstract String getText();
+
     public QuizType getQuizType(){
         return switch (this.type){
             case 1 -> QuizType.SINGLE_CHOICE_QUESTION;

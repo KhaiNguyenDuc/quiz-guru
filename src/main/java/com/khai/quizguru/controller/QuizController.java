@@ -7,9 +7,7 @@ import com.khai.quizguru.payload.request.text.BaseTextRequest;
 import com.khai.quizguru.payload.request.text.DocFileRequest;
 import com.khai.quizguru.payload.request.text.PdfFileRequest;
 import com.khai.quizguru.payload.request.text.TxtFileRequest;
-import com.khai.quizguru.payload.request.vocabulary.GenerateVocabularyRequest;
-import com.khai.quizguru.payload.request.vocabulary.TextToVocabRequest;
-import com.khai.quizguru.payload.request.vocabulary.VocabularyPromptRequest;
+import com.khai.quizguru.payload.request.vocabulary.*;
 import com.khai.quizguru.payload.response.JsonResponse;
 import com.khai.quizguru.security.CurrentUser;
 import com.khai.quizguru.security.UserPrincipal;
@@ -109,6 +107,60 @@ public class QuizController {
         if(textToVocabRequest.getIsDoQuiz()){
             id = result.getQuizId();
         // if not redirect user to words page
+        }else{
+            id = result.getWordSetId();
+        }
+        return new ResponseEntity<>(new JsonResponse("success", id), HttpStatus.OK);
+    }
+
+    @PostMapping("/generate/txt-to-vocab")
+    public ResponseEntity<JsonResponse> generateQuizByTxtToVocab(
+            @CurrentUser UserPrincipal userPrincipal,
+            @ModelAttribute TxtVocabularyRequest txtVocabularyRequest) {
+
+        ChatRequest chat = new ChatRequest(model, txtVocabularyRequest);
+        QuizGenerationResult result = quizService.generateQuizAndSaveWordSet(chat, userPrincipal.getId());
+        String id = "";
+        // If user wanted to do quiz after generation
+        if(txtVocabularyRequest.getIsDoQuiz()){
+            id = result.getQuizId();
+            // if not redirect user to words page
+        }else{
+            id = result.getWordSetId();
+        }
+        return new ResponseEntity<>(new JsonResponse("success", id), HttpStatus.OK);
+    }
+
+    @PostMapping("/generate/doc-to-vocab")
+    public ResponseEntity<JsonResponse> generateQuizByDocToVocab(
+            @CurrentUser UserPrincipal userPrincipal,
+            @ModelAttribute DocFileVocabRequest docFileVocabRequest) {
+
+        ChatRequest chat = new ChatRequest(model, docFileVocabRequest);
+        QuizGenerationResult result = quizService.generateQuizAndSaveWordSet(chat, userPrincipal.getId());
+        String id = "";
+        // If user wanted to do quiz after generation
+        if(docFileVocabRequest.getIsDoQuiz()){
+            id = result.getQuizId();
+            // if not redirect user to words page
+        }else{
+            id = result.getWordSetId();
+        }
+        return new ResponseEntity<>(new JsonResponse("success", id), HttpStatus.OK);
+    }
+
+    @PostMapping("/generate/pdf-to-vocab")
+    public ResponseEntity<JsonResponse> generateQuizByPdfToVocab(
+            @CurrentUser UserPrincipal userPrincipal,
+            @ModelAttribute PdfFileVocabRequest pdfFileVocabRequest) {
+
+        ChatRequest chat = new ChatRequest(model, pdfFileVocabRequest);
+        QuizGenerationResult result = quizService.generateQuizAndSaveWordSet(chat, userPrincipal.getId());
+        String id = "";
+        // If user wanted to do quiz after generation
+        if(pdfFileVocabRequest.getIsDoQuiz()){
+            id = result.getQuizId();
+            // if not redirect user to words page
         }else{
             id = result.getWordSetId();
         }

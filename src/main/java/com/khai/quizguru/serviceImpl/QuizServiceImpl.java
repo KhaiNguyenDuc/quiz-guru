@@ -10,11 +10,14 @@ import com.khai.quizguru.dto.ChatResponse;
 import com.khai.quizguru.dto.QuestionMixIn;
 import com.khai.quizguru.exception.UnauthorizedException;
 import com.khai.quizguru.model.*;
-import com.khai.quizguru.model.question.Question;
+import com.khai.quizguru.model.Question;
 import com.khai.quizguru.model.user.User;
+import com.khai.quizguru.payload.request.HasHtmlContent;
 import com.khai.quizguru.payload.request.QuizGenerationResult;
 import com.khai.quizguru.payload.request.WordRequest;
 import com.khai.quizguru.payload.request.WordSetRequest;
+import com.khai.quizguru.payload.request.text.BaseTextRequest;
+import com.khai.quizguru.payload.request.vocabulary.GenerateVocabularyRequest;
 import com.khai.quizguru.payload.request.vocabulary.VocabularyPromptRequest;
 import com.khai.quizguru.payload.response.JsonPageResponse;
 import com.khai.quizguru.payload.response.QuizResponse;
@@ -127,14 +130,7 @@ public class QuizServiceImpl implements QuizService {
             if(userOtp.isEmpty()){
                 throw new ResourceNotFoundException(Constant.RESOURCE_NOT_FOUND_MSG);
             }
-            Quiz quiz = new Quiz();
-            quiz.setUser(userOtp.get());
-            quiz.setGivenText(chat.getGivenText());
-            quiz.setLevel(chat.getPromptRequest().getLevel());
-            quiz.setLanguage(chat.getPromptRequest().getLanguage());
-            quiz.setNumber(chat.getPromptRequest().getNumber());
-            quiz.setType(chat.getPromptRequest().getQuizType());
-            quiz.setDuration(chat.getPromptRequest().getDuration());
+            Quiz quiz = getQuiz(chat, userOtp);
             Quiz quizSaved = quizRepository.save(quiz);
 
             // Parse the string to JSON
@@ -176,6 +172,25 @@ public class QuizServiceImpl implements QuizService {
             e.printStackTrace();
             throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
         }
+    }
+
+    private Quiz getQuiz(ChatRequest chat, Optional<User> userOtp) {
+        Quiz quiz = new Quiz();
+        quiz.setUser(userOtp.get());
+        if(chat.getPromptRequest() instanceof HasHtmlContent){
+            quiz.setGivenText(((HasHtmlContent) chat.getPromptRequest()).getHtmlContent());
+        }else if(chat.getPromptRequest() instanceof GenerateVocabularyRequest){
+            quiz.setGivenText("");
+        } else{
+            quiz.setGivenText(chat.getGivenText());
+        }
+
+        quiz.setLevel(chat.getPromptRequest().getLevel());
+        quiz.setLanguage(chat.getPromptRequest().getLanguage());
+        quiz.setNumber(chat.getPromptRequest().getNumber());
+        quiz.setType(chat.getPromptRequest().getQuizType());
+        quiz.setDuration(chat.getPromptRequest().getDuration());
+        return quiz;
     }
 
     @Override

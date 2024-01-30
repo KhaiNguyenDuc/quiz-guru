@@ -1,7 +1,6 @@
-package com.khai.quizguru.payload.request.text;
+package com.khai.quizguru.payload.request.vocabulary;
 
 import com.khai.quizguru.exception.InvalidRequestException;
-import com.khai.quizguru.payload.request.PromptRequest;
 import com.khai.quizguru.utils.Constant;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,8 +14,7 @@ import java.util.Objects;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PdfFileRequest extends PromptRequest {
-
+public class PdfFileVocabRequest extends VocabularyPromptRequest{
     private MultipartFile file;
 
     @Override
@@ -36,5 +34,4 @@ public class PdfFileRequest extends PromptRequest {
         }
 
     }
-
 }

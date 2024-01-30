@@ -1,4 +1,4 @@
-package com.khai.quizguru.model.question;
+package com.khai.quizguru.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.khai.quizguru.enums.QuestionType;

@@ -17,7 +17,14 @@ public abstract class VocabularyPromptRequest extends PromptRequest {
 
     public String generatePrompt(){
         String prompt = "";
-        if(this instanceof TextToVocabRequest){
+         if(this instanceof GenerateVocabularyRequest){
+            prompt = Prompt.VOCABULARY_QUIZ_PROMPT;
+            return String.format(prompt,
+                    this.getNumber(),
+                    this.getQuizType().getValue(),
+                    this.getLevel().getValue(),
+                    this.getLanguage());
+        }else{
             prompt = Prompt.TEXT_TO_VOCAB_PROMPT;
             return String.format(prompt,
                     this.getNumber(),
@@ -25,15 +32,7 @@ public abstract class VocabularyPromptRequest extends PromptRequest {
                     this.getNumberOfWords(),
                     this.getLevel().getValue(),
                     this.getLanguage());
-        }else if(this instanceof GenerateVocabularyRequest){
-            prompt = Prompt.VOCABULARY_QUIZ_PROMPT;
-            return String.format(prompt,
-                    this.getNumber(),
-                    this.getQuizType().getValue(),
-                    this.getLevel().getValue(),
-                    this.getLanguage());
         }
-        return "";
 
     }
 }
