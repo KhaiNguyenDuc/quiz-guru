@@ -21,6 +21,9 @@ public class Word {
     @Column(name = "definition", columnDefinition = "LONGTEXT")
     private String definition;
 
+    @Column(name = "content", columnDefinition = "LONGTEXT")
+    private String content;
+
     @ManyToOne
     @JoinColumn(name = "word_set_id", referencedColumnName = "id")
     @JsonIgnore

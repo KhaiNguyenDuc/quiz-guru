@@ -2,6 +2,9 @@ package com.khai.quizguru.controller;
 
 import com.khai.quizguru.payload.request.WordRequest;
 import com.khai.quizguru.payload.response.JsonResponse;
+import com.khai.quizguru.payload.response.WordResponse;
+import com.khai.quizguru.security.CurrentUser;
+import com.khai.quizguru.security.UserPrincipal;
 import com.khai.quizguru.service.WordService;
 import lombok.RequiredArgsConstructor;
 
@@ -25,12 +28,25 @@ public class WordController {
 
     private final WordService wordService;
 
-    @PostMapping
+    @PostMapping("/word-set/{id}")
     public ResponseEntity<JsonResponse> getWordsDefinition(
+            @CurrentUser UserPrincipal userPrincipal,
+            @PathVariable("id") String wordSetId,
             @RequestBody List<String> words
             ){
 
-        List<Object> objects = wordService.findDefinition(words);
-        return new ResponseEntity<>(new JsonResponse("success",objects), HttpStatus.OK);
+        List<WordResponse> wordResponses = wordService.findDefinition(wordSetId, words, userPrincipal.getId());
+        return new ResponseEntity<>(new JsonResponse("success",wordResponses), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<JsonResponse> udpateWordDefinition(
+            @CurrentUser UserPrincipal userPrincipal,
+            @PathVariable(name ="id") String wordId,
+            @RequestBody WordRequest wordRequest
+    ){
+
+        WordResponse  wordResponse = wordService.udpateWordDefinition(wordId, wordRequest, userPrincipal.getId());
+        return new ResponseEntity<>(new JsonResponse("success",wordResponse), HttpStatus.OK);
     }
 }

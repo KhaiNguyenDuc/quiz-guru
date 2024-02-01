@@ -111,6 +111,9 @@ public class QuizServiceImpl implements QuizService {
                 if(!Objects.equals(vocabularyPromptRequest.getWordSetId(), "")){
                     wordSetId = vocabularyPromptRequest.getWordSetId();
                     wordSetService.addWordToWordSet(wordSetId, wordSetRequest);
+
+                    //delete old quiz due to one to one relationship
+                    wordSetService.bindQuiz(wordSetId, wordSetRequest.getQuizId(), userId);
                 }else{
                     wordSetId = wordSetService.createWordSet(wordSetRequest, userId);
                 }

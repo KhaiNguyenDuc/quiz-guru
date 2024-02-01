@@ -22,10 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -71,7 +68,9 @@ public class WordSetServiceImpl implements WordSetService {
         for(WordRequest wordRequest : wordSetRequest.getWords()){
             Word word = new Word();
             word.setName(wordRequest.getName());
-            word.setDefinition(wordRequest.getDefinition());
+            if(Objects.nonNull(wordRequest.getDefinition())){
+                word.setDefinition(wordRequest.getDefinition());
+            }
             word.setWordSet(wordSetSaved);
             words.add(word);
         }
@@ -194,11 +193,13 @@ public class WordSetServiceImpl implements WordSetService {
 
         List<Word> words = new ArrayList<>();
         for(WordRequest wordRequest : wordSetRequest.getWords()){
-            Word word = new Word();
-            word.setName(wordRequest.getName());
-            word.setDefinition(wordRequest.getDefinition());
-            word.setWordSet(wordSet);
-            words.add(word);
+            if(!wordRepository.existsByNameAndWordSet(wordRequest.getName(), wordSet)){
+                Word word = new Word();
+                word.setName(wordRequest.getName());
+                word.setDefinition(wordRequest.getDefinition());
+                word.setWordSet(wordSet);
+                words.add(word);
+            }
         }
         wordRepository.saveAll(words);
 
