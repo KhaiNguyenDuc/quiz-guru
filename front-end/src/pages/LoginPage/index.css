@@ -1,0 +1,77 @@
+
+.login-page .card{
+    height: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 400px;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+
+
+.login-page .social_icon span {
+    font-size: 60px;
+    margin-left: 10px;
+    color: #FFC312;
+}
+
+.login-page .social_icon span:hover {
+    color: white;
+    cursor: pointer;
+}
+
+.login-page.card-header h3 {
+    color: white;
+}
+
+.login-page .social_icon {
+    position: absolute;
+    right: 20px;
+    top: -45px;
+}
+
+.login-page .input-group-prepend span {
+    width: 50px;
+    height: 100%;
+    background-color: #FFC312;
+    color: black;
+    border: 0 !important;
+    border-radius: 0% !important;
+}
+
+.login-page input:focus {
+    outline: 0 0 0 0 !important;
+    box-shadow: 0 0 0 0 !important;
+
+}
+
+.login-page .remember {
+    color: white;
+    margin-top: 20px;
+}
+
+.login-page .remember input {
+    width: 20px;
+    height: 20px;
+    margin-left: 15px;
+    margin-right: 5px;
+}
+
+.login-page .login_btn {
+    color: black;
+    background-color: #FFC312;
+    margin-left: 71%;
+}
+
+.login-page .login_btn:hover {
+    color: black;
+    background-color: white;
+}
+
+.login-page .links {
+    color: white;
+}
+
+.login-page .links a {
+    margin-left: 4px;
+}

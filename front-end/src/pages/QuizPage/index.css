@@ -1,0 +1,39 @@
+    .scrollable-col {
+        max-height: 100vh;
+        overflow-y: auto;
+    }
+
+
+
+    .given-text {
+        background-color: white;
+        padding: 40px;
+    }
+
+    .quiz-section {
+        transition: all 0.4s ease;
+    }
+
+    .quiz-section.full-width {
+        width: 50vw;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .progress-timer {
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        border-radius: 6%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .progress-timer.time {
+        width: 120px;
+        height: 70px;
+        background: white
+    }

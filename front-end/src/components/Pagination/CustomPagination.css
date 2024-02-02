@@ -1,0 +1,34 @@
+.custom-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+
+}
+
+.paginationItemStyle {
+    margin-left: 2px;
+    margin-right: 2px;  
+}
+
+.pagination {
+    border: 4px solid black;
+}
+
+.paginationItemStyle.page-item a {
+    color: white;
+    background-color:rgba(30, 31, 30, 0.9);
+}
+
+.pagination .page-item .page-link {
+    color: white;
+    background-color:rgba(30, 31, 30, 0.5);
+}
+
+.paginationItemStyle.active span {
+    color: white !important;
+    background-color: #6A5AE2 !important;
+    z-index: -1;
+}
+
+
+

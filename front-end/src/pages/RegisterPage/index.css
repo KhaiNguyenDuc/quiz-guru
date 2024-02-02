@@ -1,0 +1,65 @@
+
+.register-page .card{
+    height: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 400px;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+
+.register-page .social_icon span {
+    font-size: 60px;
+    margin-left: 10px;
+    color: #FFC312;
+}
+
+.register-page .social_icon span:hover {
+    color: white;
+    cursor: pointer;
+}
+
+.register-page.card-header h3 {
+    color: white;
+}
+
+.register-page .social_icon {
+    position: absolute;
+    right: 20px;
+    top: -45px;
+}
+
+.register-page .input-group-prepend span {
+    width: 50px;
+    height: 100%;
+    background-color: #FFC312;
+    color: black;
+    border: 0 !important;
+    border-radius: 0% !important;
+}
+
+.register-page input:focus {
+    outline: 0 0 0 0 !important;
+    box-shadow: 0 0 0 0 !important;
+
+}
+
+
+.register-page .register_btn {
+    color: black;
+    background-color: #FFC312;
+    margin-left: 76%;
+}
+
+.register-page .register_btn:hover {
+    color: black;
+    background-color: white;
+}
+
+.register-page .links {
+    color: white;
+}
+
+.register-page .links a {
+    margin-left: 4px;
+}

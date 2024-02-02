@@ -1,0 +1,23 @@
+.setup-box {
+    max-width: 100%;
+    width: 40rem;
+    margin: auto;
+    padding: 1.5rem;
+    background-color: var(--bg-color);
+    border-radius: 1rem;
+    height: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    .setup-box {
+        min-height: 100vh;
+        padding: 1rem;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .setup-box {
+        min-height: 130vh;
+        padding: 1rem;
+    }
+}
