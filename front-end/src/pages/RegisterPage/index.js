@@ -10,6 +10,7 @@ import {
 import AuthService from "../../services/AuthService";
 import { useNavigate } from "react-router-dom";
 import PreLoader from "../../components/PreLoader/PreLoader";
+import Oauth from "../../components/Oauth2Section/Oauth";
 function RegisterPage() {
   const navigate = useNavigate();
   const [registerInfo, setRegisterInfo] = useState({});
@@ -53,17 +54,7 @@ function RegisterPage() {
           <div className="card">
             <div className="card-header">
               <h3 className="text-white">Đăng ký</h3>
-              <div className="d-flex justify-content-end social_icon">
-                <span>
-                  <FontAwesomeIcon icon="fa-brands fa-square-facebook" />
-                </span>
-                <span>
-                  <FontAwesomeIcon icon="fa-brands fa-google-plus-square" />
-                </span>
-                <span>
-                  <FontAwesomeIcon icon="fa-brands fa-twitter-square" />
-                </span>
-              </div>
+              <Oauth/>
             </div>
             <div className="card-body">
               <form onSubmit={(e) => handleRegister(e)}>

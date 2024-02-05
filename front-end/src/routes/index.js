@@ -16,6 +16,7 @@ import VocabularyPage from "../pages/VocabularyPage/index.js";
 import LibraryPage from "../pages/LibraryPage/index.js";
 import WordPage from "../pages/WordPage/index.js";
 import ErrorPage from "../pages/ErrorPage/ErrorPage.js";
+import ProtectedRoute from "./ProtectedRoute.js";
 function useRouteElements() {
 
 
@@ -37,7 +38,7 @@ function useRouteElements() {
     },
     {
         path: '/',
-        element: <MainLayout />,
+        element: <ProtectedRoute><MainLayout /></ProtectedRoute>,
         children: [
           {
             path: '',
@@ -66,7 +67,7 @@ function useRouteElements() {
       },    
       {
         path: '/member',
-        element: <MainLayout/>,
+        element:  <ProtectedRoute><MainLayout /></ProtectedRoute>,
         children: [
           {
             path: '/member/quiz',

@@ -6,9 +6,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { INVALID_LOGIN_MSG } from "../../utils/Constant";
 import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import GoogleOauth from "../../components/Oauth2Section/GoogleOauth";
+import useUser from "../../hook/useUser";
+import Oauth from "../../components/Oauth2Section/Oauth";
 function LoginPage() {
   const location = useLocation();
+  const {user, setUser} = useUser();
   const isCreated = location.state?.isCreated;
   const createdUsername = location.state?.username;
   const [username, setUsername] = useState("");
@@ -28,6 +30,7 @@ function LoginPage() {
     if (response?.status !== 401) {
       localStorage.setItem("accessToken", response.accessToken);
       localStorage.setItem("refreshToken", response.refreshToken);
+      setUser({...user, roles: response?.user?.roles?.map(role => role?.name)})
       setLoading(false)
       navigate("/")
     } else {
@@ -50,23 +53,13 @@ function LoginPage() {
                 <div className="success-section">Tạo tài khoản thành công</div>
               )}
               
-              <div className="d-flex justify-content-end social_icon">
-                <span>
-                  <FontAwesomeIcon icon="fa-brands fa-square-facebook" />
-                </span>
-                <span>
-                  <FontAwesomeIcon icon="fa-brands fa-google-plus-square" />
-                </span>
-                <span>
-                  <FontAwesomeIcon icon="fa-brands fa-twitter-square" />
-                </span>
-              </div>
+                <Oauth/>
             </div>
             
             <div className="card-body">
-            <div className="oauth-login">
+            {/* <div className="oauth-login">
             <GoogleOauth/>
-            </div>
+            </div> */}
            
               <form onSubmit={(e) => handleSubmit(e)} className="my-3">
                 {isLoading && (<PreLoader type={"spin"} color={"#FFFFFF"}/>)}

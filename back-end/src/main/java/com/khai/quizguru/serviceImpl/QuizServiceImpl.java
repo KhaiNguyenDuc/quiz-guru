@@ -45,7 +45,7 @@ public class QuizServiceImpl implements QuizService {
 
 
 
-    @Value(("${openai.api.url}"))
+    @Value("${openai.api.url}")
     private String apiURL;
 
 
@@ -82,15 +82,16 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public QuizGenerationResult generateQuizAndSaveWordSet(ChatRequest chat, String userId){
-
-        QuizGenerationResult result = this.generateQuiz(chat, userId);
-
-        WordSetRequest wordSetRequest = new WordSetRequest();
-        wordSetRequest.setQuizId(result.getQuizId());
-        wordSetRequest.setName("");
-        ChatResponse chatResponse = result.getChatResponse();
-        String stringResponse = chatResponse.getChoices().get(0).getMessage().getContent();
+        QuizGenerationResult result;
         try {
+            result = this.generateQuiz(chat, userId);
+
+            WordSetRequest wordSetRequest = new WordSetRequest();
+            wordSetRequest.setQuizId(result.getQuizId());
+            wordSetRequest.setName("");
+            ChatResponse chatResponse = result.getChatResponse();
+            String stringResponse = chatResponse.getChoices().get(0).getMessage().getContent();
+
             // Parse the string to JSON
             JsonNode jsonNode = objMapper.readTree(stringResponse);
 
@@ -153,7 +154,9 @@ public class QuizServiceImpl implements QuizService {
 
             // Extract the "questions" array from the JSON response
             JsonNode questionsNode = jsonNode.get("questions");
-
+            if(Objects.isNull(questionsNode)){
+                throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
+            }
 
             // Iterate through each question in the array
             for (JsonNode questionNode : questionsNode) {

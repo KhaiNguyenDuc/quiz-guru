@@ -36,9 +36,10 @@ const SideBar = ({ children }) => {
   };
   const getUserInfo = async () => {
     const response = await UserService.getCurrentUser();
-    if (response?.status !== 400) {
+    if (response?.status !== 400 || response?.status !== 401) {
       setUser(response);
       setUsername(response?.username);
+      setUser({...user, roles: response?.user?.roles?.map(role => role?.name)})
     }
   };
   const [editMode, setEditMode] = useState(false);
@@ -178,13 +179,16 @@ const SideBar = ({ children }) => {
                   </>
                 )}
               </>
-              <Link to={"/normal/create/text"}>
-                <FontAwesomeIcon icon="home" className="fa-icon" />{" "}
-                <span>Tạo câu hỏi</span>
-              </Link>
+ 
             </li>
             {user !== undefined && (
               <>
+                <li>
+                <Link to={"/normal/create/text"}>
+                <FontAwesomeIcon icon="home" className="fa-icon" />{" "}
+                <span>Tạo câu hỏi</span>
+              </Link>
+                </li>
                 <li>
                   <Link to={"/member/vocabulary/create/text"}>
                     <FontAwesomeIcon icon={"clone"} className="fa-icon" /> Học
