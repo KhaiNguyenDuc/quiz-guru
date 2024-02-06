@@ -1,8 +1,9 @@
 package com.khai.quizguru.controller;
 
-import com.khai.quizguru.model.RefreshToken;
-import com.khai.quizguru.payload.request.LoginRequest;
-import com.khai.quizguru.payload.request.RegisterRequest;
+
+import com.khai.quizguru.model.user.RefreshToken;
+import com.khai.quizguru.model.user.VerificationToken;
+import com.khai.quizguru.payload.request.*;
 import com.khai.quizguru.model.user.User;
 import com.khai.quizguru.payload.jwt.TokenRefreshRequest;
 import com.khai.quizguru.payload.jwt.TokenRefreshResponse;
@@ -10,8 +11,11 @@ import com.khai.quizguru.payload.response.JsonResponse;
 import com.khai.quizguru.payload.response.RegisterResponse;
 import com.khai.quizguru.security.JwtTokenProvider;
 import com.khai.quizguru.security.UserPrincipal;
+import com.khai.quizguru.service.EmailService;
 import com.khai.quizguru.service.RefreshTokenService;
 import com.khai.quizguru.service.UserService;
+import com.khai.quizguru.service.VerifyTokenService;
+import com.khai.quizguru.utils.Constant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,10 +24,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -35,11 +37,42 @@ public class AuthController {
     private final JwtTokenProvider tokenProvider;
     private final AuthenticationManager authManager;
     private final RefreshTokenService refreshTokenService;
+    private final EmailService emailService;
+    private final VerifyTokenService verifyTokenService;
 
     @PostMapping("/register")
     public ResponseEntity<JsonResponse> register(@RequestBody RegisterRequest registerRequest){
         RegisterResponse userSaved = userService.createUser(registerRequest);
+
+        // Send verification email
+        VerificationToken token = verifyTokenService.findTokenByUser(userSaved.getId());
+        EmailRequest emailRequest = new EmailRequest();
+        emailRequest.setTo(userSaved.getEmail());
+        emailRequest.setSubject(Constant.VERIFY_SUBJECT);
+        emailRequest.setUserId(userSaved.getId());
+        emailRequest.setBody(token.getToken());
+
+        emailService.sendVerificationEmail(emailRequest);
+
         return new ResponseEntity<>(new JsonResponse("success", userSaved), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<JsonResponse> verifyUser(
+            @RequestBody VerifyRequest verifyRequest
+    ){
+        Boolean result = verifyTokenService.verifyUser(verifyRequest.getToken(), verifyRequest.getUserId());
+        return new ResponseEntity<>(new JsonResponse("success", result), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/send-verify")
+    public ResponseEntity<JsonResponse> resendVerifyToken(
+            @RequestParam String userId
+
+    ){
+
+        Boolean result = userService.resendVerifyToken(userId);
+        return new ResponseEntity<>(new JsonResponse("success", result), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
@@ -64,7 +97,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<TokenRefreshResponse> refreshToken(@RequestBody TokenRefreshRequest request) throws Exception {
+    public ResponseEntity<TokenRefreshResponse> refreshToken(@RequestBody TokenRefreshRequest request)  {
         String requestRefreshToken = request.getRefreshToken();
 
         RefreshToken refreshToken = refreshTokenService.findByToken(requestRefreshToken);
@@ -74,4 +107,24 @@ public class AuthController {
 
         return new ResponseEntity<>(new TokenRefreshResponse(accessToken, refreshToken),HttpStatus.OK);
     }
+
+    @PostMapping("/send-reset-password")
+    public ResponseEntity<JsonResponse> sendResetPasssword(
+            @RequestBody PasswordResetRequest request)  {
+
+        userService.sendResetPassword(request);
+        return new ResponseEntity<>(new JsonResponse("success", "success"),HttpStatus.OK);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<JsonResponse> resetPasssword(
+            @RequestBody PasswordResetRequest request)  {
+
+        userService.resetPassword(request);
+        return new ResponseEntity<>(new JsonResponse("success", "success"),HttpStatus.OK);
+    }
+
+
+
+
 }

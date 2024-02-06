@@ -19,12 +19,18 @@ public class User extends UserDateAudit {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @Column(name = "email", unique = true)
+    private String email;
+
     @Column(name = "username")
     private String username;
 
     @Column(name = "password")
     @JsonIgnore
     private String password;
+
+    @Column(name = "is_enabled")
+    private Boolean isEnable;
 
     @OneToOne(mappedBy = "user")
     @JsonIgnore

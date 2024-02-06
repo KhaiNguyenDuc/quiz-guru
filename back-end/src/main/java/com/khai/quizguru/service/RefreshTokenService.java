@@ -1,8 +1,6 @@
 package com.khai.quizguru.service;
 
-import com.khai.quizguru.model.RefreshToken;
-
-import java.util.Optional;
+import com.khai.quizguru.model.user.RefreshToken;
 
 public interface RefreshTokenService {
     RefreshToken createRefreshToken(String id);

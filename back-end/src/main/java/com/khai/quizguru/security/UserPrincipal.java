@@ -18,20 +18,19 @@ import java.util.Objects;
 public class UserPrincipal implements UserDetails {
 
     private static final long serialVersionUID = 1L;
-
     private String id;
     private String username;
-
+    private String email;
     private String password;
 
 
     private List<GrantedAuthority> authorities;
 
-    public UserPrincipal(String id, String username, String password,
+    public UserPrincipal(String id, String username, String password, String email,
                          List<GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
-
+        this.email = email;
         this.password = password;
 
         if (authorities == null) {
@@ -51,6 +50,7 @@ public class UserPrincipal implements UserDetails {
         return new UserPrincipal(user.getId(),
                 user.getUsername(),
                 user.getPassword(),
+                user.getEmail(),
                 authorities);
 
     }

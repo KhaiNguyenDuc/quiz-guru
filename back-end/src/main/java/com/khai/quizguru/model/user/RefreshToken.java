@@ -1,4 +1,4 @@
-package com.khai.quizguru.model;
+package com.khai.quizguru.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.khai.quizguru.model.user.User;
