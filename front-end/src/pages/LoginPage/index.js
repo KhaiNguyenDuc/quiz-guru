@@ -21,8 +21,7 @@ function LoginPage() {
   const [isError, setError] = useState("");
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
-  console.log(isReset)
-  console.log(isVerify)
+
   useEffect(() => {
     if (createdUsername !== undefined) {
       setUsername(createdUsername);
@@ -50,7 +49,7 @@ function LoginPage() {
         roles: response?.user?.roles?.map((role) => role?.name),
       });
       setLoading(false);
-      navigate("/");
+      navigate("/normal/create/text");
     } else {
       setLoading(false);
       setError(INVALID_LOGIN_MSG);
@@ -127,7 +126,7 @@ function LoginPage() {
                   <div className="text-white my-3 error-section">{isError}</div>
                 )}
                 <div className="form-group">
-                  <button className="btn login_btn">Đăng nhập</button>
+                  <button className="btn login_btn mt-3">Đăng nhập</button>
                 </div>
               </form>
             </div>
