@@ -1,8 +1,5 @@
 package com.khai.quizguru.controller;
 
-import com.khai.quizguru.payload.response.JsonResponse;
-import com.khai.quizguru.security.CurrentUser;
-import com.khai.quizguru.security.UserPrincipal;
 import com.khai.quizguru.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -13,8 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.File;
-
+/**
+ * Controller class for managing image-related operations.
+ */
 @RestController
 @RequestMapping("/api/v1/images")
 @RequiredArgsConstructor
@@ -22,9 +20,13 @@ public class ImageController {
 
     private final ImageService imageService;
 
+    /**
+     * Return image by its ID
+     * @param imageId: ID of an image
+     * @return Resource: base64 image
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Resource> getImageById(
-            @CurrentUser UserPrincipal userPrincipal,
             @PathVariable("id") String imageId
             ){
 

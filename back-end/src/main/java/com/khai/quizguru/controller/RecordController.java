@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller class for managing records related operations.
+ */
 @RestController
 @RequestMapping("/api/v1/records")
 @RequiredArgsConstructor
@@ -19,6 +22,13 @@ import org.springframework.web.bind.annotation.*;
 public class RecordController {
 
     private final RecordService recordService;
+
+    /**
+     * Creates a new record.
+     * @param userPrincipal Current authenticated user
+     * @param recordRequest Request containing information about the record to be created
+     * @return ResponseEntity with the created record details
+     */
     @PostMapping("/create")
     public ResponseEntity<JsonResponse> createRecord(
             @CurrentUser UserPrincipal userPrincipal,
@@ -28,6 +38,11 @@ public class RecordController {
         return new ResponseEntity<>(new JsonResponse("success", recordResponse), HttpStatus.CREATED);
     }
 
+    /**
+     * Retrieves a record by its ID.
+     * @param recordId ID of the record to be retrieved
+     * @return ResponseEntity with the retrieved record details
+     */
     @GetMapping("/{id}")
     public  ResponseEntity<JsonResponse> getRecordById(@PathVariable("id") String recordId){
         RecordResponse recordResponse = recordService.findById(recordId);

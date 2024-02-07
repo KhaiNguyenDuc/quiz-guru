@@ -24,6 +24,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+/**
+ * Service implementation for managing word sets.
+ */
 @Service
 @RequiredArgsConstructor
 public class WordSetServiceImpl implements WordSetService {
@@ -33,6 +36,16 @@ public class WordSetServiceImpl implements WordSetService {
     private final WordRepository wordRepository;
     private final QuizRepository quizRepository;
     private final ModelMapper mapper;
+
+    /**
+     * Creates a new word set.
+     *
+     * @param wordSetRequest The word set request containing the details of the word set to be created.
+     * @param userId         The ID of the user creating the word set.
+     * @return The ID of the newly created word set.
+     * @throws ResourceNotFoundException If the user or library is not found in the database.
+     * @throws InvalidRequestException   If an invalid request is made.
+     */
     @Override
     public String createWordSet(WordSetRequest wordSetRequest, String userId) {
 
@@ -79,6 +92,15 @@ public class WordSetServiceImpl implements WordSetService {
         return wordSetSaved.getId();
     }
 
+    /**
+     * Finds all word sets belonging to a user.
+     *
+     * @param userId   The ID of the user.
+     * @param pageable The pagination information.
+     * @return A JSON page response containing a list of word set responses.
+     * @throws ResourceNotFoundException If the user or library is not found in the database.
+     * @throws InvalidRequestException   If an invalid request is made.
+     */
     @Override
     public JsonPageResponse<WordSetResponse> findAllWordSetByUserId(String userId, Pageable pageable) {
 
@@ -112,6 +134,16 @@ public class WordSetServiceImpl implements WordSetService {
 
     }
 
+    /**
+     * Finds words in a word set by its ID.
+     *
+     * @param wordSetId The ID of the word set.
+     * @param userId    The ID of the user.
+     * @param pageable  The pagination information.
+     * @return A JSON page response containing the word set and its words.
+     * @throws InvalidRequestException If an invalid request is made.
+     * @throws UnauthorizedException   If the user is not authorized to access the word set.
+     */
     @Override
     public JsonPageResponse<WordSetResponse> findWordsById(String wordSetId, String userId, Pageable pageable) {
         Optional<WordSet> wordSetOpt = wordSetRepository.findById(wordSetId);
@@ -139,7 +171,14 @@ public class WordSetServiceImpl implements WordSetService {
 
     }
 
-
+    /**
+     * Deletes a word set by its ID.
+     *
+     * @param wordSetId The ID of the word set.
+     * @param userId    The ID of the user.
+     * @throws InvalidRequestException If an invalid request is made.
+     * @throws UnauthorizedException   If the user is not authorized to delete the word set.
+     */
     @Override
     public void deleteById(String wordSetId, String userId) {
         Optional<WordSet> wordSetOpt = wordSetRepository.findById(wordSetId);
@@ -157,8 +196,14 @@ public class WordSetServiceImpl implements WordSetService {
 
     }
 
-
-
+    /**
+     * Binds a quiz to a word set.
+     *
+     * @param wordSetId The ID of the word set.
+     * @param quizId    The ID of the quiz.
+     * @param userId    The ID of the user.
+     * @throws InvalidRequestException If an invalid request is made.
+     */
     @Override
     public void bindQuiz(String wordSetId, String quizId, String userId) {
         Optional<WordSet> wordSetOpt = wordSetRepository.findById(wordSetId);
@@ -182,6 +227,13 @@ public class WordSetServiceImpl implements WordSetService {
         wordSetRepository.save(wordSet);
     }
 
+    /**
+     * Adds words to a word set.
+     *
+     * @param wordSetId      The ID of the word set.
+     * @param wordSetRequest The word set request containing the words to be added.
+     * @throws InvalidRequestException If an invalid request is made.
+     */
     @Override
     public void addWordToWordSet(String wordSetId, WordSetRequest wordSetRequest) {
         Optional<WordSet> wordSetOpt = wordSetRepository.findById(wordSetId);
@@ -207,6 +259,15 @@ public class WordSetServiceImpl implements WordSetService {
         wordSetRepository.save(wordSet);
     }
 
+    /**
+     * Updates a word set.
+     *
+     * @param wordSetRequest The updated word set request.
+     * @param wordSetId      The ID of the word set.
+     * @param userId         The ID of the user.
+     * @return The updated word set response.
+     * @throws InvalidRequestException If an invalid request is made.
+     */
     @Override
     public WordSetResponse updateWordSet(WordSetRequest wordSetRequest, String wordSetId, String userId) {
         Optional<WordSet> wordSetOpt = wordSetRepository.findById(wordSetId);

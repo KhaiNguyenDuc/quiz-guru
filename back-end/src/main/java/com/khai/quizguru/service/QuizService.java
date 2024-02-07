@@ -1,14 +1,15 @@
 package com.khai.quizguru.service;
+
 import com.khai.quizguru.dto.ChatRequest;
 import com.khai.quizguru.payload.request.QuizGenerationResult;
 import com.khai.quizguru.payload.response.JsonPageResponse;
 import com.khai.quizguru.payload.response.QuizResponse;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 
-
+/**
+ * Service interface of quiz.
+ */
 public interface QuizService {
     QuizResponse findById(String id);
 

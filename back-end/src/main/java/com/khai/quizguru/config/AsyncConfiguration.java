@@ -7,10 +7,17 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
 
+/**
+ * Configuration class for asynchronous task execution.
+ */
 @Configuration
 @EnableAsync
 public class AsyncConfiguration implements AsyncConfigurer {
 
+    /**
+     * Configures and provides an executor for asynchronous task execution.
+     * @return Executor for asynchronous task execution
+     */
     @Override
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();

@@ -1,16 +1,13 @@
 package com.khai.quizguru.serviceImpl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.khai.quizguru.exception.InvalidRequestException;
 import com.khai.quizguru.exception.ResourceNotFoundException;
 import com.khai.quizguru.model.Word;
-import com.khai.quizguru.model.WordSet;
 import com.khai.quizguru.model.user.User;
 import com.khai.quizguru.payload.request.WordRequest;
 import com.khai.quizguru.payload.response.WordResponse;
 import com.khai.quizguru.repository.UserRepository;
 import com.khai.quizguru.repository.WordRepository;
-import com.khai.quizguru.repository.WordSetRepository;
 import com.khai.quizguru.service.WordService;
 import com.khai.quizguru.utils.Constant;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +21,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
+/**
+ * Service implementation for managing words and their definitions.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -36,12 +36,17 @@ public class WordServiceImpl implements WordService {
     private final WordRepository wordRepository;
     private final UserRepository userRepository;
     private final ModelMapper mapper;
-    private final WordSetRepository wordSetRepository;
 
-
-    private void saveWord(String word){
-
-    }
+    /**
+     * Finds the definitions of words in a word set.
+     *
+     * @param wordSetId The ID of the word set.
+     * @param words     The list of words for which definitions are to be found.
+     * @param userId    The ID of the user making the request.
+     * @return A list of word responses containing the definitions.
+     * @throws ResourceNotFoundException If the user is not found in the database.
+     * @throws InvalidRequestException   If an invalid request is made.
+     */
     @Override
     public List<WordResponse> findDefinition(String wordSetId ,List<String> words, String userId) {
 
@@ -94,6 +99,16 @@ public class WordServiceImpl implements WordService {
         return wordResponses;
     }
 
+    /**
+     * Updates the definition of a word.
+     *
+     * @param wordId      The ID of the word.
+     * @param wordRequest The word request containing the updated content.
+     * @param userId      The ID of the user making the request.
+     * @return The updated word response.
+     * @throws ResourceNotFoundException If the user is not found in the database.
+     * @throws InvalidRequestException   If an invalid request is made.
+     */
     @Override
     public WordResponse udpateWordDefinition(String wordId, WordRequest wordRequest, String userId) {
         Optional<User> userOtp = userRepository.findById(userId);

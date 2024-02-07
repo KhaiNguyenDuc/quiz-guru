@@ -1,5 +1,8 @@
 package com.khai.quizguru.utils;
 
+/**
+ * Includes constant for multiple usage
+ */
 public class Constant {
     public static final String IMAGE_HOST = "http://localhost:8080/api/v1/images";
     public static final String UPLOAD_DIRECTORY = "/src/main/java";

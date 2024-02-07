@@ -33,6 +33,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Implementation of the UserService interface.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -50,6 +53,16 @@ public class UserServiceImpl implements UserService {
 
     @Value("${app.verificationTokenDurationMs}")
     private Long verificationTokenDurationMs;
+
+    /**
+     * Creates a new user based on the provided registration request.
+     *
+     * @param registerRequest The registration request containing user details.
+     * @return The response containing information about the registered user.
+     * @throws InvalidRequestException If the password is too short.
+     * @throws ResourceExistException If a user with the same username or email already exists.
+     * @throws ResourceNotFoundException If the default user role is not found.
+     */
     @Override
     public RegisterResponse createUser(RegisterRequest registerRequest) {
         if(registerRequest.getPassword().length() < 7){
@@ -75,15 +88,19 @@ public class UserServiceImpl implements UserService {
         user.setLibrary(librarySaved);
         User userSaved = userRepository.save(user);
 
-
-
         createVerificationTokenForUser(user);
 
         return mapper.map(userSaved, RegisterResponse.class);
     }
 
 
-
+    /**
+     * Retrieves a user by their ID.
+     *
+     * @param id The ID of the user to retrieve.
+     * @return The response containing information about the user.
+     * @throws ResourceNotFoundException If the user with the specified ID is not found.
+     */
     @Override
     public UserResponse getUserById(String id) {
         Optional<User> userOtp = userRepository.findById(id);
@@ -93,6 +110,15 @@ public class UserServiceImpl implements UserService {
         return mapper.map(userOtp.get(), UserResponse.class);
     }
 
+    /**
+     * Updates a user's profile information by their ID.
+     *
+     * @param profileRequest The profile update request containing new user details.
+     * @param id The ID of the user to update.
+     * @return The response containing information about the updated user.
+     * @throws ResourceNotFoundException If the user with the specified ID is not found.
+     * @throws InvalidRequestException If the provided username is already taken.
+     */
     @Override
     public UserResponse updateById(ProfileRequest profileRequest, String id) {
         Optional<User> userOtp = userRepository.findById(id);
@@ -141,6 +167,12 @@ public class UserServiceImpl implements UserService {
         return userResponse;
     }
 
+    /**
+     * Creates a verification token for the specified user.
+     *
+     * @param user The user for whom the verification token is created.
+     * @return The verification token.
+     */
     @Override
     public VerificationToken createVerificationTokenForUser(User user) {
         final String token = RandomStringUtils.randomNumeric(4);
@@ -152,7 +184,12 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
+    /**
+     * Resends the verification token to the user with the specified username or email.
+     *
+     * @param username The username or email of the user.
+     * @return True if the verification token is successfully resent, false otherwise.
+     */
     @Override
     public Boolean resendVerifyToken(String username) {
       try{
@@ -194,6 +231,15 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    /**
+     * Sends a password reset email to the user specified in the request.
+     * Generates a new password reset token, associates it with the user, and sends an email containing the token.
+     * Throws an InvalidRequestException if the user is not found in the database.
+     *
+     * @param request The PasswordResetRequest containing the email address of the user requesting password reset.
+     * @return The user ID of the user for whom the password reset email was sent.
+     * @throws InvalidRequestException If the user is not found in the database.
+     */
     @Override
     public String sendResetPassword(PasswordResetRequest request) {
         Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
@@ -221,6 +267,15 @@ public class UserServiceImpl implements UserService {
         return user.getId();
     }
 
+    /**
+     * Resets the password for the user specified in the request.
+     * Verifies the validity of the password reset token and sets the new password for the user.
+     * Sends an email to the user to notify them of the successful password reset.
+     * Throws InvalidRequestException if the email or token is invalid, or if the password length is less than 7 characters.
+     *
+     * @param request The PasswordResetRequest containing the new password and the reset token.
+     * @throws InvalidRequestException If the email or token is invalid, or if the password length is less than 7 characters.
+     */
     @Override
     public void resetPassword(PasswordResetRequest request) {
         if(request.getPassword().length() < 7){

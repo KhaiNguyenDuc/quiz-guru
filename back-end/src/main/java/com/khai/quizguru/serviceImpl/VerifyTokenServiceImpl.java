@@ -10,18 +10,27 @@ import com.khai.quizguru.service.VerifyTokenService;
 import com.khai.quizguru.utils.Constant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import javax.swing.text.html.Option;
 import java.time.Instant;
-import java.util.Date;
 import java.util.Optional;
 
+/**
+ * Service implementation for verifying user accounts using verification tokens.
+ * Provides methods to find verification tokens by user and to verify user accounts using tokens.
+ */
 @Service
 @RequiredArgsConstructor
 public class VerifyTokenServiceImpl implements VerifyTokenService {
 
     private final VerificationTokenRepository verificationTokenRepository;
     private final UserRepository userRepository;
+
+    /**
+     * Finds the verification token associated with the specified user.
+     *
+     * @param userId The ID of the user.
+     * @return The verification token associated with the user, or null if not found.
+     * @throws InvalidRequestException If the user is not found in the database.
+     */
     @Override
     public VerificationToken findTokenByUser(String userId) {
 
@@ -37,6 +46,16 @@ public class VerifyTokenServiceImpl implements VerifyTokenService {
 
     }
 
+    /**
+     * Verifies the user's account by comparing the provided token with the one associated with the user.
+     * If the token is valid and not expired, enables the user's account.
+     *
+     * @param token    The verification token provided by the user.
+     * @param username The username or email of the user.
+     * @return True if the user account is successfully verified, false otherwise.
+     * @throws InvalidRequestException  If the user is not found in the database.
+     * @throws TokenRefreshException    If the verification token is expired or invalid.
+     */
     @Override
     public Boolean verifyUser(String token, String username) {
         Optional<User> userOpt;

@@ -38,12 +38,14 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
+/**
+ * Service implementation for managing quizzes.
+ * This service handles operations related to quiz generation, retrieval, and deletion.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class QuizServiceImpl implements QuizService {
-
-
 
     @Value("${openai.api.url}")
     private String apiURL;
@@ -58,7 +60,13 @@ public class QuizServiceImpl implements QuizService {
     private final ObjectMapper objMapper;
     private final WordSetService wordSetService;
 
-
+    /**
+     * Retrieves a quiz by its unique identifier and maps it to a QuizResponse object.
+     *
+     * @param id The unique identifier of the quiz to retrieve.
+     * @return A QuizResponse object representing the retrieved quiz.
+     * @throws ResourceNotFoundException If no quiz with the specified ID is found.
+     */
     @Override
     public QuizResponse findById(String id) {
         Optional<Quiz> quizOtp = quizRepository.findById(id);
@@ -80,6 +88,16 @@ public class QuizServiceImpl implements QuizService {
 
     }
 
+    /**
+     * Generates a quiz based on the provided ChatRequest, saves the associated word set if applicable,
+     * and returns the result.
+     *
+     * @param chat   The ChatRequest containing information for quiz generation.
+     * @param userId The ID of the user generating the quiz.
+     * @return A QuizGenerationResult object representing the generated quiz and associated data.
+     * @throws InvalidRequestException   If the request is invalid or cannot be processed.
+     * @throws ResourceNotFoundException If a required resource is not found.
+     */
     @Override
     public QuizGenerationResult generateQuizAndSaveWordSet(ChatRequest chat, String userId){
         QuizGenerationResult result;
@@ -126,6 +144,16 @@ public class QuizServiceImpl implements QuizService {
         }
         return result;
     }
+
+    /**
+     * Generates a quiz based on the provided ChatRequest and user ID.
+     *
+     * @param chat   The ChatRequest containing information for quiz generation.
+     * @param userId The ID of the user generating the quiz.
+     * @return A QuizGenerationResult object representing the generated quiz and associated data.
+     * @throws InvalidRequestException   If the request is invalid or cannot be processed.
+     * @throws ResourceNotFoundException If a required resource is not found.
+     */
     @Override
     public QuizGenerationResult generateQuiz(ChatRequest chat, String userId) {
 
@@ -192,6 +220,13 @@ public class QuizServiceImpl implements QuizService {
         }
     }
 
+    /**
+     * Constructs a Quiz object based on the provided ChatRequest and user details.
+     *
+     * @param chat     The ChatRequest containing information for quiz generation.
+     * @param userOtp  An Optional containing the user details.
+     * @return A Quiz object representing the generated quiz.
+     */
     private Quiz getQuiz(ChatRequest chat, Optional<User> userOtp) {
         Quiz quiz = new Quiz();
         quiz.setUser(userOtp.get());
@@ -211,6 +246,14 @@ public class QuizServiceImpl implements QuizService {
         return quiz;
     }
 
+    /**
+     * Retrieves a page of quizzes associated with a user and maps them to QuizResponse objects.
+     *
+     * @param userId   The ID of the user whose quizzes are to be retrieved.
+     * @param pageable Pagination information.
+     * @return A JsonPageResponse containing a page of QuizResponse objects.
+     * @throws ResourceNotFoundException If the user with the specified ID is not found.
+     */
     @Override
     public JsonPageResponse<QuizResponse> findAllByUserId(String userId, Pageable pageable) {
         Optional<User> userOpt = userRepository.findById(userId);
@@ -231,6 +274,15 @@ public class QuizServiceImpl implements QuizService {
         return pageResponse;
     }
 
+    /**
+     * Deletes a quiz by its ID, provided the user is authorized to do so.
+     *
+     * @param quizId The ID of the quiz to delete.
+     * @param userId The ID of the user performing the deletion.
+     * @throws InvalidRequestException   If the request is invalid or cannot be processed.
+     * @throws UnauthorizedException     If the user is not authorized to perform the deletion.
+     * @throws ResourceNotFoundException If the quiz with the specified ID is not found.
+     */
     @Override
     public void deleteById(String quizId, String userId) {
 

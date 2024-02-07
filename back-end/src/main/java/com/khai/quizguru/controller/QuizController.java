@@ -12,8 +12,6 @@ import com.khai.quizguru.payload.response.JsonResponse;
 import com.khai.quizguru.security.CurrentUser;
 import com.khai.quizguru.security.UserPrincipal;
 import com.khai.quizguru.service.QuizService;
-import com.khai.quizguru.service.LibraryService;
-import com.khai.quizguru.service.WordSetService;
 import com.khai.quizguru.utils.Constant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,20 +20,27 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+/**
+ * Controller class for managing user-related operations.
+ */
 @RestController
 @Slf4j
 @RequestMapping("/api/v1/quiz")
 @RequiredArgsConstructor
 public class QuizController {
 
-
     private final QuizService quizService;
-    private final LibraryService vocabularyService;
-    private final WordSetService wordSetService;
 
     @Value("${openai.model}")
     private String model;
 
+    /**
+     * Generates a quiz based on text content from a .txt file.
+     * @param userPrincipal Current authenticated user
+     * @param txtFileRequest Request containing information about the .txt file
+     * @return ResponseEntity with the ID of the generated quiz
+     */
     @PostMapping("/generate/txt")
     public ResponseEntity<JsonResponse> generateQuizByTxtFile(
             @CurrentUser UserPrincipal userPrincipal,
@@ -48,6 +53,12 @@ public class QuizController {
 
     }
 
+    /**
+     * Generates a quiz based on text content from a .pdf file.
+     * @param userPrincipal Current authenticated user
+     * @param pdfFileRequest Request containing information about the .pdf file
+     * @return ResponseEntity with the ID of the generated quiz
+     */
     @PostMapping("/generate/pdf")
     public ResponseEntity<JsonResponse> generateQuizByPdfFile(
             @CurrentUser UserPrincipal userPrincipal,
@@ -60,6 +71,12 @@ public class QuizController {
 
     }
 
+    /**
+     * Generates a quiz based on text content from a .doc file.
+     * @param userPrincipal Current authenticated user
+     * @param docFileRequest Request containing information about the .doc file
+     * @return ResponseEntity with the ID of the generated quiz
+     */
     @PostMapping("/generate/doc")
     public ResponseEntity<JsonResponse> generateQuizByDocFile(
             @CurrentUser UserPrincipal userPrincipal,
@@ -72,6 +89,12 @@ public class QuizController {
 
     }
 
+    /**
+     * Generates a quiz based on plain text.
+     * @param userPrincipal Current authenticated user
+     * @param baseTextRequest Request containing the plain text
+     * @return ResponseEntity with the ID of the generated quiz
+     */
     @PostMapping("/generate/text")
     public ResponseEntity<JsonResponse> generateQuizByText(
             @CurrentUser UserPrincipal userPrincipal,
@@ -83,6 +106,12 @@ public class QuizController {
             return new ResponseEntity<>(new JsonResponse("success", quizId), HttpStatus.OK);
     }
 
+    /**
+     * Generates a quiz based on vocabulary data.
+     * @param userPrincipal Current authenticated user
+     * @param generateVocabularyRequest Request containing the vocabulary data
+     * @return ResponseEntity with the ID of the generated quiz
+     */
     @PostMapping("/generate/vocabulary")
     public ResponseEntity<JsonResponse> generateQuizByVocabulary(
             @CurrentUser UserPrincipal userPrincipal,
@@ -95,6 +124,12 @@ public class QuizController {
         return new ResponseEntity<>(new JsonResponse("success", quizId), HttpStatus.OK);
     }
 
+    /**
+     * Generates a quiz based on text content from a .txt file and saves it as a vocabulary word set.
+     * @param userPrincipal Current authenticated user
+     * @param textToVocabRequest Request containing information about the .txt file and quiz preferences
+     * @return ResponseEntity with the ID of the generated quiz or word set
+     */
     @PostMapping("/generate/text-to-vocab")
     public ResponseEntity<JsonResponse> generateQuizByTextToVocab(
             @CurrentUser UserPrincipal userPrincipal,
@@ -113,6 +148,12 @@ public class QuizController {
         return new ResponseEntity<>(new JsonResponse("success", id), HttpStatus.OK);
     }
 
+    /**
+     * Generates a quiz based on text content from a .txt file and saves it as a vocabulary word set.
+     * @param userPrincipal Current authenticated user
+     * @param txtVocabularyRequest Request containing information about the .txt file and quiz preferences
+     * @return ResponseEntity with the ID of the generated quiz or word set
+     */
     @PostMapping("/generate/txt-to-vocab")
     public ResponseEntity<JsonResponse> generateQuizByTxtToVocab(
             @CurrentUser UserPrincipal userPrincipal,
@@ -131,6 +172,12 @@ public class QuizController {
         return new ResponseEntity<>(new JsonResponse("success", id), HttpStatus.OK);
     }
 
+    /**
+     * Generates a quiz based on text content from a .doc file and saves it as a vocabulary word set.
+     * @param userPrincipal Current authenticated user
+     * @param docFileVocabRequest Request containing information about the .doc file and quiz preferences
+     * @return ResponseEntity with the ID of the generated quiz or word set
+     */
     @PostMapping("/generate/doc-to-vocab")
     public ResponseEntity<JsonResponse> generateQuizByDocToVocab(
             @CurrentUser UserPrincipal userPrincipal,
@@ -149,6 +196,12 @@ public class QuizController {
         return new ResponseEntity<>(new JsonResponse("success", id), HttpStatus.OK);
     }
 
+    /**
+     * Generates a quiz based on text content from a .pdf file and saves it as a vocabulary word set.
+     * @param userPrincipal Current authenticated user
+     * @param pdfFileVocabRequest Request containing information about the .pdf file and quiz preferences
+     * @return ResponseEntity with the ID of the generated quiz or word set
+     */
     @PostMapping("/generate/pdf-to-vocab")
     public ResponseEntity<JsonResponse> generateQuizByPdfToVocab(
             @CurrentUser UserPrincipal userPrincipal,
@@ -167,6 +220,12 @@ public class QuizController {
         return new ResponseEntity<>(new JsonResponse("success", id), HttpStatus.OK);
     }
 
+    /**
+     * Deletes a quiz by its ID.
+     * @param userPrincipal Current authenticated user
+     * @param quizId ID of the quiz to be deleted
+     * @return ResponseEntity indicating success or failure of the deletion operation
+     */
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<JsonResponse> deleteQuizById(
             @CurrentUser UserPrincipal userPrincipal,

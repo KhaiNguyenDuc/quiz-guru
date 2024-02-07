@@ -2,13 +2,12 @@ package com.khai.quizguru.service;
 
 import com.khai.quizguru.payload.request.WordSetRequest;
 import com.khai.quizguru.payload.response.JsonPageResponse;
-import com.khai.quizguru.payload.response.WordResponse;
 import com.khai.quizguru.payload.response.WordSetResponse;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
+/**
+ * Service interface of word set.
+ */
 public interface WordSetService {
     String createWordSet(WordSetRequest wordSetRequest, String id);
 

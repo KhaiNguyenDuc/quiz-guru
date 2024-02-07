@@ -5,8 +5,10 @@ import com.khai.quizguru.payload.response.JsonPageResponse;
 import com.khai.quizguru.payload.response.RecordResponse;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 
+/**
+ * Service interface of records.
+ */
 public interface RecordService {
     JsonPageResponse<RecordResponse> findAllRecordsByUserId(String userId, Pageable pageable);
 

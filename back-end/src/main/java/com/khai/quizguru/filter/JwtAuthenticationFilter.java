@@ -17,7 +17,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-
+/**
+ * The JwtAuthenticationFilter class is responsible for handling JWT authentication.
+ * It intercepts incoming requests, extracts the JWT token, validates it, and sets the
+ * authentication context with the authenticated user's details.
+ */
 @Slf4j
 @NoArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -28,6 +32,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenProvider tokenProvider;
 
+    /**
+     * Filters incoming HTTP requests, extracts the JWT token, validates it,
+     * and sets the authentication context with the authenticated user's details.
+     * @param request The HttpServletRequest
+     * @param response The HttpServletResponse
+     * @param filterChain The FilterChain
+     * @throws ServletException if an exception occurs during the filter process
+     * @throws java.io.IOException if an I/O error occurs during the filter process
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, java.io.IOException {

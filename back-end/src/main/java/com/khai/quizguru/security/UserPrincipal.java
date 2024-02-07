@@ -7,12 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Represents the principal (authenticated user) stored in the security context after successful authentication.
+ */
 @Data
 @Slf4j
 public class UserPrincipal implements UserDetails {
@@ -22,10 +24,17 @@ public class UserPrincipal implements UserDetails {
     private String username;
     private String email;
     private String password;
-
-
     private List<GrantedAuthority> authorities;
 
+    /**
+     * Constructs a new UserPrincipal object.
+     *
+     * @param id           The ID of the user.
+     * @param username     The username of the user.
+     * @param password     The password of the user.
+     * @param email        The email address of the user.
+     * @param authorities  The authorities (roles) granted to the user.
+     */
     public UserPrincipal(String id, String username, String password, String email,
                          List<GrantedAuthority> authorities) {
         this.id = id;
@@ -41,6 +50,12 @@ public class UserPrincipal implements UserDetails {
 
     }
 
+    /**
+     * Creates a UserPrincipal object from a User entity.
+     *
+     * @param user The User entity from which to create the UserPrincipal.
+     * @return The created UserPrincipal object.
+     */
     public static UserPrincipal create(User user) {
 
         List<GrantedAuthority> authorities = new ArrayList<>();

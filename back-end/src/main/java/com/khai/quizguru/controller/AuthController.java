@@ -1,8 +1,5 @@
 package com.khai.quizguru.controller;
 
-
-import com.khai.quizguru.exception.AccessDeniedException;
-import com.khai.quizguru.exception.UnauthorizedException;
 import com.khai.quizguru.model.user.RefreshToken;
 import com.khai.quizguru.model.user.VerificationToken;
 import com.khai.quizguru.payload.request.*;
@@ -27,10 +24,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.util.Objects;
 
+
+/**
+ * Controller class for managing authentication-related operations.
+ */
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -44,6 +43,11 @@ public class AuthController {
     private final EmailService emailService;
     private final VerifyTokenService verifyTokenService;
 
+    /**
+     * Register new account includes sending verification email asynchronously
+     * @param registerRequest: includes username, email, password
+     * @return JsonResponse
+     */
     @PostMapping("/register")
     public ResponseEntity<JsonResponse> register(@RequestBody RegisterRequest registerRequest){
         RegisterResponse userSaved = userService.createUser(registerRequest);
@@ -61,6 +65,12 @@ public class AuthController {
         return new ResponseEntity<>(new JsonResponse("success", userSaved), HttpStatus.CREATED);
     }
 
+    /**
+     * Verify user's email by confirm the verification token
+     * @param verifyRequest: includes username ( can be either username or email )
+     * and a verification token sent to user's email
+     * @return JsonResponse
+     */
     @PostMapping("/verify")
     public ResponseEntity<JsonResponse> verifyUser(
             @RequestBody VerifyRequest verifyRequest
@@ -69,6 +79,12 @@ public class AuthController {
         return new ResponseEntity<>(new JsonResponse("success", result), HttpStatus.CREATED);
     }
 
+
+    /**
+     * Send email which has verification token to user's email asynchronously
+     * @param username: username of user
+     * @return JsonResponse
+     */
     @GetMapping("/send-verify")
     public ResponseEntity<JsonResponse> resendVerifyToken(
             @RequestParam String username
@@ -79,6 +95,11 @@ public class AuthController {
         return new ResponseEntity<>(new JsonResponse("success", result), HttpStatus.CREATED);
     }
 
+    /**
+     * Sign in user by username/email and password
+     * @param loginRequest: The credentials can be either username or email and a password
+     * @return JsonResponse: json response includes accessToken, refreshToken, token type
+     */
     @PostMapping("/login")
     public ResponseEntity<JsonResponse> signIn(
             @RequestBody LoginRequest loginRequest){
@@ -100,6 +121,13 @@ public class AuthController {
         return new ResponseEntity<>(new JsonResponse("success", tokenRefreshResponse),HttpStatus.OK);
     }
 
+    /**
+     * Refresh access token when client need.
+     * @param request: Include an UUID refresh Token which is not expired
+     * and match which the token in database
+     * @return TokenRefreshResponse: json response with has new accessToken, refreshToken, token Type ( bearer )
+     * and basic user info
+     */
     @PostMapping("/refresh-token")
     public ResponseEntity<TokenRefreshResponse> refreshToken(@RequestBody TokenRefreshRequest request)  {
         String requestRefreshToken = request.getRefreshToken();
@@ -112,6 +140,12 @@ public class AuthController {
         return new ResponseEntity<>(new TokenRefreshResponse(accessToken, refreshToken),HttpStatus.OK);
     }
 
+
+    /**
+     * Send reset password email contain reset password token to user's email
+     * @param request: includes user's  username/email
+     * @return JsonResponse: json response contain userId for specific client usage
+     */
     @PostMapping("/send-reset-password")
     public ResponseEntity<JsonResponse> sendResetPasssword(
             @RequestBody PasswordResetRequest request)  {
@@ -120,6 +154,11 @@ public class AuthController {
         return new ResponseEntity<>(new JsonResponse("success", userId),HttpStatus.OK);
     }
 
+    /**
+     * Update new user's password base on the provided informations
+     * @param request: includes user's  username/email, a password reset token
+     * @return JsonResponse: a json contain message success.
+     */
     @PostMapping("/reset-password")
     public ResponseEntity<JsonResponse> resetPasssword(
             @RequestBody PasswordResetRequest request)  {

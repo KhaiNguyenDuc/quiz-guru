@@ -10,14 +10,24 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
+/**
+ * Service class for handling security-related user operations.
+ */
 @Service
 @RequiredArgsConstructor
 public class SecurityUserService implements UserDetailsService, ISecurityUserService {
 
     private final UserRepository userRepository;
+
+    /**
+     * Loads a user by username from the database.
+     *
+     * @param username The username of the user.
+     * @return The UserDetails object representing the user.
+     * @throws UsernameNotFoundException If the user is not found.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user;
@@ -37,6 +47,13 @@ public class SecurityUserService implements UserDetailsService, ISecurityUserSer
 
     }
 
+    /**
+     * Loads a user by ID from the database.
+     *
+     * @param userId The ID of the user.
+     * @return The UserPrincipal object representing the user.
+     * @throws UnauthorizedException If the user is not found.
+     */
     @Override
     public UserPrincipal loadUserById(String userId) {
         Optional<User> user = userRepository.findById(userId);

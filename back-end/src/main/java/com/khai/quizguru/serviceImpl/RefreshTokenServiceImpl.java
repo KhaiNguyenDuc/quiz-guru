@@ -16,6 +16,9 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Implementation of the RefreshTokenService interface.
+ */
 @Service
 @RequiredArgsConstructor
 public class RefreshTokenServiceImpl implements RefreshTokenService {
@@ -24,6 +27,14 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     private Long refreshTokenDurationMs;
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+
+    /**
+     * Creates a new refresh token for the specified user.
+     *
+     * @param userId The ID of the user for whom the refresh token is created.
+     * @return The newly created refresh token.
+     * @throws ResourceNotFoundException If the user with the specified ID is not found.
+     */
     @Override
     public RefreshToken createRefreshToken(String userId) {
 
@@ -43,6 +54,13 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         return refreshToken;
     }
 
+    /**
+     * Finds a refresh token by its token value.
+     *
+     * @param requestRefreshToken The token value to search for.
+     * @return The refresh token if found.
+     * @throws TokenRefreshException If the token is invalid.
+     */
     @Override
     public RefreshToken findByToken(String requestRefreshToken) {
 
@@ -54,7 +72,13 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         }
     }
 
-
+    /**
+     * Verifies if a refresh token has expired.
+     *
+     * @param token The refresh token to verify.
+     * @return The refresh token if it has not expired.
+     * @throws TokenRefreshException If the token has expired.
+     */
     public RefreshToken verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(token);

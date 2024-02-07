@@ -8,15 +8,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 
+/**
+ * Custom authentication entry point for handling unauthorized access.
+ */
 @Component
 @Slf4j
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+    /**
+     * Handles unauthorized access by sending an HTTP 401 Unauthorized response with a JSON error message.
+     *
+     * @param httpServletRequest  The HTTP request being processed.
+     * @param response            The HTTP response to be sent.
+     * @param e                   The authentication exception that occurred.
+     * @throws IOException        If an I/O error occurs while writing the response.
+     */
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse response, AuthenticationException e)
             throws IOException {

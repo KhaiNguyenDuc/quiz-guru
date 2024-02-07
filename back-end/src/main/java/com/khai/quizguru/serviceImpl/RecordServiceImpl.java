@@ -20,7 +20,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +27,10 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+
+/**
+ * Implementation of the RecordService interface.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -36,10 +39,18 @@ public class RecordServiceImpl implements RecordService {
     private final RecordRepository recordRepository;
     private final UserRepository userRepository;
     private final QuizRepository quizRepository;
-    private final RecordItemRepository recordItemRepository;
     private final ChoiceRepository choiceRepository;
     private final ModelMapper mapper;
     private final QuestionRepository questionRepository;
+
+    /**
+     * Retrieves a page of records associated with a user.
+     *
+     * @param userId   The ID of the user whose records are to be retrieved.
+     * @param pageable Pagination information.
+     * @return A JsonPageResponse containing a page of RecordResponse objects.
+     * @throws ResourceNotFoundException If the user with the specified ID is not found.
+     */
     @Override
     public JsonPageResponse<RecordResponse> findAllRecordsByUserId(String userId, Pageable pageable) {
 
@@ -58,8 +69,15 @@ public class RecordServiceImpl implements RecordService {
         pageResponse.setTotalPages(records.getTotalPages());
         pageResponse.setLast(records.isLast());
         return pageResponse;
-
     }
+
+    /**
+     * Maps a RecordRequest to a Record object.
+     *
+     * @param recordRequest The RecordRequest containing information about the record.
+     * @param quizType      The type of the quiz associated with the record.
+     * @return A Record object mapped from the RecordRequest.
+     */
     public Record mapRecordRequestToRecord(RecordRequest recordRequest, QuizType quizType) {
         Record record = new Record();
         AtomicInteger score = new AtomicInteger();
@@ -98,6 +116,14 @@ public class RecordServiceImpl implements RecordService {
         return record;
     }
 
+    /**
+     * Creates a new record based on the provided RecordRequest and user details.
+     *
+     * @param recordRequest The RecordRequest containing information about the record.
+     * @param userId        The ID of the user associated with the record.
+     * @return A RecordResponse object representing the newly created record.
+     * @throws ResourceNotFoundException If the user or quiz with the specified ID is not found.
+     */
     @Override
     public RecordResponse createRecord(RecordRequest recordRequest, String userId) {
         Optional<User> user = userRepository.findById(userId);
@@ -133,6 +159,13 @@ public class RecordServiceImpl implements RecordService {
         return mapper.map(recordSaved, RecordResponse.class);
     }
 
+    /**
+     * Retrieves a record by its ID and maps it to a RecordResponse object.
+     *
+     * @param recordId The ID of the record to retrieve.
+     * @return A RecordResponse object representing the retrieved record.
+     * @throws ResourceNotFoundException If the record with the specified ID is not found.
+     */
     @Override
     public RecordResponse findById(String recordId) {
         Optional<Record> recordOpt = recordRepository.findById(recordId);
