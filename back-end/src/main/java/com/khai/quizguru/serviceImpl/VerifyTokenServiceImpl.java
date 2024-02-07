@@ -38,9 +38,14 @@ public class VerifyTokenServiceImpl implements VerifyTokenService {
     }
 
     @Override
-    public Boolean verifyUser(String token, String userId) {
+    public Boolean verifyUser(String token, String username) {
+        Optional<User> userOpt;
+        if(username.contains("@")){
+            userOpt = userRepository.findByEmail(username);
+        }else{
+            userOpt = userRepository.findByUsername(username);
+        }
 
-        Optional<User> userOpt= userRepository.findById(userId);
         if(userOpt.isEmpty()){
             throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
         }

@@ -6,5 +6,5 @@ public interface VerifyTokenService {
 
     VerificationToken findTokenByUser(String userId);
 
-    Boolean verifyUser(String token, String userId);
+    Boolean verifyUser(String token, String username);
 }

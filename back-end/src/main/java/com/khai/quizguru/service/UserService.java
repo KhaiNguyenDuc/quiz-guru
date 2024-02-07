@@ -18,9 +18,9 @@ public interface UserService {
     VerificationToken createVerificationTokenForUser(User user);
 
 
-    Boolean resendVerifyToken(String userId);
+    Boolean resendVerifyToken(String username);
 
-    void sendResetPassword(PasswordResetRequest request);
+    String sendResetPassword(PasswordResetRequest request);
 
     void resetPassword(PasswordResetRequest request);
 }

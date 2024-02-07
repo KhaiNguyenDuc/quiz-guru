@@ -4,7 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import {
   BLANK_LOGIN_MSG,
+  EXIST_EMAIL_USERNAME_MSG,
   EXIST_USERNAME_MSG,
+  PASSWORD_INVALID_MSG,
   PASSWORD_MISSMATCH_MSG,
 } from "../../utils/Constant";
 import AuthService from "../../services/AuthService";
@@ -24,26 +26,31 @@ function RegisterPage() {
     e.preventDefault();
     setLoading(true);
     if (registerInfo?.username === "" || registerInfo?.password === "") {
-      setError(BLANK_LOGIN_MSG);
       setLoading(false);
+      setError(BLANK_LOGIN_MSG);
       return;
     } else if (registerInfo?.password !== confirmPassword) {
-      setError(PASSWORD_MISSMATCH_MSG);
       setLoading(false);
+      setError(PASSWORD_MISSMATCH_MSG);
+      return;
+    }else if (registerInfo?.password.length < 7 ){
+      setLoading(false);
+      setError(PASSWORD_INVALID_MSG);
       return;
     }
     const response = await AuthService.register(registerInfo);
     if (response?.status === 201) {
       setLoading(false);
-      navigate("/auth/login", {
+      navigate("/auth/verify", {
         state: {
-          isCreated: true,
+          userId: response?.data?.data?.id,
           username: response?.data?.data?.username,
+          email: response?.data?.data?.email
         },
       });
     } else if (response?.status === 400) {
       setLoading(false);
-      setError(EXIST_USERNAME_MSG);
+      setError(EXIST_EMAIL_USERNAME_MSG);
     }
   };
 
@@ -71,6 +78,24 @@ function RegisterPage() {
                     placeholder="Tên đăng nhập"
                     name="username"
                     value={registerInfo?.username}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setError("");
+                    }}
+                  />
+                </div>
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text">
+                      <FontAwesomeIcon icon="envelope" />
+                    </span>
+                  </div>
+                  <input
+                    type="email"
+                    className="form-control"
+                    placeholder="Email"
+                    name="email"
+                    value={registerInfo?.email}
                     onChange={(e) => {
                       handleChange(e);
                       setError("");
@@ -129,7 +154,7 @@ function RegisterPage() {
                 Đã tài khoản?. <Link to={"/auth/login"}>Đăng nhập</Link>
               </div>
               <div className="d-flex justify-content-center">
-                <Link>Quên mật khẩu?</Link>
+                <Link to={"/auth/find-account"}>Quên mật khẩu?</Link>
               </div>
             </div>
           </div>

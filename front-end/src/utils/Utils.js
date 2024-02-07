@@ -16,3 +16,9 @@ export const validateJwtToken = (token) => {
   }
   return false
 }
+
+export const isValidEmail = (email) => {
+  // Regular expression for basic email validation
+  var emailRegex = /\S+@\S+\.\S+/;
+  return emailRegex.test(email);
+}

@@ -1,0 +1,65 @@
+
+.find-account-page .card{
+    height: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 400px;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+
+.find-account-page .social_icon span {
+    font-size: 60px;
+    margin-left: 10px;
+    color: #FFC312;
+}
+
+.find-account-page .social_icon span:hover {
+    color: white;
+    cursor: pointer;
+}
+
+.find-account-page.card-header h3 {
+    color: white;
+}
+
+.find-account-page .social_icon {
+    position: absolute;
+    right: 20px;
+    top: -45px;
+}
+
+.find-account-page .input-group-prepend span {
+    width: 50px;
+    height: 100%;
+    background-color: #FFC312;
+    color: black;
+    border: 0 !important;
+    border-radius: 0% !important;
+}
+
+.find-account-page input:focus {
+    outline: 0 0 0 0 !important;
+    box-shadow: 0 0 0 0 !important;
+
+}
+
+
+.find-account-page .find_btn {
+    color: black;
+    background-color: #FFC312;
+    width: 100%;
+}
+
+.find-account-page .find_btn:hover {
+    color: black;
+    background-color: white;
+}
+
+.find-account-page .links {
+    color: white;
+}
+
+.find-account-page .links a {
+    margin-left: 4px;
+}

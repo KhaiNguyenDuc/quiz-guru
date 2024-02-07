@@ -1,0 +1,65 @@
+
+.reset-password-page .card{
+    height: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 400px;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+
+.reset-password-page .social_icon span {
+    font-size: 60px;
+    margin-left: 10px;
+    color: #FFC312;
+}
+
+.reset-password-page .social_icon span:hover {
+    color: white;
+    cursor: pointer;
+}
+
+.reset-password-page.card-header h3 {
+    color: white;
+}
+
+.reset-password-page .social_icon {
+    position: absolute;
+    right: 20px;
+    top: -45px;
+}
+
+.reset-password-page .input-group-prepend span {
+    width: 50px;
+    height: 100%;
+    background-color: #FFC312;
+    color: black;
+    border: 0 !important;
+    border-radius: 0% !important;
+}
+
+.reset-password-page input:focus {
+    outline: 0 0 0 0 !important;
+    box-shadow: 0 0 0 0 !important;
+
+}
+
+
+.reset-password-page .reset_password_btn {
+    color: black;
+    background-color: #FFC312;
+    width: 100%;
+}
+
+.reset-password-page .reset_password_btn:hover {
+    color: black;
+    background-color: white;
+}
+
+.reset-password-page .links {
+    color: white;
+}
+
+.reset-password-page .links a {
+    margin-left: 4px;
+}

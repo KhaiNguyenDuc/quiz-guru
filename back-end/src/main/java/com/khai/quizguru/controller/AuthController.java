@@ -1,6 +1,8 @@
 package com.khai.quizguru.controller;
 
 
+import com.khai.quizguru.exception.AccessDeniedException;
+import com.khai.quizguru.exception.UnauthorizedException;
 import com.khai.quizguru.model.user.RefreshToken;
 import com.khai.quizguru.model.user.VerificationToken;
 import com.khai.quizguru.payload.request.*;
@@ -26,6 +28,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -61,17 +65,17 @@ public class AuthController {
     public ResponseEntity<JsonResponse> verifyUser(
             @RequestBody VerifyRequest verifyRequest
     ){
-        Boolean result = verifyTokenService.verifyUser(verifyRequest.getToken(), verifyRequest.getUserId());
+        Boolean result = verifyTokenService.verifyUser(verifyRequest.getToken(), verifyRequest.getUsername());
         return new ResponseEntity<>(new JsonResponse("success", result), HttpStatus.CREATED);
     }
 
     @GetMapping("/send-verify")
     public ResponseEntity<JsonResponse> resendVerifyToken(
-            @RequestParam String userId
+            @RequestParam String username
 
     ){
 
-        Boolean result = userService.resendVerifyToken(userId);
+        Boolean result = userService.resendVerifyToken(username);
         return new ResponseEntity<>(new JsonResponse("success", result), HttpStatus.CREATED);
     }
 
@@ -80,18 +84,18 @@ public class AuthController {
             @RequestBody LoginRequest loginRequest){
         String accessToken = "";
         RefreshToken refreshToken;
-        try{
-            UsernamePasswordAuthenticationToken authReq
-                    = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
-            Authentication auth = authManager.authenticate(authReq);
-            accessToken = tokenProvider.generateToken(auth);
-            SecurityContextHolder.getContext().setAuthentication(auth);
-            UserPrincipal userDetails = (UserPrincipal) auth.getPrincipal();
-
-            refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
-        }catch (Exception e){
-            throw e;
+        UsernamePasswordAuthenticationToken authReq;
+        if(Objects.nonNull(loginRequest.getEmail())){
+            authReq  = new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
+        }else{
+            authReq = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
         }
+        Authentication auth = authManager.authenticate(authReq);
+        accessToken = tokenProvider.generateToken(auth);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        UserPrincipal userDetails = (UserPrincipal) auth.getPrincipal();
+
+        refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
         TokenRefreshResponse tokenRefreshResponse = new TokenRefreshResponse(accessToken, refreshToken);
         return new ResponseEntity<>(new JsonResponse("success", tokenRefreshResponse),HttpStatus.OK);
     }
@@ -112,8 +116,8 @@ public class AuthController {
     public ResponseEntity<JsonResponse> sendResetPasssword(
             @RequestBody PasswordResetRequest request)  {
 
-        userService.sendResetPassword(request);
-        return new ResponseEntity<>(new JsonResponse("success", "success"),HttpStatus.OK);
+        String userId = userService.sendResetPassword(request);
+        return new ResponseEntity<>(new JsonResponse("success", userId),HttpStatus.OK);
     }
 
     @PostMapping("/reset-password")

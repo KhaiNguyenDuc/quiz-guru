@@ -12,6 +12,7 @@ public class Constant {
     public static final String RESOURCE_EXIST_MSG = "Resource already existed";
     public static final String INTERNAL_ERROR_EXCEPTION_MSG = "Internal error";
     public static final String INVALID_REQUEST_MSG = "Request invalid";
+    public static final String INVALID_PASSWORD_MSG = "Password not secure enough ( length must >= 7 )";
     public static final String TOKEN_REFRESH_EXPIRED_MSG = "Refresh token was expired. Please make a new signin request";
     public static final String TOKEN_VERIFY_EXPIRED_MSG = "Verify token was expired. Please make a new signin request";
 

@@ -17,6 +17,9 @@ import LibraryPage from "../pages/LibraryPage/index.js";
 import WordPage from "../pages/WordPage/index.js";
 import ErrorPage from "../pages/ErrorPage/ErrorPage.js";
 import ProtectedRoute from "./ProtectedRoute.js";
+import FindAccountPage from "../pages/FindAccountPage/index.js";
+import ResetPasswordPage from "../pages/ResetPasswordPage/index.js";
+import VerifyPage from "../pages/VerifyPage/index.js";
 function useRouteElements() {
 
 
@@ -33,6 +36,18 @@ function useRouteElements() {
         {
           path: '/auth/register',
           element: <RegisterPage/>
+        },
+        {
+          path: '/auth/verify',
+          element: <VerifyPage/>
+        },
+        {
+          path: '/auth/find-account',
+          element: <FindAccountPage/>
+        },
+        {
+          path: '/auth/reset-password',
+          element: <ResetPasswordPage/>
         }
       ]
     },

@@ -3,7 +3,6 @@ package com.khai.quizguru.serviceImpl;
 import com.khai.quizguru.exception.InvalidRequestException;
 import com.khai.quizguru.exception.ResourceExistException;
 import com.khai.quizguru.exception.ResourceNotFoundException;
-import com.khai.quizguru.exception.TokenRefreshException;
 import com.khai.quizguru.model.Image;
 import com.khai.quizguru.model.Library;
 import com.khai.quizguru.model.user.PasswordResetToken;
@@ -19,9 +18,7 @@ import com.khai.quizguru.payload.response.RegisterResponse;
 import com.khai.quizguru.payload.response.UserResponse;
 import com.khai.quizguru.repository.*;
 import com.khai.quizguru.service.EmailService;
-import com.khai.quizguru.service.PasswordResetTokenService;
 import com.khai.quizguru.service.UserService;
-import com.khai.quizguru.service.VerifyTokenService;
 import com.khai.quizguru.utils.Constant;
 import com.khai.quizguru.utils.FileUploadUtils;
 import lombok.RequiredArgsConstructor;
@@ -29,16 +26,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -59,9 +52,12 @@ public class UserServiceImpl implements UserService {
     private Long verificationTokenDurationMs;
     @Override
     public RegisterResponse createUser(RegisterRequest registerRequest) {
-
+        if(registerRequest.getPassword().length() < 7){
+            throw new InvalidRequestException(Constant.INVALID_PASSWORD_MSG);
+        }
         String username = registerRequest.getUsername();
-        if(userRepository.existsByUsername(username)) {
+        String email = registerRequest.getEmail();
+        if(userRepository.existsByUsername(username) || userRepository.existsByEmail(email)) {
             throw new ResourceExistException(Constant.RESOURCE_EXIST_MSG);
         }
         Optional<Role> roleOtp = roleRepository.findByName(RoleName.USER);
@@ -158,9 +154,18 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Boolean resendVerifyToken(String userId) {
+    public Boolean resendVerifyToken(String username) {
       try{
-          Optional<User> userOtp = userRepository.findById(userId);
+          if(Objects.isNull(username) || username.isEmpty()){
+              throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
+          }
+          Optional<User> userOtp;
+          if(username.contains("@")){
+              userOtp = userRepository.findByEmail(username);
+          }else{
+              userOtp = userRepository.findByUsername(username);
+          }
+
           if(userOtp.isEmpty()){
               throw  new ResourceNotFoundException(Constant.RESOURCE_NOT_FOUND_MSG);
           }
@@ -190,7 +195,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void sendResetPassword(PasswordResetRequest request) {
+    public String sendResetPassword(PasswordResetRequest request) {
         Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
         if(userOpt.isEmpty()){
             throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
@@ -213,11 +218,14 @@ public class UserServiceImpl implements UserService {
         emailRequest.setUserId(user.getId());
         emailRequest.setBody(token.getToken());
         emailService.sendResetPasswordEmail(emailRequest);
-
+        return user.getId();
     }
 
     @Override
     public void resetPassword(PasswordResetRequest request) {
+        if(request.getPassword().length() < 7){
+            throw new InvalidRequestException(Constant.INVALID_PASSWORD_MSG);
+        }
         Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
         if(userOpt.isEmpty()){
             throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
@@ -232,11 +240,11 @@ public class UserServiceImpl implements UserService {
         PasswordResetToken token = tokenOpt.get();
 
         if(request.getToken().equals(token.getToken()) && token.getExpiryDate().compareTo(Instant.now()) > 0){
-            user.setPassword(request.getPassword());
+            user.setPassword(encoder.encode(request.getPassword()));
         }else{
             throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
         }
-
+        userRepository.save(user);
         EmailRequest emailRequest = new EmailRequest();
         emailRequest.setTo(user.getEmail());
         emailRequest.setSubject(Constant.PASSWORD_RESET_SUCCESS_SUBJECT);
