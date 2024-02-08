@@ -18,7 +18,7 @@ public interface UserService {
 
     UserResponse updateById(ProfileRequest profileRequest, String id);
 
-    VerificationToken createVerificationTokenForUser(User user);
+    void createVerificationTokenForUser(User user);
 
 
     Boolean resendVerifyToken(String username);

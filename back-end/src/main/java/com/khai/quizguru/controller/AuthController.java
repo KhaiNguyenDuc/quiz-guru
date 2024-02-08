@@ -133,7 +133,7 @@ public class AuthController {
         String requestRefreshToken = request.getRefreshToken();
 
         RefreshToken refreshToken = refreshTokenService.findByToken(requestRefreshToken);
-        refreshTokenService.verifyExpiration(refreshToken);
+        refreshTokenService.deleteIfExpired(refreshToken);
         User user = refreshToken.getUser();
         String accessToken = tokenProvider.generateTokenFromUserId(user.getId(), user.getRoles());
 

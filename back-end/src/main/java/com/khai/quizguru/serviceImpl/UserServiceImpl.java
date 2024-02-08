@@ -79,10 +79,16 @@ public class UserServiceImpl implements UserService {
         }
 
         Role role = roleOtp.get();
+
+        Image image = new Image();
+
+        imageRepository.save(image);
+
         Library library = new Library();
         Library librarySaved = libraryRepository.save(library);
         User user = mapper.map(registerRequest, User.class);
         user.setRoles(List.of(role));
+        user.setImage(image);
         user.setIsEnable(false);
         user.setPassword(encoder.encode(user.getPassword()));
         user.setLibrary(librarySaved);
@@ -105,7 +111,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse getUserById(String id) {
         Optional<User> userOtp = userRepository.findById(id);
         if(userOtp.isEmpty()){
-            throw  new ResourceNotFoundException(Constant.RESOURCE_NOT_FOUND_MSG);
+            throw new ResourceNotFoundException(Constant.RESOURCE_NOT_FOUND_MSG);
         }
         return mapper.map(userOtp.get(), UserResponse.class);
     }
@@ -128,9 +134,10 @@ public class UserServiceImpl implements UserService {
         User user = userOtp.get();
         if(Objects.nonNull(profileRequest.getUsername())){
             Optional<User> checkUser = userRepository.findByUsername(profileRequest.getUsername());
-
-            if(!checkUser.get().getId().equals(id)){
-                throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
+            if(checkUser.isPresent()){
+                if(!checkUser.get().getId().equals(id)){
+                    throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
+                }
             }
             user.setUsername(profileRequest.getUsername());
         }
@@ -156,14 +163,18 @@ public class UserServiceImpl implements UserService {
                 }
 
             }
-            userRepository.save(user);
+
         }catch (Exception e){
+            log.info(e.getMessage());
             throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
         }
-
+        userRepository.save(user);
 
         UserResponse userResponse =  mapper.map(user, UserResponse.class);
-        userResponse.setImagePath(user.getImage().getPath());
+        if(Objects.nonNull((user.getImage().getPath()))){
+            userResponse.setImagePath(user.getImage().getPath());
+        }
+
         return userResponse;
     }
 
@@ -171,16 +182,14 @@ public class UserServiceImpl implements UserService {
      * Creates a verification token for the specified user.
      *
      * @param user The user for whom the verification token is created.
-     * @return The verification token.
      */
     @Override
-    public VerificationToken createVerificationTokenForUser(User user) {
+    public void createVerificationTokenForUser(User user) {
         final String token = RandomStringUtils.randomNumeric(4);
         VerificationToken verificationToken = new VerificationToken(token, user);
         verificationToken.setExpiryDate(Instant.now().plusMillis(verificationTokenDurationMs));
         log.info("In createVerificationTokenForUser");
-        return verifyTokenRepository.save(verificationToken);
-
+        verifyTokenRepository.save(verificationToken);
     }
 
 
