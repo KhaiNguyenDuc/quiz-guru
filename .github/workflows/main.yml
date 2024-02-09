@@ -23,7 +23,12 @@ jobs:
           cache: maven
 
       - name: Test with Maven
+        id: test
         run: mvn clean test
+
+      - name: Check Test Results
+        if: ${{ steps.test.outcome != 'success' }}
+        run: exit 1
 
       - name: Generate Test case Report
         run: mvn surefire-report:report-only

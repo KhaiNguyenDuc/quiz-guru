@@ -2,6 +2,7 @@ package com.khai.quizguru.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class TestData {
     public static final String USERNAME="username";
@@ -24,6 +25,6 @@ public class TestData {
 
     public static final String WORDSET_ID = "123";
     public static final String WORD_ID = "345";
-    public static final ArrayList<String> LIST_WORDS = new ArrayList<>(Arrays.asList("happy", "case"));
+    public static final ArrayList<String> LIST_WORDS = new ArrayList<>(List.of("happy"));
     public static final String QUIZ_ID ="987";
 }

@@ -27,7 +27,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
@@ -62,17 +62,17 @@ class VerifyTokenServiceImplTest {
     @Test
     void findTokenByUser_TokenFound_Success() {
 
-        // When
+        // Given
         User user = new User();
         when(userRepositoryMock.findById(anyString())).thenReturn(Optional.of(user));
 
         VerificationToken verificationToken = new VerificationToken();
         when(verificationTokenRepositoryMock.findByUser(user)).thenReturn(Optional.of(verificationToken));
 
-        // Act
+        // When
         VerificationToken result = verifyTokenService.findTokenByUser(TestData.USER_ID);
 
-        // Assert
+        // Then
         assertNotNull(result);
     }
 
@@ -87,6 +87,7 @@ class VerifyTokenServiceImplTest {
 
     @Test
     void verifyUser_TokenExpired_ThrowsTokenRefreshException() {
+
         // When
         User user = new User();
         when(userRepositoryMock.findByEmail(TestData.EXIST_EMAIL)).thenReturn(Optional.of(user));
@@ -100,7 +101,23 @@ class VerifyTokenServiceImplTest {
     }
 
     @Test
+    void verifyUser_TokenNotFound_ThrowsTokenRefreshException() {
+
+        // When
+        User user = new User();
+        when(userRepositoryMock.findByEmail(TestData.EXIST_EMAIL)).thenReturn(Optional.of(user));
+
+        when(verificationTokenRepositoryMock.findByUser(user)).thenReturn(Optional.empty());
+
+        // Then
+        assertThrows(TokenRefreshException.class, () -> verifyTokenService.verifyUser(TestData.TOKEN, TestData.EXIST_EMAIL));
+    }
+
+
+
+    @Test
     void verifyUser_InvalidToken_ReturnsFalse() {
+
         // When
         User user = new User();
         when(userRepositoryMock.findByEmail(TestData.EXIST_EMAIL)).thenReturn(Optional.of(user));
@@ -118,20 +135,44 @@ class VerifyTokenServiceImplTest {
     }
 
     @Test
-    void verifyUser_ValidToken_ReturnsTrue() {
-        // When
+    void verifyUser_ByEmail_ValidToken_ReturnsTrue() {
+
+        // Given
         User user = new User();
         when(userRepositoryMock.findByEmail(TestData.EXIST_EMAIL)).thenReturn(Optional.of(user));
+        when(userRepositoryMock.findByUsername(anyString())).thenReturn(Optional.of(user));
 
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setExpiryDate(Instant.now().plusMillis(3600000));
         verificationToken.setToken(TestData.TOKEN);
         when(verificationTokenRepositoryMock.findByUser(user)).thenReturn(Optional.of(verificationToken));
 
-        // Act
+        // When
         boolean result = verifyTokenService.verifyUser(TestData.TOKEN, TestData.EXIST_EMAIL);
 
-        // Assert
+        // Then
         assertTrue(result);
+        verify(userRepositoryMock, times(1)).findByEmail(TestData.EXIST_EMAIL);
+    }
+
+    @Test
+    void verifyUser_ByUsername_ValidToken_ReturnsTrue() {
+
+        // Given
+        User user = new User();
+        when(userRepositoryMock.findByUsername(TestData.EXIST_USERNAME)).thenReturn(Optional.of(user));
+        when(userRepositoryMock.findByEmail(anyString())).thenReturn(Optional.of(user));
+
+        VerificationToken verificationToken = new VerificationToken();
+        verificationToken.setExpiryDate(Instant.now().plusMillis(3600000));
+        verificationToken.setToken(TestData.TOKEN);
+        when(verificationTokenRepositoryMock.findByUser(user)).thenReturn(Optional.of(verificationToken));
+
+        // When
+        boolean result = verifyTokenService.verifyUser(TestData.TOKEN, TestData.EXIST_USERNAME);
+
+        // Then
+        assertTrue(result);
+        verify(userRepositoryMock, times(1)).findByUsername(TestData.EXIST_USERNAME);
     }
 }

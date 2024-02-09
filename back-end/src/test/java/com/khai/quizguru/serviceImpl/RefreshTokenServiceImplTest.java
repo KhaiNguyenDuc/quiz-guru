@@ -57,8 +57,6 @@ class RefreshTokenServiceImplTest {
         Image image = new Image();
         imageRepository.save(image);
 
-
-
         User user = new User();
         user.setUsername(TestData.EXIST_USERNAME);
         user.setPassword(TestData.PASSWORD);

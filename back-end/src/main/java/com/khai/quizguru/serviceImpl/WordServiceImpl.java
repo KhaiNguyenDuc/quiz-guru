@@ -58,12 +58,7 @@ public class WordServiceImpl implements WordService {
         if(userOtp.isEmpty()){
             throw new ResourceNotFoundException(Constant.RESOURCE_NOT_FOUND_MSG);
         }
-
-
         User user = userOtp.get();
-
-
-
         List<WordResponse> wordResponses = new ArrayList<>();
         try{
 
@@ -89,8 +84,6 @@ public class WordServiceImpl implements WordService {
                         log.warn("Definition not found for word: {}", word);
                     }
                 }
-
-
             }
         }catch (Exception e){
             throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
