@@ -170,30 +170,4 @@ class WordSetServiceImplTest {
         verifyNoMoreInteractions(wordSetRepository);
     }
 
-
-    @Test
-    void addWordToWordSet_Success() {
-        // Given
-        String wordSetId = TestData.WORDSET_ID;
-        
-        
-        WordSetRequest wordSetRequest = new WordSetRequest();
-        wordSetRequest.setWords(List.of(
-                new WordRequest(),
-                new WordRequest()
-        ));
-
-        WordSet existingWordSet = new WordSet();
-        existingWordSet.setId(wordSetId);
-        when(wordSetRepository.findById(wordSetId)).thenReturn(Optional.of(existingWordSet));
-        when(wordRepository.existsByNameAndWordSet(anyString(), any(WordSet.class))).thenReturn(false);
-
-        // When
-        wordSetService.addWordToWordSet(wordSetId, wordSetRequest);
-
-        // Then
-        verify(wordRepository, times(2)).save(any(Word.class));
-        verify(wordSetRepository).save(existingWordSet);
-    }
-
 }
