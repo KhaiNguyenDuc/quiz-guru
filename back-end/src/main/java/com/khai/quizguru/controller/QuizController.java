@@ -13,6 +13,7 @@ import com.khai.quizguru.security.CurrentUser;
 import com.khai.quizguru.security.UserPrincipal;
 import com.khai.quizguru.service.QuizService;
 import com.khai.quizguru.utils.Constant;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,7 +45,7 @@ public class QuizController {
     @PostMapping("/generate/txt")
     public ResponseEntity<JsonResponse> generateQuizByTxtFile(
             @CurrentUser UserPrincipal userPrincipal,
-            @ModelAttribute TxtFileRequest txtFileRequest) {
+            @Valid @ModelAttribute TxtFileRequest txtFileRequest) {
 
         ChatRequest chat = new ChatRequest(model, txtFileRequest);
         QuizGenerationResult result = quizService.generateQuiz(chat, userPrincipal.getId());
@@ -62,7 +63,7 @@ public class QuizController {
     @PostMapping("/generate/pdf")
     public ResponseEntity<JsonResponse> generateQuizByPdfFile(
             @CurrentUser UserPrincipal userPrincipal,
-            @ModelAttribute PdfFileRequest pdfFileRequest) {
+            @Valid @ModelAttribute PdfFileRequest pdfFileRequest) {
 
         ChatRequest chat = new ChatRequest(model, pdfFileRequest);
         QuizGenerationResult result = quizService.generateQuiz(chat, userPrincipal.getId());
@@ -80,7 +81,7 @@ public class QuizController {
     @PostMapping("/generate/doc")
     public ResponseEntity<JsonResponse> generateQuizByDocFile(
             @CurrentUser UserPrincipal userPrincipal,
-            @ModelAttribute DocFileRequest docFileRequest) {
+            @Valid @ModelAttribute DocFileRequest docFileRequest) {
 
         ChatRequest chat = new ChatRequest(model, docFileRequest);
         QuizGenerationResult result = quizService.generateQuiz(chat, userPrincipal.getId());
@@ -98,7 +99,7 @@ public class QuizController {
     @PostMapping("/generate/text")
     public ResponseEntity<JsonResponse> generateQuizByText(
             @CurrentUser UserPrincipal userPrincipal,
-            @RequestBody BaseTextRequest baseTextRequest) {
+            @Valid @RequestBody BaseTextRequest baseTextRequest) {
 
             ChatRequest chat = new ChatRequest(model, baseTextRequest);
             QuizGenerationResult result = quizService.generateQuiz(chat, userPrincipal.getId());
@@ -115,7 +116,7 @@ public class QuizController {
     @PostMapping("/generate/vocabulary")
     public ResponseEntity<JsonResponse> generateQuizByVocabulary(
             @CurrentUser UserPrincipal userPrincipal,
-            @RequestBody GenerateVocabularyRequest generateVocabularyRequest) {
+            @Valid @RequestBody GenerateVocabularyRequest generateVocabularyRequest) {
 
         ChatRequest chat = new ChatRequest(model, generateVocabularyRequest);
         QuizGenerationResult result = quizService.generateQuizAndSaveWordSet(chat, userPrincipal.getId());
@@ -133,7 +134,7 @@ public class QuizController {
     @PostMapping("/generate/text-to-vocab")
     public ResponseEntity<JsonResponse> generateQuizByTextToVocab(
             @CurrentUser UserPrincipal userPrincipal,
-            @RequestBody TextToVocabRequest textToVocabRequest) {
+            @Valid @RequestBody TextToVocabRequest textToVocabRequest) {
 
         ChatRequest chat = new ChatRequest(model, textToVocabRequest);
         QuizGenerationResult result = quizService.generateQuizAndSaveWordSet(chat, userPrincipal.getId());
@@ -157,7 +158,7 @@ public class QuizController {
     @PostMapping("/generate/txt-to-vocab")
     public ResponseEntity<JsonResponse> generateQuizByTxtToVocab(
             @CurrentUser UserPrincipal userPrincipal,
-            @ModelAttribute TxtVocabularyRequest txtVocabularyRequest) {
+            @Valid @ModelAttribute TxtVocabularyRequest txtVocabularyRequest) {
 
         ChatRequest chat = new ChatRequest(model, txtVocabularyRequest);
         QuizGenerationResult result = quizService.generateQuizAndSaveWordSet(chat, userPrincipal.getId());
@@ -181,7 +182,7 @@ public class QuizController {
     @PostMapping("/generate/doc-to-vocab")
     public ResponseEntity<JsonResponse> generateQuizByDocToVocab(
             @CurrentUser UserPrincipal userPrincipal,
-            @ModelAttribute DocFileVocabRequest docFileVocabRequest) {
+            @Valid @ModelAttribute DocFileVocabRequest docFileVocabRequest) {
 
         ChatRequest chat = new ChatRequest(model, docFileVocabRequest);
         QuizGenerationResult result = quizService.generateQuizAndSaveWordSet(chat, userPrincipal.getId());
@@ -205,7 +206,7 @@ public class QuizController {
     @PostMapping("/generate/pdf-to-vocab")
     public ResponseEntity<JsonResponse> generateQuizByPdfToVocab(
             @CurrentUser UserPrincipal userPrincipal,
-            @ModelAttribute PdfFileVocabRequest pdfFileVocabRequest) {
+            @Valid @ModelAttribute PdfFileVocabRequest pdfFileVocabRequest) {
 
         ChatRequest chat = new ChatRequest(model, pdfFileVocabRequest);
         QuizGenerationResult result = quizService.generateQuizAndSaveWordSet(chat, userPrincipal.getId());

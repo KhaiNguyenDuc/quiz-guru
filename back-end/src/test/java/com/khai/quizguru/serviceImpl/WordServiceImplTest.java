@@ -117,33 +117,34 @@ class WordServiceImplTest {
                 wordService.udpateWordDefinition(TestData.WORD_ID, new WordRequest(), TestData.USER_ID));
     }
 
-//    @Test
-//    void updateWordDefinition_Success() {
-//
-//        // Given
-//        String content = "content";
-//        User user = new User();
-//        Word word = new Word();
-//        word.setContent(content);
-//        WordRequest wordRequest = new WordRequest();
-//        wordRequest.setContent(content);
-//
-//        when(userRepository.findById(anyString())).thenReturn(Optional.of(user));
-//        when(wordRepository.findByIdAndUser(anyString(), any(User.class))).thenReturn(Optional.of(word));
-//        when(mapper.map(any(Word.class), eq(WordResponse.class)))
-//                .thenAnswer(invocation -> {
-//                    Word inputWord = invocation.getArgument(0);
-//                    WordResponse wordResponse = new WordResponse();
-//                    wordResponse.setContent(inputWord.getContent());
-//                    return new WordResponse();
-//                });
-//
-//        // When
-//        WordResponse wordResponse =
-//                wordService.udpateWordDefinition(TestData.WORD_ID, wordRequest, TestData.USER_ID);
-//
-//        // Then
-//        assertEquals(wordResponse.getContent(), content);
-//    }
+    @Test
+    void updateWordDefinition_Success() {
+
+        // Given
+        String content = "content";
+        User user = new User();
+        Word word = new Word();
+        word.setContent(content);
+        WordRequest wordRequest = new WordRequest();
+        wordRequest.setContent(content);
+
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(user));
+        when(wordRepository.findByIdAndUser(anyString(), any(User.class))).thenReturn(Optional.of(word));
+        when(wordRepository.save(any(Word.class))).thenReturn(word);
+        when(mapper.map(any(Word.class), eq(WordResponse.class)))
+                .thenAnswer(invocation -> {
+                    Word inputWord = invocation.getArgument(0);
+                    WordResponse wordResponse = new WordResponse();
+                    wordResponse.setContent(inputWord.getContent());
+                    return wordResponse;
+                });
+
+        // When
+        WordResponse wordResponse =
+                wordService.udpateWordDefinition(TestData.WORD_ID, wordRequest, TestData.USER_ID);
+
+        // Then
+        assertEquals(wordResponse.getContent(), content);
+    }
 
 }

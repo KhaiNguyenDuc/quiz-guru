@@ -12,6 +12,6 @@ import java.util.Date;
 public class ExceptionDetails {
 
     private Date timestamp;
-    private String message;
+    private Object message;
     private String details;
 }

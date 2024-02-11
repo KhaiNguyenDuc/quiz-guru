@@ -27,4 +27,7 @@ public class TestData {
     public static final String WORD_ID = "345";
     public static final ArrayList<String> LIST_WORDS = new ArrayList<>(List.of("happy"));
     public static final String QUIZ_ID ="987";
+
+    public static final String QUESTION_ID ="923";
+    public static final String RECORD_ID ="373";
 }

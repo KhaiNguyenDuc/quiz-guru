@@ -174,7 +174,6 @@ public class RecordServiceImpl implements RecordService {
         }
         Record record = recordOpt.get();
         RecordResponse recordResponse = mapper.map(record, RecordResponse.class);
-//        recordResponse.getRecordItems().forEach(recordItemResponse -> recordItemResponse.getQuestion().setType());
         recordResponse.setGivenText(record.getQuiz().getGivenText());
         return recordResponse;
     }

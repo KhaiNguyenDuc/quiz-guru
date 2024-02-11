@@ -109,7 +109,6 @@ public class WordServiceImpl implements WordService {
             throw new ResourceNotFoundException(Constant.RESOURCE_NOT_FOUND_MSG);
         }
 
-
         User user = userOtp.get();
 
         Optional<Word> wordOpt = wordRepository.findByIdAndUser(wordId, user);

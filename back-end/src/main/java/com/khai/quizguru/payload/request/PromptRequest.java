@@ -5,15 +5,25 @@ import com.khai.quizguru.enums.QuizType;
 import com.khai.quizguru.payload.request.vocabulary.GenerateVocabularyRequest;
 import com.khai.quizguru.payload.request.vocabulary.TextToVocabRequest;
 import com.khai.quizguru.utils.Prompt;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public abstract class PromptRequest {
 
+    @NotBlank(message = "Type can't be empty")
     public Integer type;
+
+    @NotBlank(message = "Number can't be empty")
     public Integer number;
+
+    @NotBlank(message = "Language can't be empty")
     public String language;
+
+    @NotBlank(message = "Level can't be empty")
     public Integer level;
+
+    @NotBlank(message = "Duration can't be empty")
     public Integer duration;
 
 

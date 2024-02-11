@@ -2,14 +2,22 @@ package com.khai.quizguru.exception;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * The ExceptionHandlerController class handles exceptions globally across the application.
@@ -143,5 +151,33 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(details, HttpStatus.FORBIDDEN);
     }
 
+    /**
+     * Handles the MethodArgumentNotValidException and returns a ResponseEntity with a BAD_REQUEST status code.
+     * @param ex: Exception class
+     * @param headers: Headers
+     * @param status: Status
+     * @param request: Request
+     * @return ResponseEntity
+     */
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
+
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        ExceptionDetails details = new ExceptionDetails(
+                new Date(),
+                errors,
+                request.getDescription(false)
+        );
+        return new ResponseEntity<>(details, HttpStatus.BAD_REQUEST);
+    }
 
 }

@@ -17,8 +17,6 @@ import java.time.Instant;
 @NoArgsConstructor
 public class VerificationToken {
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;

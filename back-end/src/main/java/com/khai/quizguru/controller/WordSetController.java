@@ -6,6 +6,7 @@ import com.khai.quizguru.payload.response.*;
 import com.khai.quizguru.security.CurrentUser;
 import com.khai.quizguru.security.UserPrincipal;
 import com.khai.quizguru.service.WordSetService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class WordSetController {
     @PostMapping
     public ResponseEntity<JsonResponse> createWordSet(
             @CurrentUser UserPrincipal userPrincipal,
-            @RequestBody WordSetRequest wordSetRequest
+            @Valid @RequestBody WordSetRequest wordSetRequest
             ){
         String id = wordSetService.createWordSet(wordSetRequest, userPrincipal.getId());
         return new ResponseEntity<>(new JsonResponse("success", id), HttpStatus.CREATED);
@@ -47,7 +48,7 @@ public class WordSetController {
     @PutMapping("/{id}")
     public ResponseEntity<JsonResponse> updateWordSet(
             @CurrentUser UserPrincipal userPrincipal,
-            @RequestBody WordSetRequest wordSetRequest,
+            @Valid @RequestBody WordSetRequest wordSetRequest,
             @PathVariable("id") String wordSetId
     ){
         WordSetResponse wordSetResponse = wordSetService.updateWordSet(wordSetRequest, wordSetId, userPrincipal.getId());
@@ -64,7 +65,7 @@ public class WordSetController {
     @PostMapping("/bind")
     public ResponseEntity<JsonResponse> bindQuiz(
             @CurrentUser UserPrincipal userPrincipal,
-            @RequestBody BindRequest bindRequest
+            @Valid @RequestBody BindRequest bindRequest
             ){
         wordSetService.bindQuiz(bindRequest.getWordSetId(), bindRequest.getQuizId(), userPrincipal.getId());
         return new ResponseEntity<>(new JsonResponse("success", "success"), HttpStatus.CREATED);

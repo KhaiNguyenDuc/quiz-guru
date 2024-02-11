@@ -6,6 +6,7 @@ import com.khai.quizguru.payload.response.RecordResponse;
 import com.khai.quizguru.security.CurrentUser;
 import com.khai.quizguru.security.UserPrincipal;
 import com.khai.quizguru.service.RecordService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ public class RecordController {
     @PostMapping("/create")
     public ResponseEntity<JsonResponse> createRecord(
             @CurrentUser UserPrincipal userPrincipal,
-            @RequestBody RecordRequest recordRequest){
+            @Valid @RequestBody RecordRequest recordRequest){
         log.info(recordRequest.getQuizId());
         RecordResponse recordResponse = recordService.createRecord(recordRequest, userPrincipal.getId());
         return new ResponseEntity<>(new JsonResponse("success", recordResponse), HttpStatus.CREATED);

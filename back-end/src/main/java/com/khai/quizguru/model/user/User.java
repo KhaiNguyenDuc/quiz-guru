@@ -12,17 +12,21 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-@Table(name = "users")
+@Table(name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "UniqueUsername",columnNames = "username"),
+                @UniqueConstraint(name = "UniqueEmail", columnNames = "email")
+        })
 public class User extends UserDateAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true, length = 30)
     private String email;
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true, length = 30)
     private String username;
 
     @Column(name = "password")

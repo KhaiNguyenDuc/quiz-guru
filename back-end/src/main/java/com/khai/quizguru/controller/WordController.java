@@ -6,6 +6,7 @@ import com.khai.quizguru.payload.response.WordResponse;
 import com.khai.quizguru.security.CurrentUser;
 import com.khai.quizguru.security.UserPrincipal;
 import com.khai.quizguru.service.WordService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +53,7 @@ public class WordController {
     public ResponseEntity<JsonResponse> udpateWordDefinition(
             @CurrentUser UserPrincipal userPrincipal,
             @PathVariable(name ="id") String wordId,
-            @RequestBody WordRequest wordRequest
+            @Valid @RequestBody WordRequest wordRequest
     ){
 
         WordResponse  wordResponse = wordService.udpateWordDefinition(wordId, wordRequest, userPrincipal.getId());
