@@ -62,7 +62,7 @@ function Quiz() {
   };
 
   const selectAnswer = (index) => {
-    if (quizIndex !== 0 && quizIndex % 2 === 0 && words[quizIndex] !== undefined) {
+    if (quizIndex !== 0 && quizIndex % 2 === 0 && words[quizIndex - 1] !== undefined) {
       // If is flashcard so just render next button without doing anything
       setIsNextButton(true);
       return;
@@ -125,7 +125,7 @@ function Quiz() {
           }),
         },
       ]);
-    } else if(quizIndex===0 || quizIndex % 2 !== 0 || words[quizIndex] === undefined){
+    } else if(quizIndex===0 || quizIndex % 2 !== 0 || words[quizIndex - 1] === undefined){
       // If not flashcard so append to result to submit
       setCurrentQuestion(currentQuestion + 1);
       setRecordItems([
