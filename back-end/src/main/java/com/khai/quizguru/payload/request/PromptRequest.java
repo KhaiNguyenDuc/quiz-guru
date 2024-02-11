@@ -6,6 +6,7 @@ import com.khai.quizguru.payload.request.vocabulary.GenerateVocabularyRequest;
 import com.khai.quizguru.payload.request.vocabulary.TextToVocabRequest;
 import com.khai.quizguru.utils.Prompt;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -23,7 +24,7 @@ public abstract class PromptRequest {
     @NotBlank(message = "Level can't be empty")
     public Integer level;
 
-    @NotBlank(message = "Duration can't be empty")
+    @NotNull(message = "Duration can't be empty")
     public Integer duration;
 
 
