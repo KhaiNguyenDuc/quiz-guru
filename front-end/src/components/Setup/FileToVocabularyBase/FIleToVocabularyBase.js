@@ -39,6 +39,7 @@ const FileToVocabularyBase = () => {
     setLoading(true)
     let response = {};
     if(selectedFile === undefined){
+      setLoading(false)
       setError(EMPTY_FILE)
       return;
     }

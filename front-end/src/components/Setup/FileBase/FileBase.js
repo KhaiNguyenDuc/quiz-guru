@@ -31,6 +31,7 @@ const FileBase = () => {
     e.preventDefault();
     setLoading(true)
     if(selectedFile === undefined){
+      setLoading(false)
       setError(EMPTY_FILE)
       return;
     }
