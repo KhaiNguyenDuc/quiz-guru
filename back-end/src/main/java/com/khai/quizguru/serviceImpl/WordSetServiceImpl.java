@@ -84,7 +84,9 @@
 
             for(WordRequest wordRequest : wordSetRequest.getWords()){
                 Word word = new Word();
-                word.setName(wordRequest.getName().toLowerCase().trim());
+                if(Objects.nonNull(wordRequest.getName())){
+                    word.setName(wordRequest.getName().toLowerCase().trim());
+                }
                 if(Objects.nonNull(wordRequest.getDefinition())){
                     word.setDefinition(wordRequest.getDefinition());
                 }
