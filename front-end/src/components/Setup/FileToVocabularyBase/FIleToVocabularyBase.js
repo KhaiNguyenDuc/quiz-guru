@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import {
   ALLOWED_TYPE,
   DOCX_TYPE,
+  EMPTY_FILE,
   PDF_TYPE,
   TRY_AGAIN_MSG,
   TXT_TYPE,
@@ -37,6 +38,10 @@ const FileToVocabularyBase = () => {
     e.preventDefault();
     setLoading(true)
     let response = {};
+    if(selectedFile === undefined){
+      setError(EMPTY_FILE)
+      return;
+    }
     // Convert to second
     const payload = {...fileToVocab, duration: fileToVocab.duration* 60, isDoQuiz: fileToVocab.isDoQuiz,
         wordSetId: (!isCreatedSet && fileToVocab.wordSetId === "") ? wordSets[0]?.id : fileToVocab.wordSetId}

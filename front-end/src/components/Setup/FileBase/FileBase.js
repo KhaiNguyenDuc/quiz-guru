@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import {
   ALLOWED_TYPE,
   DOCX_TYPE,
+  EMPTY_FILE,
   PDF_TYPE,
   TRY_AGAIN_MSG,
   TXT_TYPE,
@@ -29,6 +30,10 @@ const FileBase = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true)
+    if(selectedFile === undefined){
+      setError(EMPTY_FILE)
+      return;
+    }
     let response = {};
     // Convert to second
     
