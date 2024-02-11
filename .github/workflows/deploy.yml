@@ -1,65 +1,69 @@
 name: Deploy
-
 on:
-  push:
-    branches: [ "main" ]
+  workflow_run:
+    workflows: ["Test"]
+    branches: [main]
+    types:
+      - completed
 
 permissions: read-all
 
 jobs:
+
   config:
     name: Config project
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-    - uses: actions/checkout@v2 
-    - name: Pull repository
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.PRIVATE_KEY }}
-        port: ${{ secrets.SSH_PORT }}
-        script: |
-          sudo -i
-          cd root
-          if [ -d "quiz-guru" ]; then
-            cd quiz-guru
-            git pull https://github.com/KhaiNguyenDuc/quiz-guru.git --ff --no-edit
-            wait
-            cd ../
-          else
-            git clone https://github.com/KhaiNguyenDuc/quiz-guru.git
-            wait
-          fi
+      - uses: actions/checkout@v2 
+      - name: Pull repository
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            sudo -i
+            cd root
+            if [ -d "quiz-guru" ]; then
+              cd quiz-guru
+              git pull https://github.com/KhaiNguyenDuc/quiz-guru.git --ff --no-edit
+              wait
+              cd ../
+            else
+              git clone https://github.com/KhaiNguyenDuc/quiz-guru.git
+              wait
+            fi
           
   stop-old-container:
     name: Stop container
     runs-on: ubuntu-latest
     needs: config
     steps:
-    - name: SSH into VPS
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.PRIVATE_KEY }}
-        port: ${{ secrets.SSH_PORT }}
-        script: |
-          sudo docker ps -a --format '{{.ID}}' | xargs -r sudo docker stop
+      - name: SSH into VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            sudo docker ps -a --format '{{.ID}}' | xargs -r sudo docker stop
       
   remove-old-container:
     name: Remove container
     needs: stop-old-container
     runs-on: ubuntu-latest
     steps:
-    - name: SSH into EC2 instance
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.PRIVATE_KEY }}
-        port: ${{ secrets.SSH_PORT }}
-        script: |
+      - name: SSH into EC2 instance
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
             sudo docker ps -a --format '{{.ID}}' | xargs -r sudo docker rm
           
  
@@ -68,13 +72,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: remove-old-container
     steps:
-    - name: SSH into Vps
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.PRIVATE_KEY }}
-        port: ${{ secrets.SSH_PORT }}
-        script: |
-          cd quiz-guru
-          sudo docker compose up --build -d
+      - name: SSH into Vps
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd quiz-guru
+            sudo docker compose up --build -d
