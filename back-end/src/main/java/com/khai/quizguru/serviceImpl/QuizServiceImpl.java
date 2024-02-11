@@ -55,6 +55,7 @@ public class QuizServiceImpl implements QuizService {
     private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
     private final ChoiceRepository choiceRepository;
+    private final WordSetRepository wordSetRepository;
     private final RestTemplate restTemplate;
     private final ModelMapper mapper;
     private final ObjectMapper objMapper;
@@ -127,14 +128,27 @@ public class QuizServiceImpl implements QuizService {
             String wordSetId = "";
             if(chat.getPromptRequest() instanceof VocabularyPromptRequest vocabularyPromptRequest){
                 wordSetRequest.setName(vocabularyPromptRequest.getWordSetName());
+
+                // Mapping exist wordSet with quiz
                 if(!Objects.equals(vocabularyPromptRequest.getWordSetId(), "")){
                     wordSetId = vocabularyPromptRequest.getWordSetId();
                     wordSetService.addWordToWordSet(wordSetId, wordSetRequest);
-
-                    //delete old quiz due to one to one relationship
                     wordSetService.bindQuiz(wordSetId, wordSetRequest.getQuizId(), userId);
+                    //ToDo: delete old quiz due to one to one relationship
                 }else{
-                    wordSetId = wordSetService.createWordSet(wordSetRequest, userId);
+                    if(!vocabularyPromptRequest.getWordSetName().isEmpty()){
+                        // Mapping exist wordSet with quiz
+                        Optional<WordSet> wordSetOpt =
+                                wordSetRepository.findByNameAndUser(vocabularyPromptRequest.getWordSetName(), userId);
+                        if(wordSetOpt.isPresent()){
+                            wordSetId = wordSetOpt.get().getId();
+                            wordSetService.addWordToWordSet(wordSetId, wordSetRequest);
+                            wordSetService.bindQuiz(wordSetId, wordSetRequest.getQuizId(), userId);
+                        }
+                    }else{
+                        // Create new wordSet
+                        wordSetId = wordSetService.createWordSet(wordSetRequest, userId);
+                    }
                 }
             }
             result.setWordSetId(wordSetId);

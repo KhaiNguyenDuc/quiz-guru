@@ -19,5 +19,6 @@ public interface WordSetRepository extends JpaRepository<WordSet, String> {
     @Query("SELECT ws FROM WordSet ws WHERE ws.isDeleted = false AND ws.library = :library")
     Page<WordSet> findByLibrary(@Param("library") Library library, Pageable pageable);
 
-
+    @Query("SELECT ws FROM WordSet ws JOIN ws.library l JOIN l.user u WHERE u.id = :userId AND ws.name = :name")
+    Optional<WordSet> findByNameAndUser(@Param("name") String wordSetName, @Param("userId") String userId);
 }
