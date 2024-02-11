@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useUser from "../../hook/useUser";
 import UserService from "../../services/UserService";
@@ -10,8 +10,11 @@ import {
   TRY_AGAIN_MSG,
   USERNAME_EXIST,
 } from "../../utils/Constant";
+import { useLocation } from 'react-router-dom';
 import PreLoader from "../PreLoader/PreLoader";
+import { Nav } from "react-bootstrap";
 const SideBar = ({ children }) => {
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const [selectedFile, setFile] = useState();
   const [imageUrl, setImageUrl] = useState();
@@ -105,8 +108,8 @@ const SideBar = ({ children }) => {
       {isLoading ? (
         <PreLoader color={"black"} type={"bars"} />
       ) : (
-        <div className="wrapper d-flex align-items-stretch sidebar-wrap ">
-          <nav
+        <Nav className="wrapper d-flex align-items-stretch sidebar-wrap ">
+          <div
             id="sidebar"
             className={`${sidebarOpen ? "active" : ""}  sticky-top`}
           >
@@ -196,10 +199,10 @@ const SideBar = ({ children }) => {
                 <>
                   {user === undefined && (
                     <>
-                      <Link to={"/auth/login"}>
+                      <NavLink to={"/auth/login"}>
                         <FontAwesomeIcon icon="home" className="fa-icon" />{" "}
                         <span>Đăng nhập</span>
-                      </Link>
+                      </NavLink>
                     </>
                   )}
                 </>
@@ -207,42 +210,49 @@ const SideBar = ({ children }) => {
               {user !== undefined && (
                 <>
                   <li>
-                    <Link to={"/normal/create/text"}>
+                    <NavLink to={"/normal/create/text"}
+                    className={ ['/normal/create/text', '/normal/create/file'].includes(pathname) ? 'active': ''}
+                    
+                   >
                       <FontAwesomeIcon icon="home" className="fa-icon" />{" "}
                       <span>Tạo câu hỏi</span>
-                    </Link>
+                    </NavLink>
+             
                   </li>
                   <li>
-                    <Link to={"/member/vocabulary/create/text"}>
-                      <FontAwesomeIcon icon={"clone"} className="fa-icon" /> Học
+                    <NavLink to={"/member/vocabulary/create/text"}
+                    className={ ['/member/vocabulary/create/text-to-vocab', '/member/vocabulary/create/file-to-vocab'].includes(pathname) ? 'active': ''}
+                    >
+                     <FontAwesomeIcon icon={"clone"} className="fa-icon" /> Học
                       từ vựng
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link to={"/member/quiz"}>
+                    <NavLink to={"/member/quiz"}>
                       <FontAwesomeIcon icon={"pencil"} className="fa-icon" />{" "}
                       Luyện tập
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link to={"/member/library"}>
+                    <NavLink to={"/member/library"}>
                       <FontAwesomeIcon icon={"bank"} className="fa-icon" /> Kho
                       từ vựng
-                    </Link>
+                    </NavLink>
                   </li>
 
                   <li>
-                    <Link to={"/member/record"}>
+                    <NavLink to={"/member/record"}
+                    >
                       <FontAwesomeIcon
                         icon={"note-sticky"}
                         className="fa-icon"
                       />{" "}
                       Lịch sử làm bài
-                    </Link>
+                    </NavLink>
                   </li>
 
                   <li>
-                    <Link onClick={(e) => handleLogout(e)} to={"/"}>
+                    <Link onClick={(e) => handleLogout(e)}>
                       <span className="pr-3">
                         <FontAwesomeIcon
                           icon={"sign-out"}
@@ -255,11 +265,11 @@ const SideBar = ({ children }) => {
                 </>
               )}
             </ul>
-          </nav>
+          </div>
           <div id="content" className="p-4 p-md-5 pt-5 text-start">
             <Outlet />
           </div>
-        </div>
+        </Nav>
       )}
     </>
   );

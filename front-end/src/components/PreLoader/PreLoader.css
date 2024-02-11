@@ -4,16 +4,14 @@
 }
 
 .preloader-overlay {
-    position: absolute;
+    position: fixed; /* Fixed positioning relative to the viewport */
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.7);
-    /* Semi-transparent background */
+    height: 100vh; /* Set height to 100% of viewport height */
+    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent background */
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10;
-    /* Ensure it's above other elements in the div */
+    z-index: 10; /* Ensure it's above other elements */
 }

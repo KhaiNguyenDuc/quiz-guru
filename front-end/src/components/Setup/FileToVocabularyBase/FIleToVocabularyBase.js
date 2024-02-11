@@ -85,7 +85,7 @@ const FileToVocabularyBase = () => {
   };
   return (
     <>
-      <form className="my-5" onSubmit={(e) => handleSubmit(e)}>
+      <form className="mt-5" onSubmit={(e) => handleSubmit(e)}>
         {isLoading && (<PreLoader color={"black"} type={"bars"} message={"Đang khởi tạo bộ câu hỏi"}/>)}
         {isError && (<div className="error-section">{isError}</div>)}
         <div className="row my-5 mx-2"> 
@@ -228,10 +228,10 @@ const FileToVocabularyBase = () => {
           <div className="col">
             <h5>Thời gian</h5>
 
-            <div class="input-group">
+            <div className="input-group">
               <input
                 type="number"
-                class="form-control"
+                className="form-control"
                 id="validationServerUsername"
                 placeholder="Thời gian"
                 min={1}
@@ -239,8 +239,8 @@ const FileToVocabularyBase = () => {
                 value={fileToVocab?.duration}
                 onChange={(e) => handleChange(e)}
               />
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroupPrepend3">
+              <div className="input-group-prepend">
+                <span className="input-group-text" id="inputGroupPrepend3">
                   Phút
                 </span>
               </div>

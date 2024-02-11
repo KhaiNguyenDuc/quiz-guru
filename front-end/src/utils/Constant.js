@@ -1,5 +1,5 @@
 export const HOST = 'api/v1'
-export const ROOT = 'http://localhost:8080'
+export const ROOT = 'https://khainguyenduc.id.vn'
 export const GOOGLE_CLIENT_ID  = '990887837910-pml8dp7e0lhotrolcprggedblnfki2no.apps.googleusercontent.com'
 export const TXT_TYPE = 'text/plain';
 export const PDF_TYPE = 'application/pdf';

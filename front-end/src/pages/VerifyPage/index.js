@@ -97,7 +97,7 @@ const VerifyPage = () => {
               {isResend ? (
                 <div className="success-section">Chúng tôi đã gửi mã xác thức đến email với tài khoản: {username}</div>
               ) : (
-                <div className="success-section">Hãy nhập mã xác thực đã được gửi đến email với tài khoản: {username}</div>
+                <div className="success-section">Hãy nhập mã xác thực đã được gửi đến email với tài khoản: {username}. Nếu không tìm thấy hãy kiểm tra hộp thư rác hoặc bấm "gửi lại"</div>
               )}
               <Oauth/>
             </div>

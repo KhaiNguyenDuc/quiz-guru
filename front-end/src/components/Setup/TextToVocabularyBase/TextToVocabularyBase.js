@@ -86,7 +86,7 @@ const TextToVocabularyBase = () => {
 
   return (
     <>
-      <form className="my-5" onSubmit={(e) => handleSubmit(e)}>
+      <form className="mt-5" onSubmit={(e) => handleSubmit(e)}>
         {isLoading && (
           <PreLoader
             color={"black"}
@@ -237,10 +237,10 @@ const TextToVocabularyBase = () => {
           <div className="col">
             <h5>Thời gian</h5>
 
-            <div class="input-group">
+            <div className="input-group">
               <input
                 type="number"
-                class="form-control"
+                className="form-control"
                 id="validationServerUsername"
                 placeholder="Thời gian"
                 min={1}
@@ -248,8 +248,8 @@ const TextToVocabularyBase = () => {
                 value={textToVocab?.duration}
                 onChange={(e) => handleChange(e)}
               />
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroupPrepend3">
+              <div className="input-group-prepend">
+                <span className="input-group-text" id="inputGroupPrepend3">
                   Phút
                 </span>
               </div>

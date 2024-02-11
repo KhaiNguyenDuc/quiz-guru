@@ -199,12 +199,8 @@ class UserServiceImplTest {
     @Test
     void sendResetPassword_NotFoundEmail_ThrowsInvalidRequestException(){
 
-        // Given
-        PasswordResetRequest request = new PasswordResetRequest();
-        request.setEmail(TestData.NOT_FOUND_EMAIL);
-
-        // Then
-        assertThrows(InvalidRequestException.class, () -> userService.sendResetPassword(request));
+        // Assert
+        assertThrows(InvalidRequestException.class, () -> userService.sendResetPassword(TestData.NOT_FOUND_EMAIL));
 
     }
 
@@ -212,8 +208,6 @@ class UserServiceImplTest {
     void sendResetPassword_Success(){
 
         // Given
-        PasswordResetRequest request = new PasswordResetRequest();
-        request.setEmail(TestData.EXIST_EMAIL);
         Mockito.doNothing().when(emailServiceMock).sendResetPasswordEmail(any(EmailRequest.class));
 
         // Expect
@@ -221,7 +215,7 @@ class UserServiceImplTest {
         String expectedId = user.getId();
 
         // When
-        String userId = userService.sendResetPassword(request);
+        String userId = userService.sendResetPassword(TestData.EXIST_EMAIL);
 
         // Then
         assertEquals(expectedId, userId);

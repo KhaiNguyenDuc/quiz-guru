@@ -245,13 +245,13 @@ public class UserServiceImpl implements UserService {
      * Generates a new password reset token, associates it with the user, and sends an email containing the token.
      * Throws an InvalidRequestException if the user is not found in the database.
      *
-     * @param request The PasswordResetRequest containing the email address of the user requesting password reset.
+     * @param email The PasswordResetRequest containing the email address of the user requesting password reset.
      * @return The user ID of the user for whom the password reset email was sent.
      * @throws InvalidRequestException If the user is not found in the database.
      */
     @Override
-    public String sendResetPassword(PasswordResetRequest request) {
-        Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
+    public String sendResetPassword(String email) {
+        Optional<User> userOpt = userRepository.findByEmail(email);
         if(userOpt.isEmpty()){
             throw new InvalidRequestException(Constant.INVALID_REQUEST_MSG);
         }

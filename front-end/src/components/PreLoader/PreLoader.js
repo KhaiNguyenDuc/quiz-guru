@@ -10,7 +10,7 @@ function PreLoader({type, color, message}) {
           height={100}
           width={100}
         />
-        {message && (<div className="text-dark">{message}</div>)}
+        {message && (<div className="text-dark">{message}. Hãy đợi 2-3 phút (Vì api của chatgpt-3.5 rất chậm và xài vps free xD )</div>)}
     </div>
    
   )

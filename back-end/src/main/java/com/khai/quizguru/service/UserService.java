@@ -23,7 +23,7 @@ public interface UserService {
 
     Boolean resendVerifyToken(String username);
 
-    String sendResetPassword(PasswordResetRequest request);
+    String sendResetPassword(String email);
 
     void resetPassword(PasswordResetRequest request);
 }

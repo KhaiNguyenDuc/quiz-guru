@@ -98,7 +98,7 @@ function ResetPasswordPage() {
               {isResend ? (
                 <div className="text-white success-section">Đã gửi mã xác nhận qua email: {email}</div>
               ) : (
-                <div className="text-white success-section">Chúng tôi đã gửi cho bạn mã xác thực để đặt lại mật khẩu qua email: {email}</div>
+                <div className="text-white success-section">Chúng tôi đã gửi cho bạn mã xác thực để đặt lại mật khẩu qua email: {email}.  Nếu không tìm thấy hãy kiểm tra hộp thư rác hoặc bấm "gửi lại"</div>
               )}
               <Oauth/>
             </div>
