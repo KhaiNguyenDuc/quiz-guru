@@ -45,7 +45,7 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          sudo docker ps -a  | xargs -r sudo docker stop 
+          sudo docker ps -a --format '{{.ID}}' | xargs -r sudo docker stop
       
   remove-old-container:
     name: Remove container
@@ -60,7 +60,7 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-            sudo docker ps -a | xargs -r sudo docker rm
+            sudo docker ps -a --format '{{.ID}}' | xargs -r sudo docker rm
           
  
   start-container:
