@@ -29,17 +29,15 @@ axiosPrivate.interceptors.response.use(
     return response;
   },
   async (error) => {
-    console.log("innnnnn")
     const prevRequest = error?.config;
     if (
       (error.response.status === 401 && localStorage.getItem('refreshToken')) &&
       !prevRequest?.sent
     ) {
       prevRequest.sent = true;
-      
-      console.log("Refresh access Token")
+
       const refresh = await useRefreshToken();
-      console.log(refresh)  
+
       if (refresh?.refreshToken && refresh?.accessToken) {
         
         localStorage.setItem("accessToken", refresh?.accessToken);
@@ -47,13 +45,12 @@ axiosPrivate.interceptors.response.use(
 
         return axiosPrivate(prevRequest);
       } else {
-        console.log("Hết cứu")
+ 
         localStorage.clear()
         window.location.href = "/auth/login"
       }
     } else if (error.response.status === 500){
-      console.log("500 rui")
-      console.log(error)
+
       window.location.href = "/internal-error" 
     } else{
       return Promise.reject(error)

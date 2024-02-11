@@ -49,7 +49,7 @@ const SideBar = ({ children }) => {
     if (response?.status == 400) {
       return;
     }
-    console.log(response)
+
     setUser(response);
     setUsername(response?.username);
     setUser({

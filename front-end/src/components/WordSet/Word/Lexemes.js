@@ -4,9 +4,10 @@ function Lexemes({entry}) {
     const [showAllSenses, setShowAllSenses] = useState(false);
   return (
     <>
-    {entry.lexemes.map((lexeme) => (
+    {entry.lexemes.map((lexeme, index) => (
      <>
-       <hr className="bg-dark" />
+      <div key={index}>
+      <hr className="bg-dark" />
        <div key={lexeme.lemma + lexeme.partOfSpeech} className="my-4">
          <h4>{lexeme.partOfSpeech}</h4>
 
@@ -32,11 +33,12 @@ function Lexemes({entry}) {
          </div>
        ))}
         {lexeme.senses.length > 2 && (
-         <button className="my-2 btn btn-secondary" onClick={() => setShowAllSenses(!showAllSenses)}>
+         <button className="my-2 btn btn-secondary" onClick={(e) => {e.stopPropagation(); setShowAllSenses(!showAllSenses)}}>
            {showAllSenses ? "Ẩn" : "Hiển thị thêm"}
          </button>
        )}
        </div>
+      </div>
      </>
    ))}
     </>

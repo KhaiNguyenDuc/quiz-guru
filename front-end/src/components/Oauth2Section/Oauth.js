@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const Oauth = () => {
   
   // const handleOauthResponse = async (response) => {
-  //   console.log(response);
+
   // };
   // const googleLogin = useGoogleLogin({
   //   onSuccess: (credentialResponse) => handleOauthResponse(credentialResponse),

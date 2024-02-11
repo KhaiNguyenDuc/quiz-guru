@@ -318,28 +318,29 @@
   top: 10px; /* Adjust the top position as needed */
   right: 10px; /* Adjust the right position as needed */
 }
-
-.word.card {
-  width: 50% !important;
-  /* height: 150px; */
-  border-radius: 2% !important;
-}
-
-.word .card-text {
+.word-only .card-text {
   height: 15px;
 }
 
 
-.word.card {
+
+
+
+/* Apply transition to the word card */
+.word-only.card {
   transition: transform 0.3s ease-in-out;
-  cursor: pointer;
   background-color: rgba(241, 236, 236, 0.9) !important;
+  width: 50%;
+  height: 50% !important;
+  margin: auto;
+  overflow-y: auto;
 }
 
-.word.card:hover {
+/* Ensure the icon inherits the cursor pointer style when hovered */
+.word-only.card:hover {
+  cursor: pointer;
   transform: scale(1.05);
 }
-
 .remove-btn {
   margin-left: auto;
   color: red;

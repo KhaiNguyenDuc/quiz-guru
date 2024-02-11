@@ -37,13 +37,13 @@ const RecordDetail = ({ record }) => {
           <span className="percentile">
             {Math.round((record?.score / allQuestions.length) * 100)}%
           </span>
-          <img src={"../../../public/assets/images/bg.png"} alt="result" />
+         
         </div>
         <p className="result-detail">
           Bạn trả lời đúng {record?.score} trên {allQuestions.length} tổng câu
           hỏi
         </p>
-        <Link to="/" className="new-quiz">
+        <Link to="/normal/create/text" className="new-quiz">
           Bắt đầu bộ câu hỏi mới!
         </Link>
       </div>

@@ -53,7 +53,7 @@ public class WordController {
     public ResponseEntity<JsonResponse> udpateWordDefinition(
             @CurrentUser UserPrincipal userPrincipal,
             @PathVariable(name ="id") String wordId,
-            @Valid @RequestBody WordRequest wordRequest
+            @RequestBody WordRequest wordRequest
     ){
 
         WordResponse  wordResponse = wordService.udpateWordDefinition(wordId, wordRequest, userPrincipal.getId());

@@ -62,7 +62,8 @@ function Quiz() {
   };
 
   const selectAnswer = (index) => {
-    if (quizIndex % 2 === 0 && words[quizIndex]?.entries !== undefined) {
+    if (quizIndex !== 0 && quizIndex % 2 === 0 && words[quizIndex] !== undefined) {
+      // If is flashcard so just render next button without doing anything
       setIsNextButton(true);
       return;
     }
@@ -93,13 +94,14 @@ function Quiz() {
     }
   };
   const submitRecord = async (record) => {
+    setLoading(true)
     let response = {};
     if (record) {
       response = await RecordService.createRecord(record, id, duration);
     } else {
       response = await RecordService.createRecord(recordItems, id, duration);
     }
-
+    setLoading(false)
     if (response?.status === 201) {
       navigate(`/member/record/${response?.data?.data?.id}`, {
         state: {
@@ -108,11 +110,12 @@ function Quiz() {
       });
     }
   };
-  const nextQuestion = async (index) => {
+  const nextQuestion = async () => {
     setQuizIndex(quizIndex + 1);
     setFlip(false)
     if (currentQuestion >= questions?.length - 1) {
       setCurrentQuestion(0);
+
       submitRecord([
         ...recordItems,
         {
@@ -122,7 +125,9 @@ function Quiz() {
           }),
         },
       ]);
-    } else {
+    } else if(quizIndex===0 || quizIndex % 2 !== 0 || words[quizIndex] === undefined){
+      // If not flashcard so append to result to submit
+      setCurrentQuestion(currentQuestion + 1);
       setRecordItems([
         ...recordItems,
         {
@@ -133,9 +138,6 @@ function Quiz() {
         },
       ]);
       setIsNextButton(false);
-      if(quizIndex % 2 !== 0 || words[quizIndex]?.entries === undefined){
-        setCurrentQuestion(currentQuestion + 1);
-      }
       setSelectedIndex([]);
     }
   };
@@ -284,13 +286,19 @@ function Quiz() {
                     {
                       isFlip ? (
                         <div style={{width: '100%'}}  onClick={() => setFlip(!isFlip)}>
-                        <Word word={words[quizIndex-1]?.definition} content={words[quizIndex-1]?.content} id={words[quizIndex-1]?.id} isFlashCard={true}/>
+                          <FontAwesomeIcon icon={"sync-alt"} className="flip position-absolute top-0 end-0 m-3" onClick={() => {setFlip(!isFlip)}}/>
+                          
+                        <Word word={words[quizIndex-1]?.definition} 
+                        content={words[quizIndex-1]?.content} 
+                        id={words[quizIndex-1]?.id} 
+                        isFlashCard={true}/>
                         </div>
                       ) : (
-                        <div className="word card my-3" s  onClick={() => {setFlip(!isFlip); selectAnswer(quizIndex); }}>
-                        <div className="card-body d-flex align-items-center justify-content-center text-center">
+                        <div className="word-only card my-3" onClick={() => {setFlip(!isFlip); selectAnswer(quizIndex); }}>
+                        <div className="card-body d-flex align-items-center justify-content-center text-center position-relative">
+                          {/* <FontAwesomeIcon icon={"sync-alt"} className="flip position-absolute top-0 end-0 m-3" onClick={() => {setFlip(!isFlip); selectAnswer(quizIndex); }}/> */}
                           <h5 className="card-title">
-                            {words[quizIndex-1]?.name}
+                            {words[quizIndex - 1]?.name}
                           </h5>
                         </div>
                       </div>
@@ -326,7 +334,7 @@ function Quiz() {
                 {isNextButton ? (
                   <div className="next">
                     <button
-                      onClick={() => nextQuestion(selectedIndex)}
+                      onClick={() => nextQuestion()}
                       type="button"
                       className="next-btn"
                     >
@@ -341,7 +349,7 @@ function Quiz() {
                 {isResultButton ? (
                   <div className="next">
                     <button
-                      onClick={() => nextQuestion(selectedIndex)}
+                      onClick={() => nextQuestion()}
                       type="button"
                       className="next-btn result-btn"
                     >
