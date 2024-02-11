@@ -12,16 +12,16 @@ import lombok.Data;
 @Data
 public abstract class PromptRequest {
 
-    @NotBlank(message = "Type can't be empty")
+    @NotNull(message = "Type can't be empty")
     public Integer type;
 
-    @NotBlank(message = "Number can't be empty")
+    @NotNull(message = "Number can't be empty")
     public Integer number;
 
     @NotBlank(message = "Language can't be empty")
     public String language;
 
-    @NotBlank(message = "Level can't be empty")
+    @NotNull(message = "Level can't be empty")
     public Integer level;
 
     @NotNull(message = "Duration can't be empty")
