@@ -17,8 +17,8 @@ import java.util.List;
 @Repository
 public interface QuizRepository extends JpaRepository<Quiz, String> {
 
-    @Query("SELECT q FROM Quiz q WHERE q.isDeleted = false")
-    Page<Quiz> findAllByUser(User user, Pageable pageable);
+    @Query("SELECT q FROM Quiz q WHERE q.isDeleted = false AND q.user = :user")
+    Page<Quiz> findAllByUser(@Param("user") User user, Pageable pageable);
 
     @Query("SELECT COALESCE(COUNT(r), 0) FROM Record r WHERE r.quiz.wordSet = :wordSet")
     Integer getTotalReviewTimeForWordSet(@Param("wordSet") WordSet wordSet);
