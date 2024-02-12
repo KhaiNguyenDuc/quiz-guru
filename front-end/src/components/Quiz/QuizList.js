@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import "./QuizList.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UserService from "../../services/UserService";
 import QuizBox from "./QuizBox";
 import CustomPagination from "../Pagination/CustomPagination";
@@ -48,7 +46,7 @@ function QuizList() {
           <div>
 
 
-            <div className="quiz-boxes history">{quizReturn()}</div>
+            <div className="quiz-boxes">{quizReturn()}</div>
             <div className="custom-pagination">
             <CustomPagination
               currentPage={currentPage}

@@ -136,7 +136,6 @@ const TextBase = () => {
               <option value={"vietnamese"}>Tiếng việt</option>
               <option value={"japanese"}>Japanese</option>
               <option value={"chinese"}>Chinese</option>
-              <option value={"khmer"}>Campuchia</option>
             </select>
           </div>
           <div className="col">

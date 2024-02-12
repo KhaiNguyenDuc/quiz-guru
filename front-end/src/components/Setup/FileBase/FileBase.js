@@ -148,7 +148,6 @@ const FileBase = () => {
               <option value={"vietnamese"}>Tiếng việt</option>
               <option value={"japanese"}>Japanese</option>
               <option value={"chinese"}>Chinese</option>
-              <option value={"khmer"}>Campuchia</option>
               
             </select>
           </div>

@@ -53,7 +53,7 @@ const WordSets = () => {
         <>
           <div className="row ">
 
-            <div className="col-3 mt-3">
+            <div className="col col-md-3 mt-3">
               <div className="word-set card">
                 <div className="card-body d-flex align-items-center justify-content-center text-center"
                 onClick={() => setIsOpen(true)}>
@@ -77,7 +77,7 @@ const WordSets = () => {
 
 
             {wordSets.map((wordSet, index) => (
-              <div key={index} className={`col-3 mt-3`}>
+              <div key={index} className={`col col-md-3 mt-3`}>
                 <WordSetCard wordSet={wordSet} handleDelete={() => handleDelete(wordSet?.id)} />
               </div>
             ))}

@@ -3,22 +3,29 @@
         overflow-y: auto;
     }
 
-
+    
 
     .given-text {
+        display: block;
         background-color: white;
         padding: 40px;
     }
 
-    .quiz-section {
-        transition: all 0.4s ease;
+    @media screen and (max-width:  768px) {
+        .result.given-text {
+            display: none;
+        }   
+        .given-text {
+            display: none;
+            
+        }
     }
 
-    .quiz-section.full-width {
-        width: 50vw;
-        margin-left: auto;
-        margin-right: auto;
-    }
+
+
+   
+
+
 
     .progress-timer {
         width: 100px;

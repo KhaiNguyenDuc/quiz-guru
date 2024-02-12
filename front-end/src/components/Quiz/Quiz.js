@@ -203,8 +203,8 @@ function Quiz() {
             <span className="time">{formatTime(duration)}</span>
           </div>
           <div className="row">
-            {showText && givenText !== "" ? (
-              <div className={`col scrollable-col `}>
+            {showText && givenText !== "" && (
+              <div className={`col-md col-lg scrollable-col `}>
                 <div
                   className="given-text"
                   style={{
@@ -223,12 +223,10 @@ function Quiz() {
                   />
                 </div>
               </div>
-            ) : (
-              <></>
             )}
 
             <div
-              className={` quiz-section ${
+              className={`quiz-section ${
                 showText && givenText !== "" ? "col" : " full-width"
               }`}
             >

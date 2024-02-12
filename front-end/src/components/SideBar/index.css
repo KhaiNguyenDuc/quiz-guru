@@ -12,15 +12,47 @@
 
 
 }
-#content {
-    width: 100%;
-    min-height: 100vh;
-    margin-left: 300px;
-    -webkit-transition: all 0.3s;
-    -o-transition: all 0.3s;
-    transition: all 0.3s;
-    
+@media (max-width:  768px) {
+    /* Adjust margin-left of content for small screens */
+    #content {
+        width: 100%;
+        min-height: 100vh;
+        margin-left: 0px;
+        -webkit-transition: all 0.3s;
+        -o-transition: all 0.3s;
+        transition: all 0.3s;
+        
+    }
 }
+
+@media (min-width: 768px) {
+    /* Adjust margin-left of content for larger screens */
+    #content {
+        width: 100%;
+        min-height: 100vh;
+        margin-left: 0px;
+        -webkit-transition: all 0.3s;
+        -o-transition: all 0.3s;
+        transition: all 0.3s;
+        
+    }
+}
+
+@media (min-width: 1000px) {
+    /* Adjust margin-left of content for larger screens */
+    #content {
+        width: 100%;
+        min-height: 100vh;
+        margin-left: 300px;
+        -webkit-transition: all 0.3s;
+        -o-transition: all 0.3s;
+        transition: all 0.3s;
+        
+    }
+}
+
+
+
 
 #sidebar.active + #content {
     margin-left: auto;

@@ -51,7 +51,7 @@ const RecordDetail = ({ record }) => {
       {record?.givenText !== "" ? (
               <div className={`col scrollable-col `}>
                 <div
-                  className="given-text"
+                  className="result given-text"
                   style={{
                     maxWidth: "100%",
                     maxHeight: "100%",
@@ -72,7 +72,7 @@ const RecordDetail = ({ record }) => {
               <></>
             )}
 
-        <div className="col">
+        <div className="col-12 col-md col-lg">
           <div className="check-answers-boxes">
             {allQuestions.map((item, key) => {
               return (

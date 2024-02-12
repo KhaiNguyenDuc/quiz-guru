@@ -43,3 +43,86 @@ body {
   padding: 10px;
   background-color: rgba(138, 231, 146, 0.5) !important;
 }
+
+/* For screens smaller than or equal to 900px */
+@media screen and (max-width:  768px) {
+  h5 {
+  
+    font-size: 12px !important; 
+  }
+
+  h2 {
+    font-size: 12px !important; 
+  }
+
+  h3 {
+    font-size: 12px !important; 
+  }
+  h4 {
+    font-size: 12px !important; 
+  }
+
+  p {
+
+    font-size: 12px !important; 
+  }
+  label {
+    font-size: 12px !important; 
+  }
+
+  li {
+    font-size: 8px !important; 
+  }
+  b {
+    font-size: 8px !important; 
+  }
+
+  th {
+    font-size: 6px !important; 
+  }
+  td {
+    font-size: 6px !important; 
+  }
+  span {
+
+    font-size: 12px !important;
+  }
+
+  a {
+
+    font-size: 14px !important; 
+  }
+  /* Reduce size of form controls */
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
+  input[type="password"],
+  textarea,
+  select {
+    font-size: 12px !important;
+    padding: 6px 10px !important;
+  }
+
+  /* Reduce size of buttons */
+  button,
+  input[type="submit"],
+  input[type="reset"],
+  input[type="button"] {
+    font-size: 12px !important;
+    padding: 6px 12px !important;
+  }
+  /* Reduce size of select options */
+  select {
+    font-size: 12px !important;
+    padding: 6px 10px !important;
+  }
+
+  /* Reduce size of radio buttons and checkboxes */
+  input[type="radio"],
+  input[type="checkbox"] {
+    width: 12px !important;
+    height: 12px !important;
+  }
+
+
+}

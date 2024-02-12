@@ -1,27 +1,58 @@
-.quiz-history-container {
+/* For screens larger than or equal to 768px */
+@media (min-width: 768px) {
+  .quiz-history-container {
     background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
     border-radius: 8px;
     padding: 20px;
     margin-top: 20px;
   }
-  
+
   .quiz-history-table {
     width: 100%;
     border-collapse: collapse;
   }
-  
+
   .quiz-history-table th,
   .quiz-history-table td {
     text-align: left;
     padding: 8px;
   }
-  
+
   .quiz-history-table th {
     background-color: #4e5d6c;
     color: white;
   }
-  
+
   .quiz-history-table tr:nth-child(even) {
     background-color: #f2f2f2;
   }
-  
+}
+/* For screens smaller than or equal to 768px */
+@media (max-width:  768px) {
+  .quiz-history-container {
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .quiz-history-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .quiz-history-table th,
+  .quiz-history-table td {
+    text-align: left;
+    padding: 8px;
+  }
+
+  .quiz-history-table th {
+    background-color: #4e5d6c;
+    color: white;
+  }
+
+  .quiz-history-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+}

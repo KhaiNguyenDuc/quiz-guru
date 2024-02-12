@@ -1,3 +1,11 @@
+  @media screen and (max-width:  768px) {
+    .word-set.card {
+      height: 50px;
+      width: 90vw;
+    
+    }
+  }
+
 .word-set.card {
   height: 150px;
 }
