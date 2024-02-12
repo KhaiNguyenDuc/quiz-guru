@@ -225,8 +225,11 @@ const FileToVocabularyBase = () => {
               onChange={(e) => handleChange(e)}
               value={fileToVocab?.language}
             >
-              <option value={"english"}>Tiếng anh</option>
+                            <option value={"english"}>English</option>
               <option value={"vietnamese"}>Tiếng việt</option>
+              <option value={"japanese"}>Japanese</option>
+              <option value={"chinese"}>Chinese</option>
+              <option value={"khmer"}>Campuchia</option>
               
               
             </select>

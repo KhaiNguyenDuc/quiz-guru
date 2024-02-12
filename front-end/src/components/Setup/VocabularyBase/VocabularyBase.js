@@ -227,8 +227,11 @@ const VocabularyBase = ({ defaultVocabulary, wordSetId }) => {
               onChange={(e) => handleChange(e)}
               value={vocabularyBase?.language}
             >
-              <option value={"english"}>Tiếng anh</option>
+                            <option value={"english"}>English</option>
               <option value={"vietnamese"}>Tiếng việt</option>
+              <option value={"japanese"}>Japanese</option>
+              <option value={"chinese"}>Chinese</option>
+              <option value={"khmer"}>Campuchia</option>
             </select>
           </div>
           <div className="col">
