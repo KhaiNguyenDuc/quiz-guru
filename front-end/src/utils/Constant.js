@@ -9,7 +9,7 @@ export const ALLOWED_TYPE = [
     PDF_TYPE,
     DOCX_TYPE
   ];
-
+export const NOT_FOUND_EMAIL = "Không tìm thấy email."
 export const BASE_URL = ROOT + "/" + HOST
 export const AUTH_URL = BASE_URL + "/auth"
 export const USER_URL = BASE_URL + "/users"
@@ -36,4 +36,3 @@ export const TRY_AGAIN_MSG = "Có lỗi xảy ra, có thể nội dung của kh�
 export const GENERATE_LENGTH_INVALID = "Nội dung không hợp lệ."
 export const GENERATE_LENGTH_SHORT = "Nội dung không được để trống hoặc ít hơn 90 ký tự."
 export const USERNAME_EXIST = "Tên đăng nhập đã tồn tại"
-export const NOT_FOUND_EMAIL = "Không tìm thấy email."
