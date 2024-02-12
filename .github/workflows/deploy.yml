@@ -27,7 +27,7 @@ jobs:
             sudo -i
             cd root
             if [ -d "quiz-guru" ]; then
-              cd quiz-guru
+              cd ./quiz-guru
               git pull https://github.com/KhaiNguyenDuc/quiz-guru.git --ff --no-edit
               wait
               cd ../
@@ -95,5 +95,8 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            if [ ! -d "app-logs" ]; then
+              mkdir app-logs
+            fi
             cd quiz-guru
             sudo docker compose up --build -d
