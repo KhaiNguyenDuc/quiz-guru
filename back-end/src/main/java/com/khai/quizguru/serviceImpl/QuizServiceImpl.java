@@ -144,10 +144,10 @@ public class QuizServiceImpl implements QuizService {
                             wordSetId = wordSetOpt.get().getId();
                             wordSetService.addWordToWordSet(wordSetId, wordSetRequest);
                             wordSetService.bindQuiz(wordSetId, wordSetRequest.getQuizId(), userId);
+                        }else{
+                            // Create new wordSet
+                            wordSetId = wordSetService.createWordSet(wordSetRequest, userId);
                         }
-                    }else{
-                        // Create new wordSet
-                        wordSetId = wordSetService.createWordSet(wordSetRequest, userId);
                     }
                 }
             }

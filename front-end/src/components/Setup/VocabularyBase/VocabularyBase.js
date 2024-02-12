@@ -7,7 +7,6 @@ import {
   GENERATE_LENGTH_INVALID,
   TRY_AGAIN_MSG,
 } from "../../../utils/Constant";
-import WordSetService from "../../../services/WordSetService";
 import { validateInput } from "../../../utils/Utils";
 import UserService from "../../../services/UserService";
 const VocabularyBase = ({ defaultVocabulary, wordSetId }) => {
@@ -117,7 +116,7 @@ const VocabularyBase = ({ defaultVocabulary, wordSetId }) => {
           </>
         )}
 
-        <div className="row my-5 mx-2">
+        <div className="row my-4 mx-2">
           <div className="col">
             <h5>Loại</h5>
             <select
@@ -147,8 +146,8 @@ const VocabularyBase = ({ defaultVocabulary, wordSetId }) => {
           </div>
           {defaultVocabulary === undefined && (
             <>
-              <div className="col">
-                <h5>Chọn danh sách</h5>
+              <div className="col-12 col-lg col-md ">
+                <h5 className="word-set-list">Chọn danh sách</h5>
                 {isCreatedSet ? (
                   <>
                     <div className="d-flex">
@@ -203,7 +202,7 @@ const VocabularyBase = ({ defaultVocabulary, wordSetId }) => {
             </>
           )}
         </div>
-        <div className="row mt-5 mb-3 mx-2">
+        <div className="row mt-2 mb-3 mx-2">
           <div className="col">
             <h5>Mức độ</h5>
             <select
@@ -230,7 +229,7 @@ const VocabularyBase = ({ defaultVocabulary, wordSetId }) => {
               <option value={"english"}>English</option>
             </select>
           </div>
-          <div className="col">
+          <div className="col-5 col-lg col-md">
             <h5>Thời gian</h5>
 
             <div className="input-group">
