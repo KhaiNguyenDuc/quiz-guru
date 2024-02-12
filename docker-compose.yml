@@ -11,6 +11,8 @@ services:
     ports:
       - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine
     restart: always
+    volumes:
+      - /root:/logs  # Bind mount host log directory to container's /logs directory
     networks: # Networks to join (Services on the same network can communicate with each other using their name)
       - backend
       - frontend
