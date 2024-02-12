@@ -62,9 +62,26 @@
             }
             Library library = libraryOpt.get();
             library.setUser(userOtp.get());
+            WordSet wordSet;
+            if(Objects.nonNull(wordSetRequest.getName())){
+                Optional<WordSet> wordSetOpt =
+                        wordSetRepository.findByNameAndUser(wordSetRequest.getName(), userId);
+                if(wordSetOpt.isPresent()){
+                    wordSet = wordSetOpt.get();
+                    wordSet.setWordNumber(wordSet.getWordNumber() + wordSetRequest.getWords().size());
+                }else{
+                    wordSet = new WordSet();
+                    wordSet.setName(wordSetRequest.getName());
+                    wordSet.setLibrary(library);
+                    wordSet.setWordNumber(wordSetRequest.getWords().size());
+                }
+            }else{
+                wordSet = new WordSet();
+                wordSet.setName(wordSetRequest.getName());
+                wordSet.setLibrary(library);
+                wordSet.setWordNumber(wordSetRequest.getWords().size());
+            }
 
-            WordSet wordSet = new WordSet();
-            wordSet.setName(wordSetRequest.getName());
             if(wordSetRequest.getQuizId() != null){
                 Optional<Quiz> quizOpt = quizRepository.findById(wordSetRequest.getQuizId());
 
@@ -74,11 +91,6 @@
                 }
             }
 
-
-            wordSet.setLibrary(library);
-
-            wordSet.setName(wordSetRequest.getName());
-            wordSet.setWordNumber(wordSetRequest.getWords().size());
             WordSet wordSetSaved = wordSetRepository.save(wordSet);
             List<Word> words = new ArrayList<>();
 
