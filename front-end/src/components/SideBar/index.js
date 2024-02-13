@@ -49,14 +49,8 @@ const SideBar = ({ children }) => {
     if (response?.status == 400) {
       return;
     }
-
     setUser(response);
     setUsername(response?.username);
-    setUser({
-      ...user,
-      roles: response?.user?.roles?.map((role) => role?.name),
-    });
-
     setLoading(false);
   };
   const [editMode, setEditMode] = useState(false);
