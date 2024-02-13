@@ -7,10 +7,7 @@ import com.khai.quizguru.model.Image;
 import com.khai.quizguru.model.Library;
 import com.khai.quizguru.model.user.PasswordResetToken;
 import com.khai.quizguru.model.user.VerificationToken;
-import com.khai.quizguru.payload.request.EmailRequest;
-import com.khai.quizguru.payload.request.PasswordResetRequest;
-import com.khai.quizguru.payload.request.ProfileRequest;
-import com.khai.quizguru.payload.request.RegisterRequest;
+import com.khai.quizguru.payload.request.*;
 import com.khai.quizguru.model.user.Role;
 import com.khai.quizguru.enums.RoleName;
 import com.khai.quizguru.model.user.User;
@@ -20,7 +17,6 @@ import com.khai.quizguru.repository.*;
 import com.khai.quizguru.service.EmailService;
 import com.khai.quizguru.service.UserService;
 import com.khai.quizguru.utils.Constant;
-import com.khai.quizguru.utils.FileUploadUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -50,7 +46,7 @@ public class UserServiceImpl implements UserService {
     private final VerificationTokenRepository verifyTokenRepository;
     private final EmailService emailService;
     private final PasswordTokenRepository passwordTokenRepository;
-
+    private final AmazonS3Client amazonClient;
     @Value("${app.verificationTokenDurationMs}")
     private Long verificationTokenDurationMs;
 
@@ -117,7 +113,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Updates a user's profile information by their ID.
+     * Updates a user's profile information by their ID. Using aws s3 to upload
      *
      * @param profileRequest The profile update request containing new user details.
      * @param id The ID of the user to update.
@@ -145,21 +141,24 @@ public class UserServiceImpl implements UserService {
             if(Objects.nonNull(profileRequest.getFile())){
 
                 if(Objects.nonNull(user.getImage())){
+
+                    // Delete the old one
                     Image image = user.getImage();
-                    image.setTitle(user.getId() + ".png");
-                    FileUploadUtils.saveUserImage(profileRequest.getFile(), id);
+                    amazonClient.deleteFile(image.getTitle());
 
-                    Image imageSaved = imageRepository.save(image);
-                    imageSaved.setPath(Constant.IMAGE_HOST+ "/" + imageSaved.getId());
-                    user.setImage(imageSaved);
+                    // Create new one
+                    FileResponse fileResponse = amazonClient.uploadFile(profileRequest.getFile(), id);
+                    image.setTitle(fileResponse.getFileName());
+                    image.setPath(fileResponse.getUrl());
+                    imageRepository.save(image);
+                    user.setImage(image);
                 }else{
+                    FileResponse fileResponse = amazonClient.uploadFile(profileRequest.getFile(), id);
                     Image image = new Image();
-                    image.setTitle(user.getId() + ".png");
-                    FileUploadUtils.saveUserImage(profileRequest.getFile(), id);
-
-                    Image imageSaved = imageRepository.save(image);
-                    imageSaved.setPath(Constant.IMAGE_HOST+ "/" + imageSaved.getId());
-                    user.setImage(imageSaved);
+                    image.setTitle(fileResponse.getFileName());
+                    image.setPath(fileResponse.getUrl());
+                    imageRepository.save(image);
+                    user.setImage(image);
                 }
 
             }

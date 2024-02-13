@@ -17,6 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Configuration class for security settings.
  */
@@ -24,6 +27,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final String[] ALLOW_URL = {
+            "/api/v1/auth/**",
+    };
     @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
 
@@ -64,12 +70,8 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/member/**").authenticated()
-                        .requestMatchers("/api/v1/quiz/**").authenticated()
-                        .requestMatchers("/api/v1/users/**").authenticated()
-                        .requestMatchers("/api/v1/records/**").authenticated()
-                        .anyRequest().permitAll()
+                        .requestMatchers(ALLOW_URL).permitAll()
+                        .anyRequest().authenticated()
                 );
         return http.build();
     }

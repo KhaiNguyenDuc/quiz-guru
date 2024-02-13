@@ -4,10 +4,6 @@ package com.khai.quizguru.utils;
  * Includes constant for multiple usage
  */
 public class Constant {
-    public static final String IMAGE_HOST = "http://localhost:8080/api/v1/images";
-    public static final String UPLOAD_DIRECTORY = "/src/main/java";
-    public static final String UPLOAD_USER_DIRECTORY = "/com/khai/quizguru/uploads/users";
-    public static final String GET_USER_DIRECTORY = "src/main/java/com/khai/quizguru/uploads/users";
 
     public static final String RESOURCE_NOT_FOUND_MSG = "Not found the target resource";
     public static final String UNAUTHORIZED_MSG = "Unauthorized";
