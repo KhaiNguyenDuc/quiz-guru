@@ -409,3 +409,30 @@ Consider the following:
 	If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.
 	If you have database settings to be loaded from a particular profile you may need to activate it (the profiles pro are currently active).
 
+2024-02-13T15:08:44.400+07:00  INFO 17932 --- [main] com.khai.quizguru.QuizGuruApplication    : Starting QuizGuruApplication using Java 17.0.8 with PID 17932 (D:\repo\quiz-guru\back-end\target\classes started by kite in D:\repo\quiz-guru\back-end)
+2024-02-13T15:08:44.404+07:00  INFO 17932 --- [main] com.khai.quizguru.QuizGuruApplication    : The following 1 profile is active: "pro"
+2024-02-13T15:08:46.525+07:00  INFO 17932 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-02-13T15:08:46.691+07:00  INFO 17932 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 155 ms. Found 13 JPA repository interfaces.
+2024-02-13T15:08:48.195+07:00  INFO 17932 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-02-13T15:08:48.211+07:00  INFO 17932 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-02-13T15:08:48.211+07:00  INFO 17932 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2024-02-13T15:08:48.451+07:00  INFO 17932 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-02-13T15:08:48.452+07:00  INFO 17932 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3973 ms
+2024-02-13T15:08:48.609+07:00  INFO 17932 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-02-13T15:08:49.915+07:00  INFO 17932 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@70f4abc1
+2024-02-13T15:08:49.930+07:00  INFO 17932 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-02-13T15:08:50.150+07:00  INFO 17932 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-02-13T15:08:50.306+07:00  INFO 17932 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.1.Final
+2024-02-13T15:08:50.400+07:00  INFO 17932 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-02-13T15:08:50.918+07:00  INFO 17932 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-02-13T15:08:51.249+07:00  WARN 17932 --- [main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-02-13T15:08:53.902+07:00  INFO 17932 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-02-13T15:08:57.015+07:00  INFO 17932 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-02-13T15:08:59.554+07:00  INFO 17932 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-02-13T15:09:00.978+07:00  WARN 17932 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-02-13T15:09:01.439+07:00  INFO 17932 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@745526a0, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4a5d8ae4, org.springframework.security.web.context.SecurityContextHolderFilter@1172d47, org.springframework.security.web.header.HeaderWriterFilter@2c15ced4, org.springframework.web.filter.CorsFilter@5c1a728, org.springframework.security.web.authentication.logout.LogoutFilter@11105fbe, com.khai.quizguru.filter.JwtAuthenticationFilter@60052518, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7fa0f739, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7f74ae13, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@34b846a1, org.springframework.security.web.session.SessionManagementFilter@28459752, org.springframework.security.web.access.ExceptionTranslationFilter@cce5ae3, org.springframework.security.web.access.intercept.AuthorizationFilter@3890c4da]
+2024-02-13T15:09:02.004+07:00  INFO 17932 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-02-13T15:09:02.021+07:00  INFO 17932 --- [main] com.khai.quizguru.QuizGuruApplication    : Started QuizGuruApplication in 18.294 seconds (process running for 21.269)
+2024-02-13T15:22:56.862+07:00  INFO 17932 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-02-13T15:22:56.956+07:00  INFO 17932 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-02-13T15:22:57.511+07:00  INFO 17932 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

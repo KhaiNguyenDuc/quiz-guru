@@ -10,7 +10,6 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.khai.quizguru.exception.InvalidRequestException;
 import com.khai.quizguru.payload.request.FileResponse;
-import com.khai.quizguru.utils.Constant;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +24,7 @@ import java.util.Objects;
 
 @Service
 @Slf4j
-public class AmazonS3Client {
+public class AmazonS3Service {
     private AmazonS3 s3client;
 
     @Value("${amazonProperties.endpointUrl}")
@@ -71,7 +70,7 @@ public class AmazonS3Client {
         try {
             File file = convertMultiPartToFile(multipartFile);
             fileName = generateFileName(multipartFile, id);
-            fileUrl = endpointUrl + "/" + bucketName + "/" + fileName;
+            fileUrl = endpointUrl + "/" + fileName;
             uploadFileTos3bucket(fileName, file);
         } catch (Exception e) {
             throw new InvalidRequestException(e.getMessage());

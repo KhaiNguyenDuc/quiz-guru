@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     private final VerificationTokenRepository verifyTokenRepository;
     private final EmailService emailService;
     private final PasswordTokenRepository passwordTokenRepository;
-    private final AmazonS3Client amazonClient;
+    private final AmazonS3Service amazonService;
     @Value("${app.verificationTokenDurationMs}")
     private Long verificationTokenDurationMs;
 
@@ -144,16 +144,16 @@ public class UserServiceImpl implements UserService {
 
                     // Delete the old one
                     Image image = user.getImage();
-                    amazonClient.deleteFile(image.getTitle());
+                    amazonService.deleteFile(image.getTitle());
 
                     // Create new one
-                    FileResponse fileResponse = amazonClient.uploadFile(profileRequest.getFile(), id);
+                    FileResponse fileResponse = amazonService.uploadFile(profileRequest.getFile(), id);
                     image.setTitle(fileResponse.getFileName());
                     image.setPath(fileResponse.getUrl());
                     imageRepository.save(image);
                     user.setImage(image);
                 }else{
-                    FileResponse fileResponse = amazonClient.uploadFile(profileRequest.getFile(), id);
+                    FileResponse fileResponse = amazonService.uploadFile(profileRequest.getFile(), id);
                     Image image = new Image();
                     image.setTitle(fileResponse.getFileName());
                     image.setPath(fileResponse.getUrl());
