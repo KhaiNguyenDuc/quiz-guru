@@ -75,16 +75,10 @@ public class UserServiceImpl implements UserService {
         }
 
         Role role = roleOtp.get();
-
-        Image image = new Image();
-
-        imageRepository.save(image);
-
         Library library = new Library();
         Library librarySaved = libraryRepository.save(library);
         User user = mapper.map(registerRequest, User.class);
         user.setRoles(List.of(role));
-        user.setImage(image);
         user.setIsEnable(false);
         user.setPassword(encoder.encode(user.getPassword()));
         user.setLibrary(librarySaved);
