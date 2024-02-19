@@ -7,6 +7,8 @@ Welcome to quiz guru. This application utilize the power of chatgpt to create a 
 2. [Diagram](#diagram)
    - 2.1. [Class Diagram](#class-diagram)
    - 2.2. [ERD Diagram](#erd-diagram)
+3. Example(#example)
+   
 ## Information
 
 Deploy website: https://khainguyenduc.id.vn
@@ -26,4 +28,10 @@ The site using:
 ### ERD diagram
 
 ![quiz_guru _erd](https://github.com/KhaiNguyenDuc/quiz-guru/assets/71761537/03996368-a48d-4ac4-b898-18e00677d3b5)
+
+## Example
+
+https://github.com/KhaiNguyenDuc/quiz-guru/assets/71761537/0e0a8df6-56bd-4a66-bd15-925edf6c45cc
+
+
 
