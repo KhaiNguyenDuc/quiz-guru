@@ -125,6 +125,7 @@ function LoginPage() {
                 {isError && (
                   <div className="text-white my-3 error-section">{isError}</div>
                 )}
+                <div className="my-3 success-section">Username: khainguyen ; Password: k989898k</div>
                 <div className="form-group">
                   <button className="btn login_btn mt-3">Đăng nhập</button>
                 </div>
