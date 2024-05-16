@@ -148,14 +148,14 @@ public class AuthController {
 
     /**
      * Send reset password email contain reset password token to user's email
-     * @param email: includes user's  username/email
+     * @param loginRequest: includes user's  username/email
      * @return JsonResponse: json response contain userId for specific client usage
      */
     @PostMapping("/send-reset-password")
-    public ResponseEntity<JsonResponse> sendResetPasssword(
-            @Valid @RequestBody String email)  {
+    public ResponseEntity<JsonResponse> sendResetPassword(
+            @Valid @RequestBody LoginRequest loginRequest)  {
 
-        String userId = userService.sendResetPassword(email);
+        String userId = userService.sendResetPassword(loginRequest.getEmail());
         return new ResponseEntity<>(new JsonResponse("success", userId),HttpStatus.OK);
     }
 
@@ -165,14 +165,10 @@ public class AuthController {
      * @return JsonResponse: a json contain message success.
      */
     @PostMapping("/reset-password")
-    public ResponseEntity<JsonResponse> resetPasssword(
+    public ResponseEntity<JsonResponse> resetPassword(
             @Valid @RequestBody PasswordResetRequest request)  {
 
         userService.resetPassword(request);
         return new ResponseEntity<>(new JsonResponse("success", "success"),HttpStatus.OK);
     }
-
-
-
-
 }
