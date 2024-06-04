@@ -1,5 +1,5 @@
 #### Stage 1: Build the react application
-FROM alpine:3.19 as build
+FROM node:22-alpine3.19 as build
 
 # Configure the main working directory inside the docker image. 
 # This is the base directory used in any further RUN, COPY, and ENTRYPOINT 
