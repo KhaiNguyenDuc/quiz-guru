@@ -1,6 +1,7 @@
 package com.khai.quizguru.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.khai.quizguru.payload.request.PromptRequest;
 import com.khai.quizguru.utils.Prompt;
 import lombok.Data;
@@ -16,6 +17,9 @@ public class ChatRequest {
 
     private String model;
     private List<Message> messages;
+
+    @JsonProperty("response_format")
+    private ResponseFormat responseFormat;
 
     @JsonIgnore
     private PromptRequest promptRequest;
@@ -35,6 +39,7 @@ public class ChatRequest {
         this.model = model;
         this.messages = new ArrayList<>();
         this.promptRequest = promptRequest;
+        this.responseFormat = new ResponseFormat("json_object");
         this.givenText = this.promptRequest.getText();
         this.generateMessages(givenText);
     }
