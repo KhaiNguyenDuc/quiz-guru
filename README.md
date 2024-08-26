@@ -11,7 +11,7 @@ Welcome to quiz guru. This application utilize the power of chatgpt to create a 
    
 ## Information
 
-Deploy website: https://khainguyenduc.id.vn
+Deploy website: https://nguyenduckhai.site
 The site using:
 
 - Spring boot: 3.2.1
