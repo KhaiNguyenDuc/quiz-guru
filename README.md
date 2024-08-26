@@ -7,7 +7,7 @@ Welcome to quiz guru. This application utilize the power of chatgpt to create a 
 2. [Diagram](#diagram)
    - 2.1. [Class Diagram](#class-diagram)
    - 2.2. [ERD Diagram](#erd-diagram)
-3. Example(#example)
+3. [Exampl](#example)
    
 ## Information
 
