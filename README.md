@@ -1,6 +1,6 @@
 # Quiz guru web application
 
-Welcome to quiz guru. This application utilize the power of chatgpt to create a helpfull site in generate quiz and learning language by given content
+Welcome to quiz guru. This application utilize the power of chatgpt to create a helpfull site in generate quiz and learning language by given content.
 
 ## Table of Contents
 1. [Information](#information)
